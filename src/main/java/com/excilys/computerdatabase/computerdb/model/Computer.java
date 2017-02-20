@@ -11,6 +11,11 @@ public class Computer {
 	private Calendar dateIntroduced;
 	private Calendar dateDiscontinued;
 	private int compagnyId;
+	
+	
+	public Computer(){}
+	
+	
 	public int getId() {
 		return id;
 	}
