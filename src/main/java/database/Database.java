@@ -3,7 +3,10 @@ package database;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class Database {
 	String url = "jdbc:mysql://localhost:3306/";
@@ -12,11 +15,15 @@ public class Database {
     String userName = "admincdb";
     String password = "qwerty1234";
 
-    private static Database myObj;   
-    private Connection Con ;
+    private static Database db;   
+    private Connection con ;
+    private Statement statement;
+    
+    
+    
     private Database() {
         System.out.println("Hello");
-        Con= createConnection();
+        con= createConnection();
     }
 
     @SuppressWarnings("rawtypes")
@@ -42,9 +49,9 @@ public class Database {
 
     
     public static Database getInstance() {
-        if (myObj == null) {
-            myObj = new Database();
+        if (db == null) {
+        	db = new Database();
         }
-        return myObj;
+        return db;
     }
 }

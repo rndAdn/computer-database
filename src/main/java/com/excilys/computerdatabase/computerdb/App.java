@@ -1,5 +1,9 @@
 package com.excilys.computerdatabase.computerdb;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import database.Database;
 
 /**
@@ -11,6 +15,7 @@ public class App {
         System.out.println( "Hello World!" );
         
         Database db = Database.getInstance();
+        
        
     }
 }
