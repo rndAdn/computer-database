@@ -11,7 +11,7 @@ public class ListCompanyAction implements ActionMenu {
 	public void doAction() {
 		
 		System.out.println("--------CompanyList-------------");
-		List<Company> computers = Database.getInstance().getAllCompany();
+		List<Company> computers = Database.getCompanyDao().getAllCompany();
         for (Company c : computers)
         	System.out.println(c);
         System.out.println("--------EndCompanyList----------");
