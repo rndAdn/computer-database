@@ -32,7 +32,7 @@ public class Database {
     
     
     private Database() {
-        System.out.println("Hello");
+        //System.out.println("Hello");
         con= createConnection();
     }
 

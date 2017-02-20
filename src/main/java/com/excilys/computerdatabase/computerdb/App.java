@@ -18,16 +18,16 @@ import database.Database;
  */
 public class App {
     public static void main( String[] args ){
-        System.out.println( "Hello World!" );
+        //System.out.println( "Hello World!" );
         
         Database db = Database.getInstance();
         //Computer computer = db.getComputerById(1);
         //System.out.println(computer.getId() +" " + computer.getName());
         
-        List<Computer> computers = db.getAllComputers();
+        /*List<Computer> computers = db.getAllComputers();
         for (Computer c : computers)
         	System.out.println(c);
-        
+        */
         
         /*while(true){ 
         	for(Menu menu : Menu.values()){
