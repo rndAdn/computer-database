@@ -15,6 +15,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.mysql.jdbc.StringUtils;
 
@@ -109,4 +110,51 @@ public class Database {
         }
        
 	} 
+    
+    public Company getCompanyById(int id){
+		QueryRunner run=new QueryRunner();
+
+		BeanHandler beanHandler = new BeanHandler(Company.class);
+		ResultSetHandler h = beanHandler;
+
+		Object company=null;
+		try{
+			company =run.query(this.con, "SELECT * FROM company WHERE id = '" + id + "'", h);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return (Company)company;
+	}     
+    
+    public List<Company> getCompanysByName(String name){
+
+    	List<Company> results = new ArrayList<Company>();
+        QueryRunner qr = new QueryRunner();
+        try {
+        	results = (List<Company>) qr.query(con, "SELECT * FROM company WHERE name = '" + name + "'",
+                    new BeanListHandler(Company.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	return results;
+        }
+       
+	}  
+    
+    public List<Company> getAllCompany(){
+
+    	List<Company> results = new ArrayList<Company>();
+        QueryRunner qr = new QueryRunner();
+        try {
+        	results = (List<Company>) qr.query(con, "SELECT * FROM company",
+                    new BeanListHandler(Company.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	return results;
+        }
+       
+	} 
+    
+    
 }
