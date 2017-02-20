@@ -6,6 +6,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.mysql.jdbc.StringUtils;
 
 
 public class Database {
@@ -17,7 +28,6 @@ public class Database {
 
     private static Database db;   
     private Connection con ;
-    private Statement statement;
     
     
     
@@ -54,4 +64,49 @@ public class Database {
         }
         return db;
     }
+    
+    public Computer getComputerById(int id){
+		QueryRunner run=new QueryRunner();
+
+		BeanHandler beanHandler = new BeanHandler(Computer.class);
+		ResultSetHandler h = beanHandler;
+
+		Object computer=null;
+		try{
+			computer =run.query(this.con, "SELECT * FROM computer WHERE id = '" + id + "'", h);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return (Computer)computer;
+	}     
+    
+    public List<Computer> getComputersByName(String name){
+
+    	List<Computer> results = new ArrayList<Computer>();
+        QueryRunner qr = new QueryRunner();
+        try {
+        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer WHERE name = '" + name + "'",
+                    new BeanListHandler(Computer.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	return results;
+        }
+       
+	}  
+    
+    public List<Computer> getAllComputers(){
+
+    	List<Computer> results = new ArrayList<Computer>();
+        QueryRunner qr = new QueryRunner();
+        try {
+        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer",
+                    new BeanListHandler(Computer.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	return results;
+        }
+       
+	} 
 }
