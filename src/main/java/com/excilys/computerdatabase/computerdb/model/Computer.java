@@ -52,6 +52,14 @@ public class Computer {
 		return "" + id + " " + name;
 	}
 	
+	public String getDetail(){
+		return "Id : "+id + 
+				" Nom : " + name +
+				" DateI : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
+				" Date fin : " + ((dateDiscontinued != null)?dateDiscontinued:"NC") +
+				" Company : " + compagnyId; 
+	}
+	
 	
 	
 	
