@@ -85,7 +85,7 @@ public class Database {
     	List<Computer> results = new ArrayList<Computer>();
         QueryRunner qr = new QueryRunner();
         try {
-        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer WHERE name = '" + name + "' LIMIT 10",
+        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer WHERE name = '" + name + "'",
                     new BeanListHandler(Computer.class));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,5 +93,20 @@ public class Database {
         	return results;
         }
        
-	}     
+	}  
+    
+    public List<Computer> getAllComputers(){
+
+    	List<Computer> results = new ArrayList<Computer>();
+        QueryRunner qr = new QueryRunner();
+        try {
+        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer",
+                    new BeanListHandler(Computer.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	return results;
+        }
+       
+	} 
 }
