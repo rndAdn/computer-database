@@ -1,21 +1,40 @@
 package com.excilys.computerdatabase.computerdb.ui;
 
+import com.excilys.computerdatabase.computerdb.ui.action.*;
+
 public enum Menu {
 	
-	LIST (new Tuple<Character, String>('L', "List")),
-	SHOW (new Tuple<Character, String>('S', "Show")),
-	CREATE (new Tuple<Character, String>('C', "Create")),
-	UPDATE (new Tuple<Character, String>('U', "Update")),
-	DELETE (new Tuple<Character, String>('D', "Delete")),
-	EXIT (new Tuple<Character, String>('E', "Exit"));
+	LISTCOMPUTER ('A', "List Computer", new ListComputerAction() ),
+	LISTCOMPANY ('Z', "List Company", new ListCompanyAction()),
+	SHOW ('S', "Show", new ShowComputerDetailsAction()),
+	CREATE ('C', "Create", new CreateComputerAction()),
+	UPDATE ('U', "Update", new UpdateComputerAction()),
+	DELETE ('D', "Delete", new DeleteComputerAction()),
+	EXIT ('E', "Exit", new ExitAction());
 
-	private Tuple commande;
+	private char commandeChar;
+	private String commandeString;
+	private ActionMenu commandeAction;
 	
-	Menu(Tuple commande){
-		this.commande = commande;
+	Menu(char c, String s, ActionMenu ac){
+		commandeChar = c;
+		commandeString = s;
+		commandeAction = ac;
 	}
 	
 	public String toString(){
-		return ""+commande.getSecond() + " (" + commande.getFirst() + ")";
+		return ""+commandeChar + " (" + commandeString + ").";
 	}
+	
+	
+	public boolean isEntry(String s){
+		if(s.length() == 1) return new Character(s.toUpperCase().charAt(0)).equals(commandeChar);
+		return s.equalsIgnoreCase(commandeString);		
+	}
+	
+	public ActionMenu getAction(){
+		return commandeAction;
+	}
+	
+	
 }
