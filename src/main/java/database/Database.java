@@ -9,11 +9,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
+//import org.apache.commons.dbutils.DbUtils;
+//import org.apache.commons.dbutils.QueryRunner;
+//import org.apache.commons.dbutils.ResultSetHandler;
+//import org.apache.commons.dbutils.handlers.BeanHandler;
+//import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
@@ -21,14 +21,14 @@ import com.mysql.jdbc.StringUtils;
 
 
 public class Database {
-	String url = "jdbc:mysql://localhost:3306/";
+	String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
     String dbName = "computer-database-db";
     String driver = "com.mysql.jdbc.Driver";
     String userName = "admincdb";
     String password = "qwerty1234";
 
     private static Database db;   
-    private Connection con ;
+    protected Connection con ;
     
     
     
@@ -45,7 +45,7 @@ public class Database {
             Class driver_class = Class.forName(driver);
             Driver driver = (Driver) driver_class.newInstance();
             DriverManager.registerDriver(driver);
-            connection = DriverManager.getConnection(url + dbName, userName, password);
+            connection = DriverManager.getConnection(url, userName, password);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -66,95 +66,15 @@ public class Database {
         return db;
     }
     
-    public Computer getComputerById(int id){
-		QueryRunner run=new QueryRunner();
-
-		BeanHandler beanHandler = new BeanHandler(Computer.class);
-		ResultSetHandler h = beanHandler;
-
-		Object computer=null;
-		try{
-			computer =run.query(this.con, "SELECT * FROM computer WHERE id = '" + id + "'", h);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return (Computer)computer;
-	}     
     
-    public List<Computer> getComputersByName(String name){
-
-    	List<Computer> results = new ArrayList<Computer>();
-        QueryRunner qr = new QueryRunner();
-        try {
-        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer WHERE name = '" + name + "'",
-                    new BeanListHandler(Computer.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	return results;
-        }
-       
-	}  
     
-    public List<Computer> getAllComputers(){
-
-    	List<Computer> results = new ArrayList<Computer>();
-        QueryRunner qr = new QueryRunner();
-        try {
-        	results = (List<Computer>) qr.query(con, "SELECT * FROM computer",
-                    new BeanListHandler(Computer.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	return results;
-        }
-       
-	} 
+    public static ComputerDao getComputerDao() {
+        return new ComputerDao( getInstance() );
+    }
     
-    public Company getCompanyById(int id){
-		QueryRunner run=new QueryRunner();
-
-		BeanHandler beanHandler = new BeanHandler(Company.class);
-		ResultSetHandler h = beanHandler;
-
-		Object company=null;
-		try{
-			company =run.query(this.con, "SELECT * FROM company WHERE id = '" + id + "'", h);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return (Company)company;
-	}     
-    
-    public List<Company> getCompanysByName(String name){
-
-    	List<Company> results = new ArrayList<Company>();
-        QueryRunner qr = new QueryRunner();
-        try {
-        	results = (List<Company>) qr.query(con, "SELECT * FROM company WHERE name = '" + name + "'",
-                    new BeanListHandler(Company.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	return results;
-        }
-       
-	}  
-    
-    public List<Company> getAllCompany(){
-
-    	List<Company> results = new ArrayList<Company>();
-        QueryRunner qr = new QueryRunner();
-        try {
-        	results = (List<Company>) qr.query(con, "SELECT * FROM company",
-                    new BeanListHandler(Company.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	return results;
-        }
-       
-	} 
+    public static CompanyDao getCompanyDao() {
+        return new CompanyDao( getInstance() );
+    }
     
     
 }

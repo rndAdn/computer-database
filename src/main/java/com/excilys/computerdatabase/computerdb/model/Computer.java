@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.computerdb.model;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Computer {
 
@@ -8,8 +9,8 @@ public class Computer {
 	
 	private int id;
 	private String name;
-	private Calendar dateIntroduced;
-	private Calendar dateDiscontinued;
+	private Date dateIntroduced;
+	private Date dateDiscontinued;
 	private int compagnyId;
 	
 	
@@ -28,16 +29,16 @@ public class Computer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Calendar getDateIntroduced() {
+	public Date getDateIntroduced() {
 		return dateIntroduced;
 	}
-	public void setDateIntroduced(Calendar dateIntroduced) {
+	public void setDateIntroduced(Date dateIntroduced) {
 		this.dateIntroduced = dateIntroduced;
 	}
-	public Calendar getDateDiscontinued() {
+	public Date getDateDiscontinued() {
 		return dateDiscontinued;
 	}
-	public void setDateDiscontinued(Calendar dateDiscontinued) {
+	public void setDateDiscontinued(Date dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
 	public int getCompagnyId() {

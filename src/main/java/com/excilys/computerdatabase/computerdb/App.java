@@ -21,9 +21,9 @@ public class App {
     public static void main( String[] args ){
         //System.out.println( "Hello World!" );
         
-        Database db = Database.getInstance();
-        //Computer computer = db.getComputerById(1);
-        //System.out.println(computer.getId() +" " + computer.getName());
+        //Database db = Database.getInstance();
+        //Computer computer = Database.getComputerDao().getComputerById(1);
+        //System.out.println(computer);
         
         /*List<Company> computers = db.getAllCompany();
         for (Company c : computers)
