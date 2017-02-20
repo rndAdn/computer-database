@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.Menu;
 import com.excilys.computerdatabase.computerdb.ui.action.ActionMenu;
@@ -24,8 +25,8 @@ public class App {
         //Computer computer = db.getComputerById(1);
         //System.out.println(computer.getId() +" " + computer.getName());
         
-        /*List<Computer> computers = db.getAllComputers();
-        for (Computer c : computers)
+        /*List<Company> computers = db.getAllCompany();
+        for (Company c : computers)
         	System.out.println(c);
         */
         
