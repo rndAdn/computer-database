@@ -9,7 +9,7 @@ import database.Database;
 public class ListComputerAction implements ActionMenu {
 
 	public void doAction() {
-		List<Computer> computers = Database.getInstance().getAllComputers();
+		List<Computer> computers = Database.getComputerDao().getAllComputers();
 	    
 		System.out.println("--------ComputerList-------------");
 		for (Computer c : computers)
