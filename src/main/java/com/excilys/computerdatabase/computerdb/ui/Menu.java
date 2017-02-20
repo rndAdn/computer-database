@@ -23,7 +23,7 @@ public enum Menu {
 	}
 	
 	public String toString(){
-		return ""+commandeChar + " (" + commandeString + ").";
+		return ""+commandeString + "\t (" + commandeChar + ").";
 	}
 	
 	
