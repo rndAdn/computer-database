@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.computerdb;
 
+import database.Database;
+
 /**
  * Hello world!
  *
@@ -7,5 +9,8 @@ package com.excilys.computerdatabase.computerdb;
 public class App {
     public static void main( String[] args ){
         System.out.println( "Hello World!" );
+        
+        Database db = Database.getInstance();
+       
     }
 }
