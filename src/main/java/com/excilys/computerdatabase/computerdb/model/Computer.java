@@ -47,6 +47,10 @@ public class Computer {
 		this.compagnyId = compagnyId;
 	}
 	
+	public String toString(){
+		return "" + id + " " + name;
+	}
+	
 	
 	
 	
