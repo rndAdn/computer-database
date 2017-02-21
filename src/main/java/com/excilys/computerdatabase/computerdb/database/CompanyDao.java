@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
 public class CompanyDao {
 	private Database database;
@@ -60,14 +61,14 @@ public class CompanyDao {
 	   
 	}  
 
-	public List<Company> getAllCompany(){
+	public List<Pageable> getAllCompany(int limitStart, int size){
 		
-		List<Company> result = new ArrayList<Company>();
+		List<Pageable> result = new ArrayList<Pageable>();
 		try {
 			Statement st = database.con.createStatement();
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM company");
+			rset = st.executeQuery("SELECT * FROM company  LIMIT "+limitStart + ", " + size);
 			
 			while(rset.next()){
 				result.add(mapCompany(rset));
@@ -87,6 +88,29 @@ public class CompanyDao {
 		company.setId( rset.getInt("id"));
 		company.setName( rset.getString("name"));
 		return company;
+	}
+
+
+	public int getNumberOfCompany() {
+		int number = 0;
+		try {
+			Statement st = database.con.createStatement();
+
+			ResultSet rset=null;
+			rset = st.executeQuery("SELECT count(id) as total FROM company");
+			if(rset.next()){
+				number = rset.getInt("total");
+				//logger.debug("getNumberOfCompany : " + number);
+			}
+			
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		finally {
+			return number;
+		}  
 	}
 }
 

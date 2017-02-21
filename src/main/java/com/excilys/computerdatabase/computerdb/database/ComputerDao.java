@@ -19,7 +19,7 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
-//import com.mysql.jdbc.Statement;
+
 
 public class ComputerDao {
 	
