@@ -163,4 +163,23 @@ public class ComputerDao {
 			return number;
 		}  
 	}
+
+
+	public void updateComputer(Computer computer) {
+		try {
+			logger.debug("Update de l'ordinateur " + computer);
+			PreparedStatement updateStatment = database.con.prepareStatement("UPDATE computer SET name='?', introduced=?, discontinued=? WHERE id=?;");
+			updateStatment.setString(1, computer.getName());
+			updateStatment.setDate(2, computer.getDateIntroduced());
+			updateStatment.setDate(3, computer.getDateDiscontinued());
+			updateStatment.setInt(4, computer.getId());
+			
+			updateStatment.executeUpdate(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 }
