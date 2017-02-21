@@ -11,7 +11,7 @@ public abstract class PagesList {
 	
 	
 	public PagesList(int totalRow){
-		this.totalNumberOfpages = (int)Math.ceil(totalRow/ rowByPages);
+		this.totalNumberOfpages = (int)Math.ceil(totalRow/ (double)rowByPages);
 	}
 	
 	public abstract List<Pageable> getList();

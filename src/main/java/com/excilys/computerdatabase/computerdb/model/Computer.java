@@ -50,15 +50,16 @@ public class Computer implements Pageable {
 	}
 	
 	public String toString(){
-		return "" + id + " " + name;
+		return "" + id + 
+				"\t" + name;
 	}
 	
 	public String getDetail(){
 		return "Id : "+id + 
-				" Nom : " + name +
-				" DateI : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
-				" Date fin : " + ((dateDiscontinued != null)?dateDiscontinued:"NC") +
-				" Company : " + company.getName(); 
+				"\tNom : " + name +
+				"\tDate Introduction : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
+				"\tDate fin : " + ((dateDiscontinued != null)?dateDiscontinued:"NC") +
+				"\tCompany : " + company.getName(); 
 	}
 	
 	
