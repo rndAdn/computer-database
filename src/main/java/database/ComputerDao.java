@@ -6,6 +6,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.computerdatabase.computerdb.model.Company;
+
 //import org.apache.commons.dbutils.QueryRunner;
 //import org.apache.commons.dbutils.ResultSetHandler;
 //import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -17,9 +22,12 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 public class ComputerDao {
 	
 	private Database database;
+	private Logger logger;
 	
 	ComputerDao( Database database ) {
         this.database = database;
+        logger = LoggerFactory.getLogger("database.ComputerDao");
+        
     }
 
 	
@@ -31,13 +39,7 @@ public class ComputerDao {
 			ResultSet rset=null;
 			rset = st.executeQuery("SELECT * FROM computer WHERE id = '" + id + "'");
 			if(rset.next()){
-				Computer computer = new Computer();
-				computer.setId( rset.getInt("id"));
-				computer.setName( rset.getString("name"));
-				computer.setDateIntroduced( rset.getDate("introduced"));
-				computer.setDateDiscontinued( rset.getDate("discontinued"));
-				computer.setCompagnyId( rset.getInt("company_id"));
-				return computer;
+				return mapComputer(rset);
 			}
 			
 		} catch (SQLException e1) {
@@ -59,13 +61,7 @@ public class ComputerDao {
 			rset = st.executeQuery("SELECT * FROM computer WHERE name = '" + name + "'");
 			
 			while(rset.next()){
-				Computer computer = new Computer();
-				computer.setId( rset.getInt("id"));
-				computer.setName( rset.getString("name"));
-				computer.setDateIntroduced( rset.getDate("introduced"));
-				computer.setDateDiscontinued( rset.getDate("discontinued"));
-				computer.setCompagnyId( rset.getInt("company_id"));
-				result.add(computer);
+				result.add(mapComputer(rset));
 			}
 			
 		} catch (SQLException e1) {
@@ -89,13 +85,7 @@ public class ComputerDao {
 			rset = st.executeQuery("SELECT * FROM computer");
 			
 			while(rset.next()){
-				Computer computer = new Computer();
-				computer.setId( rset.getInt("id"));
-				computer.setName( rset.getString("name"));
-				computer.setDateIntroduced( rset.getDate("introduced"));
-				computer.setDateDiscontinued( rset.getDate("discontinued"));
-				computer.setCompagnyId( rset.getInt("company_id"));
-				result.add(computer);
+				result.add(mapComputer(rset));
 			}
 			
 		} catch (SQLException e1) {
@@ -107,4 +97,14 @@ public class ComputerDao {
 		}  
 	}
 
+    
+    private Computer mapComputer(ResultSet rset) throws SQLException{
+    	Computer computer = new Computer();
+    	computer.setId( rset.getInt("id"));
+    	computer.setName( rset.getString("name"));
+    	computer.setDateIntroduced( rset.getDate("introduced"));
+		computer.setDateDiscontinued( rset.getDate("discontinued"));
+		computer.setCompagny( Database.getCompanyDao().getCompanyById(rset.getInt("company_id")));
+		return computer;
+	}
 }
