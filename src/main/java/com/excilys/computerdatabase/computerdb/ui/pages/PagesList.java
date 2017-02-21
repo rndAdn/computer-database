@@ -3,13 +3,10 @@ package com.excilys.computerdatabase.computerdb.ui.pages;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.database.Database;
-import com.excilys.computerdatabase.computerdb.model.Computer;
-
-public class PagesList {
+public abstract class PagesList {
 	
-	private int rowByPages = 10;
-	private int pageNumber = 1;
+	protected int rowByPages = 30;
+	protected int pageNumber = 1;
 	private int totalNumberOfpages;
 	
 	
@@ -17,15 +14,12 @@ public class PagesList {
 		this.totalNumberOfpages = (int)Math.ceil(totalRow/ rowByPages);
 	}
 	
+	public abstract List<Pageable> getList();
 	
 	public void showPage(){
 		
-		List<Pageable> computers = Database.getComputerDao().getAllComputers((pageNumber-1) * rowByPages, rowByPages);
-	    
-		/*System.out.println("--------ComputerList-------------");
-		for (Computer c : computers)
-	    	System.out.println(c);
-		System.out.println("--------EndComputerList----------");*/
+		List<Pageable> computers = getList();//
+
 		Page page = new Page(computers);
 		page.printContent();
 		printFooter();
