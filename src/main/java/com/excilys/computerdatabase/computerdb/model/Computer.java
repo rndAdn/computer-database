@@ -62,6 +62,8 @@ public class Computer implements Pageable {
 	}
 	
 	
-	
+	public void checkComputer(){
+		
+	}
 	
 }
