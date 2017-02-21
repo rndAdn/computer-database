@@ -21,6 +21,7 @@ public class ShowComputerDetailsAction implements ActionMenu {
 			System.out.println(computer.getDetail());
 		}
 		catch (NullPointerException e) {
+			e.printStackTrace();
 			System.out.println("Aucun Ordinateur ne correspond à cette ID");
 		}
 		finally {

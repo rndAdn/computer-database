@@ -11,7 +11,7 @@ public class Computer {
 	private String name;
 	private Date dateIntroduced;
 	private Date dateDiscontinued;
-	private int compagnyId;
+	private Company company;
 	
 	
 	public Computer(){}
@@ -41,11 +41,11 @@ public class Computer {
 	public void setDateDiscontinued(Date dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
-	public int getCompagnyId() {
-		return compagnyId;
+	public Company getCompany() {
+		return this.company;
 	}
-	public void setCompagnyId(int compagnyId) {
-		this.compagnyId = compagnyId;
+	public void setCompagny(Company company) {
+		this.company = company;
 	}
 	
 	public String toString(){
@@ -57,7 +57,7 @@ public class Computer {
 				" Nom : " + name +
 				" DateI : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
 				" Date fin : " + ((dateDiscontinued != null)?dateDiscontinued:"NC") +
-				" Company : " + compagnyId; 
+				" Company : " + company.getName(); 
 	}
 	
 	
