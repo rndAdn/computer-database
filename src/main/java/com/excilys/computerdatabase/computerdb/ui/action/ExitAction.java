@@ -9,7 +9,7 @@ public class ExitAction  implements ActionMenu {
 		System.out.print("Quitter l'application ? [o/N] : ");
 		String reponse  = sc.nextLine();
 		if(reponse.equalsIgnoreCase("o")){
-			
+			System.out.print("Application Fermée");
 			System.exit(0);
 		}
 

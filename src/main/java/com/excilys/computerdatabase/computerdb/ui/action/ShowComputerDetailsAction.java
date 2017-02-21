@@ -3,9 +3,8 @@ package com.excilys.computerdatabase.computerdb.ui.action;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-
-import database.Database;
 
 public class ShowComputerDetailsAction implements ActionMenu {
 

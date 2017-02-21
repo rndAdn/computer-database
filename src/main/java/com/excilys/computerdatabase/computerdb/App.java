@@ -6,12 +6,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.Menu;
+import com.excilys.computerdatabase.computerdb.ui.MenuEnum;
 import com.excilys.computerdatabase.computerdb.ui.action.ActionMenu;
-
-import database.Database;
 
 /**
  * Hello world!
@@ -67,7 +66,7 @@ public class App {
     	while(true){
     		
     		System.out.println("--------MENU-------------");
-        	for(Menu menu : Menu.values()){
+        	for(MenuEnum menu : MenuEnum.values()){
       	      System.out.println(menu);
         	}
         	System.out.println("-------------------------");
@@ -75,7 +74,7 @@ public class App {
         	
             String s = sc.nextLine();
             System.out.println();
-            for(Menu menu : Menu.values()){
+            for(MenuEnum menu : MenuEnum.values()){
               	if(menu.isEntry(s)){
               		menu.getAction().doAction();
               	}

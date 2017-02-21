@@ -1,4 +1,4 @@
-package database;
+package com.excilys.computerdatabase.computerdb.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

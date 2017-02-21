@@ -2,9 +2,8 @@ package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.util.List;
 
+import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-
-import database.Database;
 
 public class ListComputerAction implements ActionMenu {
 

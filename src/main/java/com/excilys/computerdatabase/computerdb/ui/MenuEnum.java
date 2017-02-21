@@ -2,7 +2,7 @@ package com.excilys.computerdatabase.computerdb.ui;
 
 import com.excilys.computerdatabase.computerdb.ui.action.*;
 
-public enum Menu {
+public enum MenuEnum {
 	
 	LISTCOMPUTER ('A', "List Computer", new ListComputerAction() ),
 	LISTCOMPANY ('Z', "List Company", new ListCompanyAction()),
@@ -16,7 +16,7 @@ public enum Menu {
 	private String commandeString;
 	private ActionMenu commandeAction;
 	
-	Menu(char c, String s, ActionMenu ac){
+	MenuEnum(char c, String s, ActionMenu ac){
 		commandeChar = c;
 		commandeString = s;
 		commandeAction = ac;
