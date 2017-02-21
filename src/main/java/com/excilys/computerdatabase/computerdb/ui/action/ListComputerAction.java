@@ -4,16 +4,15 @@ import java.util.List;
 
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
 
 public class ListComputerAction implements ActionMenu {
 
 	public void doAction() {
-		List<Computer> computers = Database.getComputerDao().getAllComputers();
-	    
-		System.out.println("--------ComputerList-------------");
-		for (Computer c : computers)
-	    	System.out.println(c);
-		System.out.println("--------EndComputerList----------");
+		
+		PagesList pagesList = new PagesList(Database.getComputerDao().getNumberOfComputer());
+		pagesList.showPage();
+		
 	}
 
 }
