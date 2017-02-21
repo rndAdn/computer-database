@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.mysql.jdbc.StringUtils;
+//import com.mysql.jdbc.StringUtils;
 
 
 public class Database {

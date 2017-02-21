@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 
@@ -20,15 +18,17 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
+import ch.qos.logback.classic.Logger;
+
 
 public class ComputerDao {
 	
 	private Database database;
-	private Logger logger;
+	//private Logger logger;
 	
 	ComputerDao( Database database ) {
         this.database = database;
-        logger = LoggerFactory.getLogger("database.ComputerDao");
+        //logger = LoggerFactory.getLogger("database.ComputerDao");
         
     }
 
@@ -95,14 +95,14 @@ public class ComputerDao {
 			e1.printStackTrace();
 		}
 		finally {
-			logger.debug("getAllComputers : " + result.size());
+			//logger.debug("getAllComputers : " + result.size());
 			return result;
 		}  
 	}
     
     public void deleteComputer(Computer computer){
 		try {
-			logger.debug("suppression de l'ordinateur " + computer);
+			//logger.debug("suppression de l'ordinateur " + computer);
 			PreparedStatement deleteStatment = database.con.prepareStatement("DELETE FROM computer WHERE id=?;");
 			deleteStatment.setInt(1, computer.getId());
 			deleteStatment.executeUpdate(); 
@@ -126,7 +126,7 @@ public class ComputerDao {
 
 	public void insertComputer(Computer computer) {
 		try {
-			logger.debug("Ajout de l'ordinateur " + computer);
+			//logger.debug("Ajout de l'ordinateur " + computer);
 			PreparedStatement insertStatment = database.con.prepareStatement("INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);");
 			//insertStatment.setInt(1, computer.getId());
 			insertStatment.setString(1, computer.getName());
@@ -151,7 +151,7 @@ public class ComputerDao {
 			rset = st.executeQuery("SELECT count(id) as total FROM computer");
 			if(rset.next()){
 				number = rset.getInt("total");
-				logger.debug("getNumberOfComputer : " + number);
+				//logger.debug("getNumberOfComputer : " + number);
 			}
 			
 			
@@ -167,7 +167,7 @@ public class ComputerDao {
 
 	public void updateComputer(Computer computer) {
 		try {
-			logger.debug("Update de l'ordinateur " + computer);
+			//logger.debug("Update de l'ordinateur " + computer);
 			PreparedStatement updateStatment = database.con.prepareStatement("UPDATE computer SET name='?', introduced=?, discontinued=? WHERE id=?;");
 			updateStatment.setString(1, computer.getName());
 			updateStatment.setDate(2, computer.getDateIntroduced());
