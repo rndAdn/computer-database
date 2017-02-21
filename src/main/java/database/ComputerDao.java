@@ -120,4 +120,23 @@ public class ComputerDao {
 		computer.setCompagny( Database.getCompanyDao().getCompanyById(rset.getInt("company_id")));
 		return computer;
 	}
+
+
+	public void insertComputer(Computer computer) {
+		try {
+			logger.debug("Ajout de l'ordinateur " + computer);
+			PreparedStatement insertStatment = database.con.prepareStatement("INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);");
+			//insertStatment.setInt(1, computer.getId());
+			insertStatment.setString(1, computer.getName());
+			insertStatment.setDate(2, computer.getDateIntroduced());
+			insertStatment.setDate(3, computer.getDateDiscontinued());
+			insertStatment.setInt(4, computer.getCompany().getId());
+			
+			insertStatment.executeUpdate(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

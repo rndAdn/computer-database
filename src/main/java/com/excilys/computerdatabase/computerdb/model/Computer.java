@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.computerdb.model;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 public class Computer {
 
