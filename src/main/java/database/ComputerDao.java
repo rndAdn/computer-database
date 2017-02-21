@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -95,6 +96,18 @@ public class ComputerDao {
 		finally {
 			return result;
 		}  
+	}
+    
+    public void deleteComputer(Computer computer){
+		try {
+			logger.debug("suppression de l'ordinateur " + computer);
+			PreparedStatement deleteStatment = database.con.prepareStatement("DELETE FROM computer WHERE id=?;");
+			deleteStatment.setInt(1, computer.getId());
+			deleteStatment.executeUpdate(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
     
