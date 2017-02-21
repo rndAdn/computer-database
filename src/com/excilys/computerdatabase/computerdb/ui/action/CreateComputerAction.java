@@ -37,10 +37,15 @@ public class CreateComputerAction implements ActionMenu {
 			Date dateIntro = ComputerController.stringToDate(dateIntroString);
 			Date dateFin = ComputerController.stringToDate(dateFinServiceString);
 			ComputerController.compareDate(dateIntro, dateFin);
-			int companyid = ComputerController.stringToId(companyIdString);
 			
-			Company company = Database.getCompanyDao().getCompanyById(companyid);
-			ComputerController.checkCompany(company);
+			
+			Company company = null;
+			if(companyIdString != null && !companyIdString.equals("")){
+				int companyid = ComputerController.stringToId(companyIdString);
+				company = Database.getCompanyDao().getCompanyById(companyid);
+				ComputerController.checkCompany(company);
+			}
+			//
 			
 			Computer computer = new Computer();
 			computer.setName(name);
@@ -69,6 +74,7 @@ public class CreateComputerAction implements ActionMenu {
 			System.out.println();
 			System.out.print(e.getMessage());
 			System.out.println(" Abandon");
+			e.printStackTrace();
 		}
 		finally {
 			System.out.println();

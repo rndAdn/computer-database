@@ -45,6 +45,11 @@ public class Computer implements Pageable {
 	public Company getCompany() {
 		return this.company;
 	}
+	
+	public Integer getCompanyId() {
+		return ((company!= null)?company.getId():null);
+	}
+	
 	public void setCompagny(Company company) {
 		this.company = company;
 	}
@@ -59,7 +64,7 @@ public class Computer implements Pageable {
 				"\tNom : " + name +
 				"\tDate Introduction : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
 				"\tDate fin : " + ((dateDiscontinued != null)?dateDiscontinued:"NC") +
-				"\tCompany : " + company.getName(); 
+				"\tCompany : " + ((company!= null)?company.getName():"NC"); 
 	}
 	
 	

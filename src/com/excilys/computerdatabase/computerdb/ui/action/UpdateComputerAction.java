@@ -22,6 +22,7 @@ public class UpdateComputerAction implements ActionMenu {
 			
 			Computer computer = Database.getComputerDao().getComputerById(id);
 			if (computer == null) throw new ComputerException("Ordinateur introuvable dans la base de donnée");
+			System.out.println(computer.getDetail());
 			
 			System.out.print("Entrez le nom de l'ordinateur : ");
 			String name  = sc.nextLine();
@@ -49,10 +50,15 @@ public class UpdateComputerAction implements ActionMenu {
 			
 			if(name != null && !name.equals(""))computer.setName(name);
 			
+			Company company = null;
+			if(companyIdString != null && !companyIdString.equals("")){
+				int companyid = ComputerController.stringToId(companyIdString);
+				company = Database.getCompanyDao().getCompanyById(companyid);
+				ComputerController.checkCompany(company);
+			}
+			//int companyid = ComputerController.stringToId(companyIdString);
 			
-			int companyid = ComputerController.stringToId(companyIdString);
-			
-			Company company = Database.getCompanyDao().getCompanyById(companyid);
+			//Company company = Database.getCompanyDao().getCompanyById(companyid);
 			//ComputerController.checkCompany(company);
 			
 			if(company != null)computer.setCompagny(company);
@@ -69,6 +75,8 @@ public class UpdateComputerAction implements ActionMenu {
 			
 			Database.getComputerDao().updateComputer(computer);
 			System.out.print("Ordinateur mis à jour");
+			computer = Database.getComputerDao().getComputerById(id);
+			System.out.println(computer.getDetail());
 			
 		}
 		catch (ComputerException e) {

@@ -132,7 +132,9 @@ public class ComputerDao {
 			insertStatment.setString(1, computer.getName());
 			insertStatment.setDate(2, computer.getDateIntroduced());
 			insertStatment.setDate(3, computer.getDateDiscontinued());
-			insertStatment.setInt(4, computer.getCompany().getId());
+			Integer companyId = computer.getCompanyId();
+			if(companyId == null) insertStatment.setNull(4, java.sql.Types.INTEGER);
+			else insertStatment.setInt(4, companyId);
 			
 			insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
@@ -168,11 +170,19 @@ public class ComputerDao {
 	public void updateComputer(Computer computer) {
 		try {
 			//logger.debug("Update de l'ordinateur " + computer);
-			PreparedStatement updateStatment = database.con.prepareStatement("UPDATE computer SET name='?', introduced=?, discontinued=? WHERE id=?;");
+			PreparedStatement updateStatment = database.con.prepareStatement("UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;");
 			updateStatment.setString(1, computer.getName());
 			updateStatment.setDate(2, computer.getDateIntroduced());
 			updateStatment.setDate(3, computer.getDateDiscontinued());
-			updateStatment.setInt(4, computer.getId());
+			
+			Integer companyId = computer.getCompanyId();
+			if(companyId == null) updateStatment.setNull(4, java.sql.Types.INTEGER);
+			else updateStatment.setInt(4, companyId);
+			
+			System.out.println(updateStatment.toString());
+			updateStatment.setLong(5, computer.getId());
+			
+			
 			
 			updateStatment.executeUpdate(); 
 		} catch (SQLException e) {
