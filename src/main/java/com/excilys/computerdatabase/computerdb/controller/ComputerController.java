@@ -34,13 +34,13 @@ public class ComputerController {
 		}
 	}
 	
-	public static int stringToCompanyId(String idString) throws ComputerException{
+	public static int stringToId(String idString) throws ComputerException{
 		int id;
 		try {
 			id = Integer.parseInt(idString);
 		}
 		catch (NumberFormatException e) {
-			throw new ComputerException("Erreur l'id de la company n'est pas un nombre correct");
+			throw new ComputerException("Erreur l'id n'est pas correct ou est introuvable");
 		}
 		return id;
 	}
