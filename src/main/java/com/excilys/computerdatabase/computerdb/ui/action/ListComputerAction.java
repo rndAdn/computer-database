@@ -10,7 +10,6 @@ import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
 public class ListComputerAction implements ActionMenu {
 
 	public void doAction() {
-		
 		PagesList pagesList = new PagesListComputer(Database.getComputerDao().getNumberOfComputer());
 		pagesList.showPage();
 		

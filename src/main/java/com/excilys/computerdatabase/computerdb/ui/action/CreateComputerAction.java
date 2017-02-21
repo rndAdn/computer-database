@@ -37,7 +37,7 @@ public class CreateComputerAction implements ActionMenu {
 			Date dateIntro = ComputerController.stringToDate(dateIntroString);
 			Date dateFin = ComputerController.stringToDate(dateFinServiceString);
 			ComputerController.compareDate(dateIntro, dateFin);
-			int companyid = ComputerController.stringToCompanyId(companyIdString);
+			int companyid = ComputerController.stringToId(companyIdString);
 			
 			Company company = Database.getCompanyDao().getCompanyById(companyid);
 			ComputerController.checkCompany(company);

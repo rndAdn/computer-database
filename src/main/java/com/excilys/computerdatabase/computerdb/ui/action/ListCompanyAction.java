@@ -11,7 +11,6 @@ import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
 public class ListCompanyAction implements ActionMenu {
 
 	public void doAction() {
-		
 		PagesList pagesList = new PagesListCompany(Database.getCompanyDao().getNumberOfCompany());
 		pagesList.showPage();
 	}

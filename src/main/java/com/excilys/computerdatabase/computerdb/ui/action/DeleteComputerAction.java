@@ -2,6 +2,8 @@ package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.controller.ComputerController;
+import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 
@@ -11,13 +13,14 @@ public class DeleteComputerAction implements ActionMenu{
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Entrez l'id de l'ordinateur à supprimer : ");
-		String s  = sc.nextLine();
+		String idString  = sc.nextLine();
 		
-	    
 		try{
-			int id = Integer.parseInt(s);
+			int id = ComputerController.stringToId(idString);
+			
 			
 			Computer computer = Database.getComputerDao().getComputerById(id);
+			if (computer == null) throw new ComputerException("Ordinateur introuvable dans la base de donnée");
 			
 			System.out.println(computer.getDetail());
 			System.out.print("Supprimer ? [O/n]");
@@ -26,20 +29,16 @@ public class DeleteComputerAction implements ActionMenu{
 			System.out.println();
 			
 			if(reponse.equalsIgnoreCase("n")){
-				System.out.print("Ordinateur non supprimé");
-				return; 
+				throw new ComputerException("");
 			}
 			
 			Database.getComputerDao().deleteComputer(computer);
 			System.out.print("Ordinateur supprimé");
-		}
-		catch (NullPointerException e) {
-			//e.printStackTrace();
-			System.out.println("Aucun Ordinateur ne correspond à cette ID");
-		}
-		catch (NumberFormatException e) {
-			//e.printStackTrace();
-			System.out.println("id Incorrect");
+		} catch (ComputerException e) {
+			System.out.println();
+			System.out.println();
+			System.out.print(e.getMessage());
+			System.out.println(" Abandon de la suppression");
 		}
 		finally {
 			System.out.println();
