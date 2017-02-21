@@ -24,6 +24,7 @@ public class CompanyDao {
 			ResultSet rset=null;
 			rset = st.executeQuery("SELECT * FROM company WHERE id = '" + id + "'");
 			if(rset.next()){
+				return mapCompany(rset);
 			}
 			
 		} catch (SQLException e1) {
