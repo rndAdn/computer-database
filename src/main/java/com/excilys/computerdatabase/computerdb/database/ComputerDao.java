@@ -18,7 +18,8 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 //import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
-//import com.mysql.jdbc.Statement;
+import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+
 
 public class ComputerDao {
 	
@@ -51,7 +52,7 @@ public class ComputerDao {
 		
 	}     
     
-    public List<Computer> getComputersByName(String name){
+    public List<Computer> getComputersByName(String name, int limitStart, int size){
         
         
         List<Computer> result = new ArrayList<Computer>();
@@ -59,7 +60,7 @@ public class ComputerDao {
 			Statement st = database.con.createStatement();
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM computer WHERE name = '" + name + "'");
+			rset = st.executeQuery("SELECT * FROM computer WHERE name = '" + name + "' LIMIT "+limitStart + ", " + size);
 			
 			while(rset.next()){
 				result.add(mapComputer(rset));
@@ -76,14 +77,14 @@ public class ComputerDao {
        
 	}  
     
-    public List<Computer> getAllComputers(){
+    public List<Pageable> getAllComputers(int limitStart, int size){
     	
-    	List<Computer> result = new ArrayList<Computer>();
+    	List<Pageable> result = new ArrayList<Pageable>();
 		try {
 			Statement st = database.con.createStatement();
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM computer");
+			rset = st.executeQuery("SELECT * FROM computer  LIMIT "+limitStart + ", " + size);
 			
 			while(rset.next()){
 				result.add(mapComputer(rset));
@@ -94,6 +95,7 @@ public class ComputerDao {
 			e1.printStackTrace();
 		}
 		finally {
+			logger.debug("getAllComputers : " + result.size());
 			return result;
 		}  
 	}
@@ -138,5 +140,27 @@ public class ComputerDao {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public int getNumberOfComputer(){
+		int number = 0;
+		try {
+			Statement st = database.con.createStatement();
+
+			ResultSet rset=null;
+			rset = st.executeQuery("SELECT count(id) as total FROM computer");
+			if(rset.next()){
+				number = rset.getInt("total");
+				logger.debug("getNumberOfComputer : " + number);
+			}
+			
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		finally {
+			return number;
+		}  
 	}
 }

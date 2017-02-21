@@ -1,6 +1,8 @@
 package com.excilys.computerdatabase.computerdb.model;
 
-public class Company {
+import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+
+public class Company implements Pageable{
 
 	
 	
