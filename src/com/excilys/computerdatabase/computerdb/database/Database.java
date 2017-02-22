@@ -3,20 +3,11 @@ package com.excilys.computerdatabase.computerdb.database;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
-//import org.apache.commons.dbutils.DbUtils;
-//import org.apache.commons.dbutils.QueryRunner;
-//import org.apache.commons.dbutils.ResultSetHandler;
-//import org.apache.commons.dbutils.handlers.BeanHandler;
-//import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.model.Computer;
 //import com.mysql.jdbc.StringUtils;
 
 
@@ -29,16 +20,19 @@ public class Database {
 
     private static Database db;   
     protected Connection con ;
-    
+    private Logger logger;
     
     
     private Database() {
         //System.out.println("Hello");
+    	logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.Database");
         con= createConnection();
+        
     }
 
     @SuppressWarnings("rawtypes")
     public Connection createConnection() {
+    	logger.info("creation de la connexion à la base de donnée ");
         Connection connection = null;
         try {
             // Load the JDBC driver
