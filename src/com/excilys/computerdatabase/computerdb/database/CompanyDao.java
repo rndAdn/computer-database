@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.computerdb.database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,21 +10,23 @@ import java.util.List;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
-public class CompanyDao {
+public class CompanyDao implements ICompanyDAO{
 	private Database database;
 
 	CompanyDao( Database database ) {
 		this.database = database;
 	}
 	
-	
-	public Company getCompanyById(int id){
-		Statement st;
+	@Override
+	public Company getCompanyById(long id){
+		PreparedStatement selectStatement;
+		
 		try {
-			st = database.con.createStatement();
-
-			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM company WHERE id = '" + id + "'");
+			selectStatement = database.con.prepareStatement(SELECT_COMPANY_BY_ID);
+			
+			selectStatement.setLong(1, id);
+			
+			ResultSet rset = selectStatement.executeQuery();
 			if(rset.next()){
 				return mapCompany(rset);
 			}
@@ -36,15 +39,20 @@ public class CompanyDao {
 		
 	}     
 
-	public List<Company> getCompanyByName(String name){
+	@Override
+	public List<Pageable> getCompanyByName(String name, int limitStart, int size){    
+	    List<Pageable> result = new ArrayList<>();
+	    PreparedStatement selectStatement;
 	    
-	    
-	    List<Company> result = new ArrayList<Company>();
 		try {
-			Statement st = database.con.createStatement();
-
-			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM company WHERE name = '" + name + "'");
+			
+			selectStatement = database.con.prepareStatement(SELECT_COMPANY_BY_NAME);
+			
+			selectStatement.setString(1, name);
+			selectStatement.setLong(2, limitStart);
+			selectStatement.setLong(3, size);
+			
+			ResultSet rset = selectStatement.executeQuery();
 			
 			while(rset.next()){
 				result.add(mapCompany(rset));
@@ -61,14 +69,21 @@ public class CompanyDao {
 	   
 	}  
 
-	public List<Pageable> getAllCompany(int limitStart, int size){
+	
+	@Override
+	public List<Pageable> getCompanys(int limitStart, int size){
 		
-		List<Pageable> result = new ArrayList<Pageable>();
+		List<Pageable> result = new ArrayList<>();
+	    PreparedStatement selectStatement;
+	    
 		try {
-			Statement st = database.con.createStatement();
-
-			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM company  LIMIT "+limitStart + ", " + size);
+			
+			selectStatement = database.con.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
+			
+			selectStatement.setLong(1, limitStart);
+			selectStatement.setLong(2, size);
+			
+			ResultSet rset = selectStatement.executeQuery();
 			
 			while(rset.next()){
 				result.add(mapCompany(rset));
@@ -91,19 +106,17 @@ public class CompanyDao {
 	}
 
 
-	public int getNumberOfCompany() {
-		int number = 0;
+	public long getNumberOfCompany() {
+		long number = 0;
 		try {
 			Statement st = database.con.createStatement();
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT count(id) as total FROM company");
+			rset = st.executeQuery(COUNT_COMPANY);
 			if(rset.next()){
-				number = rset.getInt("total");
-				//logger.debug("getNumberOfCompany : " + number);
+				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+				//logger.debug("getNumberOfComputer : " + number);
 			}
-			
-			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
