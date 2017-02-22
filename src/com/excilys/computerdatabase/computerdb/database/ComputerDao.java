@@ -127,7 +127,7 @@ public class ComputerDao implements IComputerDAO{
 		try {
 			PreparedStatement deleteStatment = database.con.prepareStatement(DELETE_COMPUTER);
 			
-			deleteStatment.setInt(1, computer.getId());
+			deleteStatment.setLong(1, computer.getId());
 			deleteStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

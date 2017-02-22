@@ -6,13 +6,13 @@ import com.excilys.computerdatabase.computerdb.database.Database;
 
 public class PagesListComputer extends PagesList {
 
-	public PagesListComputer(int totalRow) {
-		super(totalRow);
+	public PagesListComputer(long l) {
+		super(l);
 	}
 
 	@Override
 	public List<Pageable> getList() {
-		return Database.getComputerDao().getAllComputers((pageNumber-1) * rowByPages, rowByPages);
+		return Database.getComputerDao().getComputers((pageNumber-1) * rowByPages, rowByPages);
 	}
 
 }

@@ -10,8 +10,8 @@ public abstract class PagesList {
 	private int totalNumberOfpages;
 	
 	
-	public PagesList(int totalRow){
-		this.totalNumberOfpages = (int)Math.ceil(totalRow/ (double)rowByPages);
+	public PagesList(long l){
+		this.totalNumberOfpages = (int)Math.ceil(l/ (double)rowByPages);
 	}
 	
 	public abstract List<Pageable> getList();
