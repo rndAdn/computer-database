@@ -8,7 +8,7 @@ public class Computer implements Pageable {
 
 	
 	
-	private int id;
+	private long id;
 	private String name;
 	private Date dateIntroduced;
 	private Date dateDiscontinued;
@@ -18,10 +18,10 @@ public class Computer implements Pageable {
 	public Computer(){}
 	
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -46,7 +46,7 @@ public class Computer implements Pageable {
 		return this.company;
 	}
 	
-	public Integer getCompanyId() {
+	public Long getCompanyId() {
 		return ((company!= null)?company.getId():null);
 	}
 	

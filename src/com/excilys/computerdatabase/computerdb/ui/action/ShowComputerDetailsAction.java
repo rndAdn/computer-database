@@ -16,7 +16,7 @@ public class ShowComputerDetailsAction implements ActionMenu {
 		String idString  = sc.nextLine();
 		
 		try{
-			int id = ComputerController.stringToId(idString);
+			long id = ComputerController.stringToId(idString);
 			
 			Computer computer = Database.getComputerDao().getComputerById(id);
 			if (computer == null) throw new ComputerException("Ordinateur introuvable dans la base de donnée");

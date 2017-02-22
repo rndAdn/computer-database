@@ -18,10 +18,10 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
-import ch.qos.logback.classic.Logger;
+//import ch.qos.logback.classic.Logger;
 
 
-public class ComputerDao {
+public class ComputerDao implements IComputerDAO{
 	
 	private Database database;
 	//private Logger logger;
@@ -32,14 +32,22 @@ public class ComputerDao {
         
     }
 
-	
-	public Computer getComputerById(int id){
-		Statement st;
+	// DONE
+	@Override
+	public Computer getComputerById(long id){
+		PreparedStatement selectStatement;
+		
 		try {
-			st = database.con.createStatement();
-
+			selectStatement = database.con.prepareStatement(SELECT_COMPUTER_BY_ID);
+			
+			selectStatement.setLong(1, id);
+			
+			
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM computer WHERE id = '" + id + "'");
+			//rset = st.executeQuery("SELECT * FROM computer WHERE id = '" + id + "'");
+			
+			rset = selectStatement.executeQuery();
+			
 			if(rset.next()){
 				return mapComputer(rset);
 			}
@@ -51,16 +59,22 @@ public class ComputerDao {
 		return null;
 		
 	}     
-    
-    public List<Computer> getComputersByName(String name, int limitStart, int size){
-        
-        
-        List<Computer> result = new ArrayList<Computer>();
+
+	// DONE
+	@Override
+	public List<Computer> getComputersByName(String name, int limitStart, int size){
+		PreparedStatement selectStatement;
+		List<Computer> result = new ArrayList<>();
+		
 		try {
-			Statement st = database.con.createStatement();
+			selectStatement = database.con.prepareStatement(SELECT_COMPUTER_BY_NAME);
+			
+			selectStatement.setString(1, name);
+			selectStatement.setInt(2, limitStart);
+			selectStatement.setInt(3, size);
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM computer WHERE name = '" + name + "' LIMIT "+limitStart + ", " + size);
+			rset = selectStatement.executeQuery();
 			
 			while(rset.next()){
 				result.add(mapComputer(rset));
@@ -76,15 +90,22 @@ public class ComputerDao {
 		
        
 	}  
-    
-    public List<Pageable> getAllComputers(int limitStart, int size){
+	
+	//DONE
+	@Override
+    public List<Pageable> getComputers(int limitStart, int size){
     	
-    	List<Pageable> result = new ArrayList<Pageable>();
+		PreparedStatement selectStatement;
+		List<Pageable> result = new ArrayList<>();
+		
 		try {
-			Statement st = database.con.createStatement();
-
+			selectStatement = database.con.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
+			
+			selectStatement.setInt(1, limitStart);
+			selectStatement.setInt(2, size);
+			
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT * FROM computer  LIMIT "+limitStart + ", " + size);
+			rset = selectStatement.executeQuery();
 			
 			while(rset.next()){
 				result.add(mapComputer(rset));
@@ -100,63 +121,93 @@ public class ComputerDao {
 		}  
 	}
     
-    public void deleteComputer(Computer computer){
+	//DONE
+	@Override
+	public boolean deleteComputer(Computer computer) {
 		try {
-			//logger.debug("suppression de l'ordinateur " + computer);
-			PreparedStatement deleteStatment = database.con.prepareStatement("DELETE FROM computer WHERE id=?;");
-			deleteStatment.setInt(1, computer.getId());
+			PreparedStatement deleteStatment = database.con.prepareStatement(DELETE_COMPUTER);
+			
+			deleteStatment.setLong(1, computer.getId());
 			deleteStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			//database.con.rollback();
+			return false;
 		}
+		return true;
 	}
 
-    
-    private Computer mapComputer(ResultSet rset) throws SQLException{
-    	Computer computer = new Computer();
-    	computer.setId( rset.getInt("id"));
-    	computer.setName( rset.getString("name"));
-    	computer.setDateIntroduced( rset.getDate("introduced"));
-		computer.setDateDiscontinued( rset.getDate("discontinued"));
-		computer.setCompagny( Database.getCompanyDao().getCompanyById(rset.getInt("company_id")));
-		return computer;
-	}
-
-
-	public void insertComputer(Computer computer) {
+	
+	//DONE
+	@Override
+	public boolean updateComputer(Computer computer) {
 		try {
-			//logger.debug("Ajout de l'ordinateur " + computer);
-			PreparedStatement insertStatment = database.con.prepareStatement("INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);");
-			//insertStatment.setInt(1, computer.getId());
+			//logger.debug("Update de l'ordinateur " + computer);
+			PreparedStatement updateStatment = database.con.prepareStatement(UPDATE_COMPUTER);
+			updateStatment.setString(1, computer.getName());
+			updateStatment.setDate(2, computer.getDateIntroduced());
+			updateStatment.setDate(3, computer.getDateDiscontinued());
+			
+			Long companyId = computer.getCompanyId();
+			
+			if( companyId == null) updateStatment.setNull(4, java.sql.Types.INTEGER);
+			else updateStatment.setLong(4, companyId);
+			
+			
+			updateStatment.setLong(5, computer.getId());
+			
+			
+			
+			updateStatment.executeUpdate(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	
+	//DONE
+	@Override
+	public boolean insertComputer(Computer computer) {
+		try {
+
+			PreparedStatement insertStatment = database.con.prepareStatement(INSERT_COMPUTER);
+			
 			insertStatment.setString(1, computer.getName());
 			insertStatment.setDate(2, computer.getDateIntroduced());
 			insertStatment.setDate(3, computer.getDateDiscontinued());
-			Integer companyId = computer.getCompanyId();
+			
+			Long companyId = computer.getCompanyId();
+			
 			if(companyId == null) insertStatment.setNull(4, java.sql.Types.INTEGER);
-			else insertStatment.setInt(4, companyId);
+			else insertStatment.setLong(4, companyId);
 			
 			insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
-		
+		return true;
 	}
+
 	
-	public int getNumberOfComputer(){
-		int number = 0;
+	//DONE
+	@Override
+	public long countComputers() {
+		long number = 0;
 		try {
 			Statement st = database.con.createStatement();
 
 			ResultSet rset=null;
-			rset = st.executeQuery("SELECT count(id) as total FROM computer");
+			rset = st.executeQuery(COUNT_COMPUTERS);
 			if(rset.next()){
-				number = rset.getInt("total");
+				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
 				//logger.debug("getNumberOfComputer : " + number);
 			}
-			
-			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -166,30 +217,15 @@ public class ComputerDao {
 		}  
 	}
 
-
-	public void updateComputer(Computer computer) {
-		try {
-			//logger.debug("Update de l'ordinateur " + computer);
-			PreparedStatement updateStatment = database.con.prepareStatement("UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;");
-			updateStatment.setString(1, computer.getName());
-			updateStatment.setDate(2, computer.getDateIntroduced());
-			updateStatment.setDate(3, computer.getDateDiscontinued());
-			
-			Integer companyId = computer.getCompanyId();
-			if(companyId == null) updateStatment.setNull(4, java.sql.Types.INTEGER);
-			else updateStatment.setInt(4, companyId);
-			
-			System.out.println(updateStatment.toString());
-			updateStatment.setLong(5, computer.getId());
-			
-			
-			
-			updateStatment.executeUpdate(); 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+	private Computer mapComputer(ResultSet rset) throws SQLException{
+    	Computer computer = new Computer();
+    	computer.setId( rset.getInt("id"));
+    	computer.setName( rset.getString("name"));
+    	computer.setDateIntroduced( rset.getDate("introduced"));
+		computer.setDateDiscontinued( rset.getDate("discontinued"));
+		computer.setCompagny( Database.getCompanyDao().getCompanyById(rset.getInt("company_id")));
+		return computer;
 	}
+
+	
 }

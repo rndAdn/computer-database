@@ -6,13 +6,13 @@ import com.excilys.computerdatabase.computerdb.database.Database;
 
 public class PagesListCompany extends PagesList {
 
-	public PagesListCompany(int totalRow) {
-		super(totalRow);
+	public PagesListCompany(long l) {
+		super(l);
 	}
 
 	@Override
 	public List<Pageable> getList() {
-		return Database.getCompanyDao().getAllCompany((pageNumber-1) * rowByPages, rowByPages);
+		return Database.getCompanyDao().getCompanys((pageNumber-1) * rowByPages, rowByPages);
 	}
 
 }

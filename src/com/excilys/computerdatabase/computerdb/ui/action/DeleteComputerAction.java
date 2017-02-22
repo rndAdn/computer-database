@@ -16,7 +16,7 @@ public class DeleteComputerAction implements ActionMenu{
 		String idString  = sc.nextLine();
 		
 		try{
-			int id = ComputerController.stringToId(idString);
+			long id = ComputerController.stringToId(idString);
 			
 			
 			Computer computer = Database.getComputerDao().getComputerById(id);

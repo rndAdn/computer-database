@@ -30,7 +30,6 @@ public class Database {
         
     }
 
-    @SuppressWarnings("rawtypes")
     public Connection createConnection() {
     	logger.info("creation de la connexion à la base de donnée ");
         Connection connection = null;
@@ -62,7 +61,7 @@ public class Database {
     
     
     
-    public static ComputerDao getComputerDao() {
+    public static IComputerDAO getComputerDao() {
         return new ComputerDao( getInstance() );
     }
     
