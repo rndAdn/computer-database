@@ -46,7 +46,7 @@ public class Computer implements Pageable {
 		return this.company;
 	}
 	
-	public Integer getCompanyId() {
+	public Long getCompanyId() {
 		return ((company!= null)?company.getId():null);
 	}
 	

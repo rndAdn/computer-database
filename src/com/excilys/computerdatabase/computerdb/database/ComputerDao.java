@@ -149,10 +149,10 @@ public class ComputerDao implements IComputerDAO{
 			updateStatment.setDate(2, computer.getDateIntroduced());
 			updateStatment.setDate(3, computer.getDateDiscontinued());
 			
-			Integer companyId = computer.getCompanyId();
+			Long companyId = computer.getCompanyId();
 			
 			if( companyId == null) updateStatment.setNull(4, java.sql.Types.INTEGER);
-			else updateStatment.setInt(4, companyId);
+			else updateStatment.setLong(4, companyId);
 			
 			
 			updateStatment.setLong(5, computer.getId());
@@ -180,10 +180,10 @@ public class ComputerDao implements IComputerDAO{
 			insertStatment.setDate(2, computer.getDateIntroduced());
 			insertStatment.setDate(3, computer.getDateDiscontinued());
 			
-			Integer companyId = computer.getCompanyId();
+			Long companyId = computer.getCompanyId();
 			
 			if(companyId == null) insertStatment.setNull(4, java.sql.Types.INTEGER);
-			else insertStatment.setInt(4, companyId);
+			else insertStatment.setLong(4, companyId);
 			
 			insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
