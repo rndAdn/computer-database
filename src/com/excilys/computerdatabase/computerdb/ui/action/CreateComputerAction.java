@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.excilys.computerdatabase.computerdb.controller.CompanyController;
 import com.excilys.computerdatabase.computerdb.controller.ComputerController;
 import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
+import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
@@ -26,7 +27,7 @@ public class CreateComputerAction implements ActionMenu {
 		System.out.print("Entrez la date de fin de service (jj-mm-aaaa) : ");
 		String dateFinServiceString = sc.nextLine();
 		
-		System.out.print("Entrez l'id de la companie (Obligatoire) : ");
+		System.out.print("Entrez l'id de la companie : ");
 		String companyIdString = sc.nextLine();
 		
 		
@@ -70,6 +71,13 @@ public class CreateComputerAction implements ActionMenu {
 			
 		}
 		catch (ComputerException e) {
+			System.out.println();
+			System.out.println();
+			System.out.print(e.getMessage());
+			System.out.println(" Abandon");
+			e.printStackTrace();
+		}
+		catch (DaoException e) {
 			System.out.println();
 			System.out.println();
 			System.out.print(e.getMessage());

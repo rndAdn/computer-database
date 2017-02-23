@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.excilys.computerdatabase.computerdb.controller.ComputerController;
 import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
+import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 
@@ -35,6 +36,12 @@ public class DeleteComputerAction implements ActionMenu{
 			Database.getComputerDao().deleteComputer(computer);
 			System.out.print("Ordinateur supprimé");
 		} catch (ComputerException e) {
+			System.out.println();
+			System.out.println();
+			System.out.print(e.getMessage());
+			System.out.println(" Abandon de la suppression");
+		}
+		catch (DaoException e) {
 			System.out.println();
 			System.out.println();
 			System.out.print(e.getMessage());
