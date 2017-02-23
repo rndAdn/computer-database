@@ -60,6 +60,8 @@ public class Computer implements Pageable {
 	}
 	
 	public String getDetail(){
+		//String s = String.format("Id : %4d Nom : %15s Date Introduction : %10t Date fin : %10t Company : %10s", id, name, ((dateIntroduced != null)?dateIntroduced:"NC"), ((dateDiscontinued != null)?dateDiscontinued:"NC"), ((company!= null)?company.getName():"NC"));
+		
 		return "Id : "+id + 
 				"\tNom : " + name +
 				"\tDate Introduction : " + ((dateIntroduced != null)?dateIntroduced:"NC") + 
