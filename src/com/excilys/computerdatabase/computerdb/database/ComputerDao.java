@@ -219,11 +219,19 @@ public class ComputerDao implements IComputerDAO{
 
 	private Computer mapComputer(ResultSet rset) throws SQLException{
     	Computer computer = new Computer();
-    	computer.setId( rset.getInt("id"));
+    	computer.setId( rset.getLong("id"));
     	computer.setName( rset.getString("name"));
     	computer.setDateIntroduced( rset.getDate("introduced"));
 		computer.setDateDiscontinued( rset.getDate("discontinued"));
-		computer.setCompagny( Database.getCompanyDao().getCompanyById(rset.getInt("company_id")));
+		
+		Company company = new Company();
+		long company_id = rset.getLong("company_id"); 
+		if(! rset.wasNull()){
+			company.setId(company_id);
+			company.setName(rset.getString("company_name"));
+			
+		}
+		computer.setCompagny(company);
 		return computer;
 	}
 
