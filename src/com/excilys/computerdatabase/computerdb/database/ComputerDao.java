@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 
@@ -24,17 +26,17 @@ import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 public class ComputerDao implements IComputerDAO{
 	
 	private Database database;
-	//private Logger logger;
+	private static Logger LOGGER;
 	
 	ComputerDao( Database database ) {
         this.database = database;
-        //logger = LoggerFactory.getLogger("database.ComputerDao");
+        LOGGER = LoggerFactory.getLogger("database.ComputerDao");
         
     }
 
 	// DONE
 	@Override
-	public Computer getComputerById(long id){
+	public Computer getComputerById(long id) throws DaoException{
 		PreparedStatement selectStatement;
 		
 		try {
@@ -52,9 +54,9 @@ public class ComputerDao implements IComputerDAO{
 				return mapComputer(rset);
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			LOGGER.error("getComputerById : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return null;
 		
@@ -62,7 +64,7 @@ public class ComputerDao implements IComputerDAO{
 
 	// DONE
 	@Override
-	public List<Computer> getComputersByName(String name, int limitStart, int size){
+	public List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException{
 		PreparedStatement selectStatement;
 		List<Computer> result = new ArrayList<>();
 		
@@ -80,9 +82,9 @@ public class ComputerDao implements IComputerDAO{
 				result.add(mapComputer(rset));
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			LOGGER.error("getComputersByName : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		finally {
 			return result;
@@ -93,7 +95,7 @@ public class ComputerDao implements IComputerDAO{
 	
 	//DONE
 	@Override
-    public List<Pageable> getComputers(int limitStart, int size){
+    public List<Pageable> getComputers(int limitStart, int size) throws DaoException {
     	
 		PreparedStatement selectStatement;
 		List<Pageable> result = new ArrayList<>();
@@ -111,9 +113,9 @@ public class ComputerDao implements IComputerDAO{
 				result.add(mapComputer(rset));
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			LOGGER.error("getComputers : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		finally {
 			//logger.debug("getAllComputers : " + result.size());
@@ -123,25 +125,22 @@ public class ComputerDao implements IComputerDAO{
     
 	//DONE
 	@Override
-	public boolean deleteComputer(Computer computer) {
+	public boolean deleteComputer(Computer computer)  throws DaoException{
 		try {
 			PreparedStatement deleteStatment = database.con.prepareStatement(DELETE_COMPUTER);
 			
 			deleteStatment.setLong(1, computer.getId());
 			deleteStatment.executeUpdate(); 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			//database.con.rollback();
-			return false;
+			LOGGER.error("deleteComputer : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return true;
 	}
-
 	
 	//DONE
 	@Override
-	public boolean updateComputer(Computer computer) {
+	public boolean updateComputer(Computer computer)  throws DaoException{
 		try {
 			//logger.debug("Update de l'ordinateur " + computer);
 			PreparedStatement updateStatment = database.con.prepareStatement(UPDATE_COMPUTER);
@@ -153,25 +152,20 @@ public class ComputerDao implements IComputerDAO{
 			
 			if( companyId == null) updateStatment.setNull(4, java.sql.Types.INTEGER);
 			else updateStatment.setLong(4, companyId);
-			
-			
+						
 			updateStatment.setLong(5, computer.getId());
-			
-			
 			
 			updateStatment.executeUpdate(); 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			LOGGER.error("updateComputer : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return true;
 	}
-
 	
 	//DONE
 	@Override
-	public boolean insertComputer(Computer computer) {
+	public boolean insertComputer(Computer computer) throws DaoException {
 		try {
 
 			PreparedStatement insertStatment = database.con.prepareStatement(INSERT_COMPUTER);
@@ -187,17 +181,15 @@ public class ComputerDao implements IComputerDAO{
 			
 			insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			LOGGER.error("insertComputer : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return true;
 	}
-
 	
 	//DONE
 	@Override
-	public long countComputers() {
+	public long countComputers() throws DaoException{
 		long number = 0;
 		try {
 			Statement st = database.con.createStatement();
@@ -208,9 +200,9 @@ public class ComputerDao implements IComputerDAO{
 				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
 				//logger.debug("getNumberOfComputer : " + number);
 			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			LOGGER.error("countComputers : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		finally {
 			return number;

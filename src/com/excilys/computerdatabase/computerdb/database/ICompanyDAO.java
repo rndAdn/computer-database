@@ -14,12 +14,12 @@ public interface ICompanyDAO {
 	public static final String COUNT_COMPANY 					= "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company";
 
 	
-	public Company getCompanyById(long id);
+	public Company getCompanyById(long id) throws DaoException;
 	
-	public List<Pageable> getCompanyByName(String name, int limitStart, int size);
+	public List<Pageable> getCompanyByName(String name, int limitStart, int size) throws DaoException;
 	
-	public List<Pageable> getCompanys(int limitStart, int size);
+	public List<Pageable> getCompanys(int limitStart, int size) throws DaoException;
 	
-	public long getNumberOfCompany();
+	public long getNumberOfCompany() throws DaoException;
 
 }
