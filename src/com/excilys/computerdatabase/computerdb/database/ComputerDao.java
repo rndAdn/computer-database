@@ -1,11 +1,15 @@
 package com.excilys.computerdatabase.computerdb.database;
 
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,40 +29,36 @@ import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
 public class ComputerDao implements IComputerDAO{
 	
-	private Database database;
-	private static Logger LOGGER;
+	private static final Logger LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.ComputerDao");;
 	
-	ComputerDao( Database database ) {
-        this.database = database;
-        LOGGER = LoggerFactory.getLogger("database.ComputerDao");
-        
-    }
 
 	// DONE
 	@Override
-	public Computer getComputerById(long id) throws DaoException{
+	public Optional<Computer> getComputerById(long id) throws DaoException{
 		PreparedStatement selectStatement;
+		Optional<Computer> optionalComputer = Optional.empty();
+	    Connection connection = Database.getConnection();
 		
 		try {
-			selectStatement = database.con.prepareStatement(SELECT_COMPUTER_BY_ID);
+			selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID);
 			
 			selectStatement.setLong(1, id);
 			
-			
-			ResultSet rset=null;
-			//rset = st.executeQuery("SELECT * FROM computer WHERE id = '" + id + "'");
-			
-			rset = selectStatement.executeQuery();
+			ResultSet rset = selectStatement.executeQuery();
 			
 			if(rset.next()){
-				return mapComputer(rset);
+				optionalComputer = Optional.of(mapComputer(rset));
 			}
 			
 		} catch (SQLException e) {
 			LOGGER.error("getComputerById : " + e.getMessage());
 			throw new DaoException(e.getMessage());
 		}
-		return null;
+		finally {
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("getComputerById : " + optionalComputer);
+		return optionalComputer;
 		
 	}     
 
@@ -67,9 +67,10 @@ public class ComputerDao implements IComputerDAO{
 	public List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException{
 		PreparedStatement selectStatement;
 		List<Computer> result = new ArrayList<>();
+	    Connection connection = Database.getConnection();
 		
 		try {
-			selectStatement = database.con.prepareStatement(SELECT_COMPUTER_BY_NAME);
+			selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 			
 			selectStatement.setString(1, name);
 			selectStatement.setInt(2, limitStart);
@@ -87,10 +88,10 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			return result;
+			Database.closeConnection(connection);
 		}
-		
-       
+		LOGGER.info("getComputersByName result size : " + result.size());
+		return result;       
 	}  
 	
 	//DONE
@@ -99,9 +100,10 @@ public class ComputerDao implements IComputerDAO{
     	
 		PreparedStatement selectStatement;
 		List<Pageable> result = new ArrayList<>();
+	    Connection connection = Database.getConnection();
 		
 		try {
-			selectStatement = database.con.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
+			selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
 			
 			selectStatement.setInt(1, limitStart);
 			selectStatement.setInt(2, size);
@@ -118,35 +120,61 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			//logger.debug("getAllComputers : " + result.size());
-			return result;
-		}  
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("getComputers result size : " + result.size());
+		return result;
 	}
     
 	//DONE
 	@Override
 	public boolean deleteComputer(Computer computer)  throws DaoException{
+		int result = -1;
+		Connection connection = Database.getConnection();
 		try {
-			PreparedStatement deleteStatment = database.con.prepareStatement(DELETE_COMPUTER);
+			PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 			
 			deleteStatment.setLong(1, computer.getId());
 			deleteStatment.executeUpdate(); 
 		} catch (SQLException e) {
+			
 			LOGGER.error("deleteComputer : " + e.getMessage());
+			Database.rollback(connection);
 			throw new DaoException(e.getMessage());
 		}
-		return true;
+		finally {
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("deleteComputer : " + (result == 1));
+		return result == 1;
 	}
 	
 	//DONE
 	@Override
 	public boolean updateComputer(Computer computer)  throws DaoException{
+		int result = -1;
+		Connection connection = Database.getConnection();
 		try {
 			//logger.debug("Update de l'ordinateur " + computer);
-			PreparedStatement updateStatment = database.con.prepareStatement(UPDATE_COMPUTER);
+			PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
 			updateStatment.setString(1, computer.getName());
-			updateStatment.setDate(2, computer.getDateIntroduced());
-			updateStatment.setDate(3, computer.getDateDiscontinued());
+			
+			Optional<Date> dateIntro = computer.getDateIntroduced();
+			if(dateIntro.isPresent()){
+				updateStatment.setDate(2, dateIntro.get());
+			}
+			else{
+				updateStatment.setNull(2, Types.NULL);
+			}
+			
+
+			Optional<Date> dateFin = computer.getDateDiscontinued();
+			if(dateFin.isPresent()){
+				updateStatment.setDate(3, dateIntro.get());
+			}
+			else{
+				updateStatment.setNull(3, Types.NULL);
+			}
 			
 			Long companyId = computer.getCompanyId();
 			
@@ -158,41 +186,68 @@ public class ComputerDao implements IComputerDAO{
 			updateStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			LOGGER.error("updateComputer : " + e.getMessage());
+			Database.rollback(connection);
 			throw new DaoException(e.getMessage());
 		}
-		return true;
+		finally {
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("updateComputer : " + (result == 1));
+		return result == 1;
 	}
 	
 	//DONE
 	@Override
 	public boolean insertComputer(Computer computer) throws DaoException {
+		int result = -1;
+		Connection connection = Database.getConnection();
 		try {
 
-			PreparedStatement insertStatment = database.con.prepareStatement(INSERT_COMPUTER);
+			PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER);
 			
 			insertStatment.setString(1, computer.getName());
-			insertStatment.setDate(2, computer.getDateIntroduced());
-			insertStatment.setDate(3, computer.getDateDiscontinued());
+			Optional<Date> dateIntro = computer.getDateIntroduced();
+			if(dateIntro.isPresent()){
+				insertStatment.setDate(2, dateIntro.get());
+			}
+			else{
+				insertStatment.setNull(2, Types.NULL);
+			}
+			
+
+			Optional<Date> dateFin = computer.getDateDiscontinued();
+			if(dateFin.isPresent()){
+				insertStatment.setDate(3, dateIntro.get());
+			}
+			else{
+				insertStatment.setNull(3, Types.NULL);
+			}
 			
 			Long companyId = computer.getCompanyId();
 			
 			if(companyId == null) insertStatment.setNull(4, java.sql.Types.INTEGER);
 			else insertStatment.setLong(4, companyId);
 			
-			insertStatment.executeUpdate(); 
+			result = insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			LOGGER.error("insertComputer : " + e.getMessage());
+			Database.rollback(connection);
 			throw new DaoException(e.getMessage());
 		}
-		return true;
+		finally {
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("insertComputer : " + (result == 1));
+		return result == 1;
 	}
 	
 	//DONE
 	@Override
 	public long countComputers() throws DaoException{
 		long number = 0;
+		Connection connection = Database.getConnection();
 		try {
-			Statement st = database.con.createStatement();
+			Statement st = connection.createStatement();
 
 			ResultSet rset=null;
 			rset = st.executeQuery(COUNT_COMPUTERS);
@@ -205,8 +260,10 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			return number;
-		}  
+			Database.closeConnection(connection);
+		}
+		LOGGER.info("countComputers : " + number);
+		return number;
 	}
 
 	private Computer mapComputer(ResultSet rset) throws SQLException{
@@ -224,6 +281,7 @@ public class ComputerDao implements IComputerDAO{
 			
 		}
 		computer.setCompagny(company);
+		//LOGGER.info("mapComputer : " + computer);
 		return computer;
 	}
 

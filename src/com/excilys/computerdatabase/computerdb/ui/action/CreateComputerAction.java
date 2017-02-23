@@ -1,18 +1,16 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.controller.CompanyController;
-import com.excilys.computerdatabase.computerdb.controller.ComputerController;
-import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.database.Database;
+
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.Utils;
+import com.excilys.computerdatabase.computerdb.service.CompanyService;
+import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class CreateComputerAction implements ActionMenu {
 
@@ -32,61 +30,40 @@ public class CreateComputerAction implements ActionMenu {
 		
 		
 		
-		try{
+		ComputerValidator.checkName(name);
+		Date dateIntro = Utils.stringToDate(dateIntroString);
+		Date dateFin = Utils.stringToDate(dateFinServiceString);
+		ComputerValidator.compareDate(dateIntro, dateFin); // if
+		
+		
+		Optional<Company> optionalCompany = Optional.empty();
+		if(companyIdString != null && !companyIdString.equals("")){
+			long companyid = Utils.stringToId(companyIdString);
 			
-			ComputerController.checkName(name);
-			Date dateIntro = ComputerController.stringToDate(dateIntroString);
-			Date dateFin = ComputerController.stringToDate(dateFinServiceString);
-			ComputerController.compareDate(dateIntro, dateFin);
-			
-			
-			Company company = null;
-			if(companyIdString != null && !companyIdString.equals("")){
-				int companyid = ComputerController.stringToId(companyIdString);
-				company = Database.getCompanyDao().getCompanyById(companyid);
-				ComputerController.checkCompany(company);
-			}
-			//
-			
-			Computer computer = new Computer();
-			computer.setName(name);
-			computer.setDateIntroduced(dateIntro);
-			computer.setDateDiscontinued(dateFin);
-			computer.setCompagny(company);
-			
-			
-			
-			System.out.println(computer.getDetail());
-			
-			System.out.print("Ajouter ? [O/n]");
-			String reponse  = sc.nextLine();
-			System.out.println();
-			if(reponse.equalsIgnoreCase("n")){
-				System.out.print("Ordinateur non ajouté");
-				return; 
-			}
-			
-			Database.getComputerDao().insertComputer(computer);
-			System.out.print("Ordinateur ajouté");
-			
+			optionalCompany = CompanyService.getCompanyByid(companyid);
 		}
-		catch (ComputerException e) {
-			System.out.println();
-			System.out.println();
-			System.out.print(e.getMessage());
-			System.out.println(" Abandon");
-			e.printStackTrace();
+		
+		Computer computer = new Computer();
+		computer.setName(name);
+		computer.setDateIntroduced(dateIntro);
+		computer.setDateDiscontinued(dateFin);
+		computer.setCompagny(optionalCompany.orElse(null));
+		
+		
+		
+		System.out.println(computer.getDetail());
+		
+		System.out.print("Ajouter ? [O/n]");
+		String reponse  = sc.nextLine();
+		System.out.println();
+		if(reponse.equalsIgnoreCase("n")){
+			System.out.print("Ordinateur non ajouté");
+			//sc.close();
+			return; 
 		}
-		catch (DaoException e) {
-			System.out.println();
-			System.out.println();
-			System.out.print(e.getMessage());
-			System.out.println(" Abandon");
-			e.printStackTrace();
-		}
-		finally {
-			System.out.println();
-		}
+		ComputerService.ajoutComputer(computer);
+		System.out.print("Ordinateur ajouté");
+		
 
 	}
 

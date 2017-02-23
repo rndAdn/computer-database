@@ -1,13 +1,15 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.controller.ComputerController;
-import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
+import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class ShowComputerDetailsAction implements ActionMenu {
 
@@ -15,20 +17,20 @@ public class ShowComputerDetailsAction implements ActionMenu {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Entrez l'id de l'ordinateur : ");
 		String idString  = sc.nextLine();
+		//sc.close();
 		
 		try{
-			long id = ComputerController.stringToId(idString);
+			long id = Utils.stringToId(idString);
+
+			ComputerDao computerDao = new ComputerDao();
+			Optional<Computer> optionalComputer = computerDao.getComputerById(id);
+			if (! optionalComputer.isPresent()){
+				System.out.println("Ordinateur introuvable dans la base de donnée");
+				//sc.close();
+				return;
+			}
 			
-			Computer computer = Database.getComputerDao().getComputerById(id);
-			if (computer == null) throw new ComputerException("Ordinateur introuvable dans la base de donnée");
-			
-			System.out.println(computer.getDetail());
-		}
-		catch (ComputerException e) {
-			System.out.println();
-			System.out.println();
-			System.out.print(e.getMessage());
-			System.out.println(" Abandon");
+			System.out.println(optionalComputer.get().getDetail());
 		}
 		catch (DaoException e) {
 			System.out.println();

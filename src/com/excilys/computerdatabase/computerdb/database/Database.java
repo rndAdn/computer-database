@@ -12,61 +12,84 @@ import org.slf4j.LoggerFactory;
 
 
 public class Database {
-	String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-    String dbName = "computer-database-db";
-    String driver = "com.mysql.jdbc.Driver";
-    String userName = "admincdb";
-    String password = "qwerty1234";
+	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	private static String dbName = "computer-database-db";
+	private static String driver = "com.mysql.jdbc.Driver";
+	private static String userName = "admincdb";
+	private static String password = "qwerty1234";
 
     private static Database db;   
-    protected Connection con ;
-    private Logger logger;
+    private static Logger logger;
     
     
     private Database() {
         //System.out.println("Hello");
     	logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.Database");
-        con= createConnection();
+    	Class driver_class;
+		try {
+			driver_class = Class.forName(driver);
+			Driver driver = (Driver) driver_class.newInstance();
+	        DriverManager.registerDriver(driver);
+	        //con= createConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
         
     }
 
-    public Connection createConnection() {
-    	logger.info("creation de la connexion à la base de donnée ");
+    private static Connection createConnection() {
+    	logger.info("connexion à la base de donnée ");
         Connection connection = null;
         try {
-            // Load the JDBC driver
-            Class driver_class = Class.forName(driver);
-            Driver driver = (Driver) driver_class.newInstance();
-            DriverManager.registerDriver(driver);
             connection = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
     }
+    
+    public static Connection getConnection(){
+    	return getInstance().createConnection();
+    }
 
     
-    public static Database getInstance() {
+    private static Database getInstance() {
         if (db == null) {
         	db = new Database();
         }
         return db;
     }
     
-    
-    
-    public static IComputerDAO getComputerDao() {
-        return new ComputerDao( getInstance() );
+    public static void closeConnection(Connection connection){
+    	try {
+			connection.close();
+			logger.info("Connection Fermée");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.error("Connection non Fermée");
+		}
     }
     
-    public static CompanyDao getCompanyDao() {
-        return new CompanyDao( getInstance() );
+    public static void rollback(Connection connection){
+    	try {
+			connection.rollback();
+			logger.info("Connection RollBack");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.error("Connection RollBack");
+		}
     }
     
     

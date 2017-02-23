@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.util.List;
 
+import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Company;
@@ -23,7 +24,8 @@ public class ListCompanyAction implements ActionMenu {
 	public void doAction() {
 		PagesList pagesList;
 		try {
-			pagesList = new PagesListCompany(Database.getCompanyDao().getNumberOfCompany());
+			CompanyDao companyDao = new CompanyDao();
+			pagesList = new PagesListCompany(companyDao.getNumberOfCompany());
 			pagesList.showPage();
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
