@@ -30,13 +30,25 @@ public class CreateComputerAction implements ActionMenu {
 		
 		
 		
-		ComputerValidator.checkName(name);
+		boolean checkName = ComputerValidator.checkName(name);
+		if(!checkName){
+			System.out.println("Le nom de l'ordinateur n'est pas valide");
+			return;
+			
+		}
 		Date dateIntro = Utils.stringToDate(dateIntroString);
 		Date dateFin = Utils.stringToDate(dateFinServiceString);
-		ComputerValidator.compareDate(dateIntro, dateFin); // if
 		
+		
+		boolean checkIntervalDate = ComputerValidator.compareDate(dateIntro, dateFin);
+		
+		if(! checkIntervalDate){
+			System.out.println("Les dates ne sont pas valides");
+			return;
+		}
 		
 		Optional<Company> optionalCompany = Optional.empty();
+		
 		if(companyIdString != null && !companyIdString.equals("")){
 			long companyid = Utils.stringToId(companyIdString);
 			

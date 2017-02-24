@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +21,18 @@ public class Database {
 	private static String userName = "admincdb";
 	private static String password = "qwerty1234";
 
+	/*private static String dbName;
+	private static String driver;
+	private static String userName;
+	private static String password;
+	*/
     private static Database db;   
     private static Logger logger;
     
     
     private Database() {
         //System.out.println("Hello");
+    	
     	logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.Database");
     	Class driver_class;
 		try {
@@ -61,7 +70,7 @@ public class Database {
     }
     
     public static Connection getConnection(){
-    	return getInstance().createConnection();
+    	return Database.getInstance().createConnection();
     }
 
     

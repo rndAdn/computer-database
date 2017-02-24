@@ -24,5 +24,16 @@ public class ComputerService {
 			System.out.println();
 		}
 	}
+
+	public void deleteComputer(Computer computer) {
+		ComputerDao computerDao = new ComputerDao();
+		try {
+			computerDao.deleteComputer(computer);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 }

@@ -8,6 +8,7 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
+import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class DeleteComputerAction implements ActionMenu{
 
@@ -28,7 +29,9 @@ public class DeleteComputerAction implements ActionMenu{
 				return;
 			}
 			
-			System.out.println(optionalComputer.get().getDetail());
+			Computer computer = optionalComputer.get();
+			
+			System.out.println(computer.getDetail());
 			System.out.print("Supprimer ? [O/n]");
 			
 			String reponse  = sc.nextLine();
@@ -40,7 +43,10 @@ public class DeleteComputerAction implements ActionMenu{
 				return;
 			}
 			
-			computerDao.deleteComputer(optionalComputer.get());
+			ComputerService computerService = new ComputerService();
+			computerService.deleteComputer(computer);
+			
+			
 			System.out.print("Ordinateur supprimé");
 		}
 		catch (DaoException e) {
