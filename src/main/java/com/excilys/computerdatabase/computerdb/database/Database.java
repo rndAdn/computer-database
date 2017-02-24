@@ -17,17 +17,29 @@ public enum Database {
 
     private Connection connection;
     
-    private String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private String dbName = "computer-database-db";
-	private String driver = "com.mysql.jdbc.Driver";
-	private String userName = "admincdb";
-	private String password = "qwerty1234";
+    private String url;
+	private String dbName;
+	private String driver;
+	private String userName;
+	private String password;
     private Logger LOGGER;
 
     Database() {
     	LOGGER = LoggerFactory.getLogger(getClass());
     	Class driver_class;
     	LOGGER.info("Database Constructor " + this);
+    	
+    	try {
+    		Configuration config = new PropertiesConfiguration("database.properties");
+    		url = config.getString("url");
+    		dbName = config.getString("db_name");
+    		driver = config.getString("driver");
+    		userName = config.getString("username");
+    		password = config.getString("password");
+    	} catch (ConfigurationException ce) {
+    		ce.printStackTrace();
+    	}
+    	
     	
 		try {
 			driver_class = Class.forName(driver);
