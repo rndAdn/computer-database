@@ -11,27 +11,20 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.mysql.jdbc.StringUtils;
-
-
-public class Database {
-	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private static String dbName = "computer-database-db";
-	private static String driver = "com.mysql.jdbc.Driver";
-	private static String userName = "admincdb";
-	private static String password = "qwerty1234";
-
-	/*private static String dbName;
-	private static String driver;
-	private static String userName;
-	private static String password;
-	private static String url;*/
+public enum Database {
 	
-    private static Database db;   
-    private static Logger LOGGER;
+    INSTANCE;
+
+    private Connection connection;
     
-    
-    private Database() {
+    private String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	private String dbName = "computer-database-db";
+	private String driver = "com.mysql.jdbc.Driver";
+	private String userName = "admincdb";
+	private String password = "qwerty1234";
+    private Logger LOGGER;
+
+    Database() {
     	LOGGER = LoggerFactory.getLogger(getClass());
     	Class driver_class;
     	LOGGER.info("Database Constructor " + this);
@@ -49,12 +42,11 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        
-        
-        
+        connection = createConnection();
     }
 
-    private static Connection createConnection() {
+    
+    private Connection createConnection() {
     	LOGGER.info("connexion à la base de donnée ");
         Connection connection = null;
         try {
@@ -64,29 +56,25 @@ public class Database {
         }
         return connection;
     }
-    
-    public static Connection getConnection(){
-    	return getInstance().createConnection();
-    }
 
-    
-    private static Database getInstance() {
-        if (db == null) {
-        	db = new Database();
-        }
-        return db;
+    public Connection getConnection(){
+    	if(connection == null){
+    		connection = createConnection();
+    	}
+        return connection;
     }
     
-    public static void closeConnection(Connection connection){
+    public void closeConnection(){
     	try {
 			connection.close();
+			connection = null;
 			LOGGER.info("Connection Fermée");
 		} catch (SQLException e) {
 			LOGGER.error("Connection non Fermée");
 		}
     }
     
-    public static void rollback(Connection connection){
+    public void rollback(){
     	try {
 			connection.rollback();
 			LOGGER.info("Connection RollBack");
@@ -94,6 +82,4 @@ public class Database {
 			LOGGER.error("Connection RollBack");
 		}
     }
-    
-    
 }

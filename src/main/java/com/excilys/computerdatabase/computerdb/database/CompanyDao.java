@@ -22,7 +22,7 @@ public class CompanyDao implements ICompanyDAO{
 	public Optional<Company> getCompanyById(long id) throws DaoException{
 		Optional<Company> optionalCompany = Optional.empty();
 		PreparedStatement selectStatement;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID);
@@ -39,7 +39,7 @@ public class CompanyDao implements ICompanyDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		logger.info("getCompanyById result :" + optionalCompany);
 		return optionalCompany;
@@ -50,7 +50,7 @@ public class CompanyDao implements ICompanyDAO{
 	public List<Pageable> getCompanyByName(String name, int limitStart, int size)throws DaoException{    
 	    List<Pageable> result = new ArrayList<>();
 	    PreparedStatement selectStatement;
-	    Connection connection = Database.getConnection();
+	    Connection connection =  Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME);
@@ -70,7 +70,7 @@ public class CompanyDao implements ICompanyDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		logger.info("getCompanyByName result size : " + result.size());
 		return result;
@@ -83,7 +83,7 @@ public class CompanyDao implements ICompanyDAO{
 		
 		List<Pageable> result = new ArrayList<>();
 	    PreparedStatement selectStatement;
-	    Connection connection = Database.getConnection();
+	    Connection connection =  Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
@@ -102,7 +102,7 @@ public class CompanyDao implements ICompanyDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		logger.info("getCompanys result size : " + result.size());
 		return result;
@@ -117,7 +117,7 @@ public class CompanyDao implements ICompanyDAO{
 
 	public long getNumberOfCompany() throws DaoException{
 		long number = 0;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		
 		try {
 			Statement st = connection.createStatement();
@@ -131,7 +131,7 @@ public class CompanyDao implements ICompanyDAO{
 			throw new DaoException(e1.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		logger.info("getNumberOfCompany result : " + number);
 		return number;
