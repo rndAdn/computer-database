@@ -17,8 +17,6 @@ import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
 public class CompanyDao implements ICompanyDAO{
 	private static final Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
-
-
 	
 	@Override
 	public Optional<Company> getCompanyById(long id) throws DaoException{
@@ -114,7 +112,6 @@ public class CompanyDao implements ICompanyDAO{
 		Company company = new Company();
 		company.setId( rset.getInt("id"));
 		company.setName(rset.getString("name"));
-		//logger.info("mapCompany result : " + company);
 		return company;
 	}
 
@@ -129,7 +126,6 @@ public class CompanyDao implements ICompanyDAO{
 			rset = st.executeQuery(COUNT_COMPANY);
 			if(rset.next()){
 				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
-				//logger.debug("getNumberOfComputer : " + number);
 			}
 		} catch (SQLException e1) {
 			throw new DaoException(e1.getMessage());

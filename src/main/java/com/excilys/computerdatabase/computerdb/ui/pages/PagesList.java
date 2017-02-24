@@ -18,7 +18,7 @@ public abstract class PagesList {
 	
 	public void showPage(){
 		
-		List<Pageable> computers = getList();//
+		List<Pageable> computers = getList();
 
 		Page page = new Page(computers);
 		page.printContent();

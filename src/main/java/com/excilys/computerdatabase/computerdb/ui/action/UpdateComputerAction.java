@@ -30,7 +30,6 @@ public class UpdateComputerAction implements ActionMenu {
 			Optional<Computer> optionalComputer = computerDao.getComputerById(id);
 			if (! optionalComputer.isPresent()){
 				System.out.println("Ordinateur introuvable dans la base de donnée");
-				//sc.close();
 				return;
 			}
 			

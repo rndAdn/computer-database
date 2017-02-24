@@ -21,7 +21,6 @@ public class PagesListCompany extends PagesList {
 			CompanyDao companyDao = new CompanyDao();
 			list = companyDao.getCompanys((pageNumber-1) * rowByPages, rowByPages);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;

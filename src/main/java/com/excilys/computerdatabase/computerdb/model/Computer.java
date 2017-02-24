@@ -5,8 +5,6 @@ import java.util.Optional;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
 public class Computer implements Pageable {
-
-	
 	
 	private long id;
 	private String name;
@@ -32,8 +30,6 @@ public class Computer implements Pageable {
 	}
 	public Optional<LocalDate> getDateIntroduced() {
 		return Optional.ofNullable(dateIntroduced);
-		//return ((dateIntroduced!= null)?Optional.of(this.dateIntroduced):Optional.empty());
-		//return Optional.of(dateIntroduced);
 		
 	}
 	public void setDateIntroduced(LocalDate dateIntroduced) {
@@ -41,15 +37,12 @@ public class Computer implements Pageable {
 	}
 	public Optional<LocalDate> getDateDiscontinued() {
 		return Optional.ofNullable(dateDiscontinued);
-		//return ((dateDiscontinued!= null)?Optional.of(this.dateDiscontinued):Optional.empty());
-		//return Optional.of(dateDiscontinued);
 	}
 	public void setDateDiscontinued(LocalDate dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
 	public Optional<Company> getCompany() {
 		return Optional.ofNullable(company);
-		//return  ((company!= null)?Optional.of(this.company):Optional.empty());
 	}
 	
 	public Long getCompanyId() {

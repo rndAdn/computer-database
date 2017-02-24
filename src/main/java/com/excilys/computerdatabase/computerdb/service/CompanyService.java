@@ -13,7 +13,6 @@ public class CompanyService {
 		try {
 			return companyDao.getCompanyById(id);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return Optional.empty();

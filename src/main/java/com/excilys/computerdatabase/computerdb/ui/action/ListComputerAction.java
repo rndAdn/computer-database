@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.database.Database;
-import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
 import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
 
@@ -19,7 +17,6 @@ public class ListComputerAction implements ActionMenu {
 			pagesList = new PagesListComputer(computerDao.countComputers());
 			pagesList.showPage();
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

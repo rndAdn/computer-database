@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 
 public class ListCompanyAction implements ActionMenu {
 	
-	Logger logger;
+	private static Logger LOGGER;
 	
 	public ListCompanyAction(){
-		//logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.ui.action.ListCompanyAction");
+		LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.ui.action.ListCompanyAction");
 	}
 
 	public void doAction() {
@@ -28,7 +28,6 @@ public class ListCompanyAction implements ActionMenu {
 			pagesList = new PagesListCompany(companyDao.getNumberOfCompany());
 			pagesList.showPage();
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

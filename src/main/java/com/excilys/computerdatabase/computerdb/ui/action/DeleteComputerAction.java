@@ -19,6 +19,7 @@ public class DeleteComputerAction implements ActionMenu{
 		String idString  = sc.nextLine();
 		
 		try{
+			
 			long id = Utils.stringToId(idString);
 			
 			ComputerDao computerDao = new ComputerDao();
@@ -39,7 +40,6 @@ public class DeleteComputerAction implements ActionMenu{
 			
 			if(reponse.equalsIgnoreCase("n")){
 				System.out.println(" Abandon de la suppression");
-				//sc.close();
 				return;
 			}
 			
@@ -56,7 +56,6 @@ public class DeleteComputerAction implements ActionMenu{
 			System.out.println(" Abandon de la suppression");
 		}
 		finally {
-			//sc.close();
 			System.out.println();
 		}
 		

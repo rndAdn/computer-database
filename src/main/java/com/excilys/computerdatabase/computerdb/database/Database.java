@@ -82,7 +82,6 @@ public class Database {
 			connection.close();
 			LOGGER.info("Connection Fermée");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("Connection non Fermée");
 		}
     }
@@ -92,7 +91,6 @@ public class Database {
 			connection.rollback();
 			LOGGER.info("Connection RollBack");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("Connection RollBack");
 		}
     }

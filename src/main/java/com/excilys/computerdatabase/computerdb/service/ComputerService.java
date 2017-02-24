@@ -7,22 +7,22 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 public class ComputerService {
 	
 	
-	public static void ajoutComputer(Computer computer){
+	public static boolean ajoutComputer(Computer computer){
 		ComputerDao dao = new ComputerDao();
+		boolean result = false;
 		try {
-			boolean result = dao.insertComputer(computer);
+			result = dao.insertComputer(computer);
 		} catch (DaoException e) {
-			//sc.close();
 			System.out.println();
 			System.out.println();
 			System.out.print(e.getMessage());
 			System.out.println(" Abandon");
-			e.printStackTrace();
 		}
 		finally {
-			//sc.close();
 			System.out.println();
+			
 		}
+		return result;
 	}
 
 	public void deleteComputer(Computer computer) {
@@ -30,7 +30,6 @@ public class ComputerService {
 		try {
 			computerDao.deleteComputer(computer);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

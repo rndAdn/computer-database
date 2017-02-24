@@ -24,15 +24,12 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
-//import ch.qos.logback.classic.Logger;
 
 
 public class ComputerDao implements IComputerDAO{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.ComputerDao");;
 	
-
-	// DONE
 	@Override
 	public Optional<Computer> getComputerById(long id) throws DaoException{
 		PreparedStatement selectStatement;
@@ -62,7 +59,6 @@ public class ComputerDao implements IComputerDAO{
 		
 	}     
 
-	// DONE
 	@Override
 	public List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException{
 		PreparedStatement selectStatement;
@@ -94,7 +90,6 @@ public class ComputerDao implements IComputerDAO{
 		return result;       
 	}  
 	
-	//DONE
 	@Override
     public List<Pageable> getComputers(int limitStart, int size) throws DaoException {
     	
@@ -126,7 +121,6 @@ public class ComputerDao implements IComputerDAO{
 		return result;
 	}
     
-	//DONE
 	@Override
 	public boolean deleteComputer(Computer computer)  throws DaoException{
 		int result = -1;
@@ -149,13 +143,11 @@ public class ComputerDao implements IComputerDAO{
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public boolean updateComputer(Computer computer)  throws DaoException{
 		int result = -1;
 		Connection connection = Database.getConnection();
 		try {
-			//logger.debug("Update de l'ordinateur " + computer);
 			PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
 			updateStatment.setString(1, computer.getName());
 			
@@ -196,7 +188,6 @@ public class ComputerDao implements IComputerDAO{
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public boolean insertComputer(Computer computer) throws DaoException {
 		int result = -1;
@@ -213,7 +204,6 @@ public class ComputerDao implements IComputerDAO{
 			else{
 				insertStatment.setNull(2, Types.NULL);
 			}
-			
 
 			Optional<LocalDate> dateFin = computer.getDateDiscontinued();
 			if(dateFin.isPresent()){
@@ -241,7 +231,6 @@ public class ComputerDao implements IComputerDAO{
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public long countComputers() throws DaoException{
 		long number = 0;
@@ -253,7 +242,6 @@ public class ComputerDao implements IComputerDAO{
 			rset = st.executeQuery(COUNT_COMPUTERS);
 			if(rset.next()){
 				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
-				//logger.debug("getNumberOfComputer : " + number);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("countComputers : " + e.getMessage());
@@ -285,7 +273,6 @@ public class ComputerDao implements IComputerDAO{
 			
 		}
 		computer.setCompagny(company);
-		//LOGGER.info("mapComputer : " + computer);
 		return computer;
 	}
 

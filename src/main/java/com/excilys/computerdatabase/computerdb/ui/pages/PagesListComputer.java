@@ -20,7 +20,6 @@ public class PagesListComputer extends PagesList {
 			ComputerDao computerDao = new ComputerDao();
 			list = computerDao.getComputers((pageNumber-1) * rowByPages, rowByPages);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;

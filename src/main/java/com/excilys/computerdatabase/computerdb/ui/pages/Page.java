@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.computerdb.ui.pages;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Page {

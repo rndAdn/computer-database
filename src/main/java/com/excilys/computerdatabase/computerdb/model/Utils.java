@@ -32,7 +32,7 @@ public class Utils {
 			id = Long.parseLong(idString);
 		}
 		catch (NumberFormatException e) {
-			e.printStackTrace();
+			LOGGER.warn("stringToId   NumberFormatExeption : " + idString );
 		}
 		return id;
 	}

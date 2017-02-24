@@ -17,6 +17,7 @@ import com.excilys.computerdatabase.computerdb.service.ComputerService;
 public class CreateComputerAction implements ActionMenu {
 
 	public void doAction() {
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Entrez le nom de l'ordinateur (Obligatoire): ");
 		String name  = sc.nextLine();
@@ -31,16 +32,14 @@ public class CreateComputerAction implements ActionMenu {
 		String companyIdString = sc.nextLine();
 		
 		
-		
 		boolean blankName = StringUtils.isBlank(name);
 		if(blankName){
 			System.out.println("Le nom de l'ordinateur n'est pas valide");
-			return;
-			
+			return;		
 		}
+		
 		Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroString);
 		Optional<LocalDate> dateFin = Utils.stringToDate(dateFinServiceString);
-		
 		
 		boolean checkIntervalDate = ComputerValidator.compareDate(dateIntro, dateFin);
 		
@@ -57,13 +56,12 @@ public class CreateComputerAction implements ActionMenu {
 			optionalCompany = CompanyService.getCompanyByid(companyid);
 		}
 		
+		
 		Computer computer = new Computer();
 		computer.setName(name);
 		dateIntro.ifPresent(x -> computer.setDateIntroduced(x));
 		dateFin.ifPresent(x -> computer.setDateDiscontinued(x));
 		computer.setCompagny(optionalCompany.orElse(null));
-		
-		
 		
 		System.out.println(computer.getDetail());
 		
@@ -72,7 +70,6 @@ public class CreateComputerAction implements ActionMenu {
 		System.out.println();
 		if(reponse.equalsIgnoreCase("n")){
 			System.out.print("Ordinateur non ajouté");
-			//sc.close();
 			return; 
 		}
 		ComputerService.ajoutComputer(computer);
