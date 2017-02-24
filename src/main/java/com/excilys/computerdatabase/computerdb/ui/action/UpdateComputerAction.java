@@ -1,8 +1,10 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
@@ -31,9 +33,10 @@ public class UpdateComputerAction implements ActionMenu {
 				//sc.close();
 				return;
 			}
-			Computer computer = optionalComputer.get();
 			
+			Computer computer = optionalComputer.get();
 			System.out.println(computer.getDetail());
+			
 			
 			System.out.print("Entrez le nom de l'ordinateur : ");
 			String name  = sc.nextLine();
@@ -47,19 +50,23 @@ public class UpdateComputerAction implements ActionMenu {
 			System.out.print("Entrez l'id de la companie  : ");
 			String companyIdString = sc.nextLine();
 			
-			//ComputerController.checkName(name);
-			Date dateIntro = Utils.stringToDate(dateIntroString);
-			if(dateIntro != null) computer.setDateIntroduced(dateIntro);
 			
-			Date dateFin = Utils.stringToDate(dateFinServiceString);
-			if(dateFin != null) computer.setDateDiscontinued(dateFin);
+			Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroString);
+			Optional<LocalDate> dateFin = Utils.stringToDate(dateFinServiceString);
 			
+			if(dateIntro.isPresent()){
+				computer.setDateIntroduced(dateIntro.get());
+			}
+
+			if(dateFin.isPresent()){
+				computer.setDateDiscontinued(dateFin.get());
+			}
 			ComputerValidator.compareDate(computer.getDateIntroduced(), computer.getDateDiscontinued());//
 			
 			
 			
 			
-			if(name != null && !name.equals(""))computer.setName(name);
+			if(! StringUtils.isBlank(name))computer.setName(name);
 			
 			Optional<Company> optionalCompany = Optional.empty();
 			if(companyIdString != null && !companyIdString.equals("")){

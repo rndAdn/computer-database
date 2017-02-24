@@ -1,12 +1,12 @@
 package com.excilys.computerdatabase.computerdb.database;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -159,18 +159,18 @@ public class ComputerDao implements IComputerDAO{
 			PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
 			updateStatment.setString(1, computer.getName());
 			
-			Optional<Date> dateIntro = computer.getDateIntroduced();
+			Optional<LocalDate> dateIntro = computer.getDateIntroduced();
 			if(dateIntro.isPresent()){
-				updateStatment.setDate(2, dateIntro.get());
+				updateStatment.setObject(2, dateIntro.get());
 			}
 			else{
-				updateStatment.setNull(2, Types.NULL);
+				updateStatment.setObject(2, Types.NULL);
 			}
 			
 
-			Optional<Date> dateFin = computer.getDateDiscontinued();
+			Optional<LocalDate> dateFin = computer.getDateDiscontinued();
 			if(dateFin.isPresent()){
-				updateStatment.setDate(3, dateIntro.get());
+				updateStatment.setObject(3, dateIntro.get());
 			}
 			else{
 				updateStatment.setNull(3, Types.NULL);
@@ -206,18 +206,18 @@ public class ComputerDao implements IComputerDAO{
 			PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER);
 			
 			insertStatment.setString(1, computer.getName());
-			Optional<Date> dateIntro = computer.getDateIntroduced();
+			Optional<LocalDate> dateIntro = computer.getDateIntroduced();
 			if(dateIntro.isPresent()){
-				insertStatment.setDate(2, dateIntro.get());
+				insertStatment.setObject(2, dateIntro.get());
 			}
 			else{
 				insertStatment.setNull(2, Types.NULL);
 			}
 			
 
-			Optional<Date> dateFin = computer.getDateDiscontinued();
+			Optional<LocalDate> dateFin = computer.getDateDiscontinued();
 			if(dateFin.isPresent()){
-				insertStatment.setDate(3, dateIntro.get());
+				insertStatment.setObject(3, dateIntro.get());
 			}
 			else{
 				insertStatment.setNull(3, Types.NULL);
@@ -270,9 +270,13 @@ public class ComputerDao implements IComputerDAO{
     	Computer computer = new Computer();
     	computer.setId( rset.getLong("id"));
     	computer.setName( rset.getString("name"));
-    	computer.setDateIntroduced( rset.getDate("introduced"));
-		computer.setDateDiscontinued( rset.getDate("discontinued"));
-		
+    	try{
+    	computer.setDateIntroduced( rset.getObject("introduced", LocalDate.class));
+		computer.setDateDiscontinued( rset.getObject("discontinued", LocalDate.class));
+    	}
+    	catch(NullPointerException e){
+    		LOGGER.warn("mapComputer date null dans la bd get" );
+    	}
 		Company company = new Company();
 		long company_id = rset.getLong("company_id"); 
 		if(! rset.wasNull()){

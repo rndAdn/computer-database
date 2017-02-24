@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.computerdb.model;
-
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
@@ -11,8 +10,8 @@ public class Computer implements Pageable {
 	
 	private long id;
 	private String name;
-	private Date dateIntroduced;
-	private Date dateDiscontinued;
+	private LocalDate dateIntroduced;
+	private LocalDate dateDiscontinued;
 	private Company company;
 	
 	
@@ -31,21 +30,21 @@ public class Computer implements Pageable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Optional<Date> getDateIntroduced() {
+	public Optional<LocalDate> getDateIntroduced() {
 		return Optional.ofNullable(dateIntroduced);
 		//return ((dateIntroduced!= null)?Optional.of(this.dateIntroduced):Optional.empty());
 		//return Optional.of(dateIntroduced);
 		
 	}
-	public void setDateIntroduced(Date dateIntroduced) {
+	public void setDateIntroduced(LocalDate dateIntroduced) {
 		this.dateIntroduced = dateIntroduced;
 	}
-	public Optional<Date> getDateDiscontinued() {
+	public Optional<LocalDate> getDateDiscontinued() {
 		return Optional.ofNullable(dateDiscontinued);
 		//return ((dateDiscontinued!= null)?Optional.of(this.dateDiscontinued):Optional.empty());
 		//return Optional.of(dateDiscontinued);
 	}
-	public void setDateDiscontinued(Date dateDiscontinued) {
+	public void setDateDiscontinued(LocalDate dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
 	public Optional<Company> getCompany() {

@@ -1,9 +1,11 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.apache.commons.lang.StringUtils;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
@@ -30,14 +32,14 @@ public class CreateComputerAction implements ActionMenu {
 		
 		
 		
-		boolean checkName = ComputerValidator.checkName(name);
-		if(!checkName){
+		boolean blankName = StringUtils.isBlank(name);
+		if(blankName){
 			System.out.println("Le nom de l'ordinateur n'est pas valide");
 			return;
 			
 		}
-		Date dateIntro = Utils.stringToDate(dateIntroString);
-		Date dateFin = Utils.stringToDate(dateFinServiceString);
+		Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroString);
+		Optional<LocalDate> dateFin = Utils.stringToDate(dateFinServiceString);
 		
 		
 		boolean checkIntervalDate = ComputerValidator.compareDate(dateIntro, dateFin);
@@ -49,7 +51,7 @@ public class CreateComputerAction implements ActionMenu {
 		
 		Optional<Company> optionalCompany = Optional.empty();
 		
-		if(companyIdString != null && !companyIdString.equals("")){
+		if(!StringUtils.isBlank(companyIdString)){
 			long companyid = Utils.stringToId(companyIdString);
 			
 			optionalCompany = CompanyService.getCompanyByid(companyid);
@@ -57,8 +59,8 @@ public class CreateComputerAction implements ActionMenu {
 		
 		Computer computer = new Computer();
 		computer.setName(name);
-		computer.setDateIntroduced(dateIntro);
-		computer.setDateDiscontinued(dateFin);
+		dateIntro.ifPresent(x -> computer.setDateIntroduced(x));
+		dateFin.ifPresent(x -> computer.setDateDiscontinued(x));
 		computer.setCompagny(optionalCompany.orElse(null));
 		
 		
