@@ -1,13 +1,17 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
 import java.sql.Date;
+import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.controller.ComputerController;
-import com.excilys.computerdatabase.computerdb.controller.exception.ComputerException;
+import com.excilys.computerdatabase.computerdb.database.CompanyDao;
+import com.excilys.computerdatabase.computerdb.database.ComputerDao;
+import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.database.Database;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class UpdateComputerAction implements ActionMenu {
 
@@ -17,11 +21,18 @@ public class UpdateComputerAction implements ActionMenu {
 		String idString  = sc.nextLine();
 		
 		try{
-			long id = ComputerController.stringToId(idString);
+			long id = Utils.stringToId(idString);
 			
+
+			ComputerDao computerDao = new ComputerDao();
+			Optional<Computer> optionalComputer = computerDao.getComputerById(id);
+			if (! optionalComputer.isPresent()){
+				System.out.println("Ordinateur introuvable dans la base de donnée");
+				//sc.close();
+				return;
+			}
+			Computer computer = optionalComputer.get();
 			
-			Computer computer = Database.getComputerDao().getComputerById(id);
-			if (computer == null) throw new ComputerException("Ordinateur introuvable dans la base de donnée");
 			System.out.println(computer.getDetail());
 			
 			System.out.print("Entrez le nom de l'ordinateur : ");
@@ -37,31 +48,26 @@ public class UpdateComputerAction implements ActionMenu {
 			String companyIdString = sc.nextLine();
 			
 			//ComputerController.checkName(name);
-			Date dateIntro = ComputerController.stringToDate(dateIntroString);
+			Date dateIntro = Utils.stringToDate(dateIntroString);
 			if(dateIntro != null) computer.setDateIntroduced(dateIntro);
 			
-			Date dateFin = ComputerController.stringToDate(dateFinServiceString);
+			Date dateFin = Utils.stringToDate(dateFinServiceString);
 			if(dateFin != null) computer.setDateDiscontinued(dateFin);
 			
-			ComputerController.compareDate(computer.getDateIntroduced(), computer.getDateDiscontinued());
+			ComputerValidator.compareDate(computer.getDateIntroduced(), computer.getDateDiscontinued());//
 			
 			
 			
 			
 			if(name != null && !name.equals(""))computer.setName(name);
 			
-			Company company = null;
+			Optional<Company> optionalCompany = Optional.empty();
 			if(companyIdString != null && !companyIdString.equals("")){
-				int companyid = ComputerController.stringToId(companyIdString);
-				company = Database.getCompanyDao().getCompanyById(companyid);
-				ComputerController.checkCompany(company);
+				long companyid = Utils.stringToId(companyIdString);
+				CompanyDao companyDao = new CompanyDao();
+				optionalCompany = companyDao.getCompanyById(companyid);
 			}
-			//int companyid = ComputerController.stringToId(companyIdString);
-			
-			//Company company = Database.getCompanyDao().getCompanyById(companyid);
-			//ComputerController.checkCompany(company);
-			
-			if(company != null)computer.setCompagny(company);
+			computer.setCompagny(optionalCompany.orElse(null));
 			
 			
 			System.out.println(computer.getDetail());
@@ -73,13 +79,21 @@ public class UpdateComputerAction implements ActionMenu {
 				return; 
 			}
 			
-			Database.getComputerDao().updateComputer(computer);
+			computerDao.updateComputer(computer);
 			System.out.print("Ordinateur mis à jour");
-			computer = Database.getComputerDao().getComputerById(id);
+			optionalComputer = computerDao.getComputerById(id);
+			if (! optionalComputer.isPresent()){
+				System.out.println("Ordinateur introuvable dans la base de donnée");
+				sc.close();
+				return;
+			}
+			computer = optionalComputer.get();
+			
+			System.out.println(computer.getDetail());
 			System.out.println(computer.getDetail());
 			
 		}
-		catch (ComputerException e) {
+		catch (DaoException e) {
 			System.out.println();
 			System.out.println();
 			System.out.print(e.getMessage());

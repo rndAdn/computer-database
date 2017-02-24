@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.computerdb.database;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
@@ -17,18 +18,18 @@ public interface IComputerDAO {
 	public static final String COUNT_COMPUTERS 					= "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer";
 		
 	
-	public Computer getComputerById(long id);
+	public Optional<Computer> getComputerById(long id) throws DaoException;
 	
-	public List<Computer> getComputersByName(String name, int limitStart, int size);
+	public List<Computer> getComputersByName(String name, int limitStart, int size)  throws DaoException;
 	
-	public List<Pageable> getComputers(int limitStart, int size);
+	public List<Pageable> getComputers(int limitStart, int size) throws DaoException;
 	
-	public boolean deleteComputer(Computer computer);
+	public boolean deleteComputer(Computer computer) throws DaoException;
 	
-	public boolean updateComputer(Computer computer);
+	public boolean updateComputer(Computer computer) throws DaoException;
 	
-	public boolean insertComputer(Computer computer);
+	public boolean insertComputer(Computer computer) throws DaoException;
 	
-	public long countComputers();
+	public long countComputers() throws DaoException;
 
 }

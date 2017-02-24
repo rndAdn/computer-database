@@ -1,52 +1,61 @@
 package com.excilys.computerdatabase.computerdb.database;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
 
 public class CompanyDao implements ICompanyDAO{
-	private Database database;
+	private static final Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
 
-	CompanyDao( Database database ) {
-		this.database = database;
-	}
+
 	
 	@Override
-	public Company getCompanyById(long id){
+	public Optional<Company> getCompanyById(long id) throws DaoException{
+		Optional<Company> optionalCompany = Optional.empty();
 		PreparedStatement selectStatement;
+		Connection connection = Database.getConnection();
 		
 		try {
-			selectStatement = database.con.prepareStatement(SELECT_COMPANY_BY_ID);
+			selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID);
 			
 			selectStatement.setLong(1, id);
 			
 			ResultSet rset = selectStatement.executeQuery();
 			if(rset.next()){
-				return mapCompany(rset);
+				optionalCompany = Optional.of(mapCompany(rset));
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("getCompanyById : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
-		return null;
+		finally {
+			Database.closeConnection(connection);
+		}
+		logger.info("getCompanyById result :" + optionalCompany);
+		return optionalCompany;
 		
 	}     
 
 	@Override
-	public List<Pageable> getCompanyByName(String name, int limitStart, int size){    
+	public List<Pageable> getCompanyByName(String name, int limitStart, int size)throws DaoException{    
 	    List<Pageable> result = new ArrayList<>();
 	    PreparedStatement selectStatement;
-	    
+	    Connection connection = Database.getConnection();
+		
 		try {
-			
-			selectStatement = database.con.prepareStatement(SELECT_COMPANY_BY_NAME);
+			selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME);
 			
 			selectStatement.setString(1, name);
 			selectStatement.setLong(2, limitStart);
@@ -58,27 +67,28 @@ public class CompanyDao implements ICompanyDAO{
 				result.add(mapCompany(rset));
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("getCompanyByName : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		finally {
-			return result;
+			Database.closeConnection(connection);
 		}
+		logger.info("getCompanyByName result size : " + result.size());
+		return result;
 		
 	   
 	}  
-
 	
 	@Override
-	public List<Pageable> getCompanys(int limitStart, int size){
+	public List<Pageable> getCompanys(int limitStart, int size)throws DaoException{
 		
 		List<Pageable> result = new ArrayList<>();
 	    PreparedStatement selectStatement;
-	    
+	    Connection connection = Database.getConnection();
+		
 		try {
-			
-			selectStatement = database.con.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
+			selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
 			
 			selectStatement.setLong(1, limitStart);
 			selectStatement.setLong(2, size);
@@ -89,27 +99,31 @@ public class CompanyDao implements ICompanyDAO{
 				result.add(mapCompany(rset));
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			logger.error("getCompanys : " + e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		finally {
-			return result;
-		}  
+			Database.closeConnection(connection);
+		}
+		logger.info("getCompanys result size : " + result.size());
+		return result;
 	}
 	
-	private Company mapCompany(ResultSet rset) throws SQLException{
+	private Company mapCompany(ResultSet rset)throws SQLException{
 		Company company = new Company();
 		company.setId( rset.getInt("id"));
-		company.setName( rset.getString("name"));
+		company.setName(rset.getString("name"));
+		//logger.info("mapCompany result : " + company);
 		return company;
 	}
 
-
-	public long getNumberOfCompany() {
+	public long getNumberOfCompany() throws DaoException{
 		long number = 0;
+		Connection connection = Database.getConnection();
+		
 		try {
-			Statement st = database.con.createStatement();
+			Statement st = connection.createStatement();
 
 			ResultSet rset=null;
 			rset = st.executeQuery(COUNT_COMPANY);
@@ -118,12 +132,12 @@ public class CompanyDao implements ICompanyDAO{
 				//logger.debug("getNumberOfComputer : " + number);
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new DaoException(e1.getMessage());
 		}
 		finally {
-			return number;
-		}  
+			Database.closeConnection(connection);
+		}
+		logger.info("getNumberOfCompany result : " + number);
+		return number;
 	}
 }
-

@@ -18,44 +18,8 @@ import com.excilys.computerdatabase.computerdb.ui.action.ActionMenu;
  */
 public class App {
     public static void main( String[] args ){
-        //System.out.println( "Hello World!" );
-        
-        //Database db = Database.getInstance();
-        //Computer computer = Database.getComputerDao().getComputerById(1);
-        //System.out.println(computer);
-        
-        /*List<Company> computers = db.getAllCompany();
-        for (Company c : computers)
-        	System.out.println(c);
-        */
-        
-        /*while(true){ 
-        	for(Menu menu : Menu.values()){
-        	      System.out.println(menu);
-        	 }
-              
-              Scanner sc = new Scanner(System.in);
-              String s = sc.nextLine();	
-              
-              for(Menu menu : Menu.values()){
-              	if(menu.isEntry(s)){
-              		System.out.println(menu);
-              		break;
-              	}
-              	else {
-              		System.out.println("nope " + menu);
-              	}
-          	}
-        	
-        }*/
         
         showMenu();
-        
-        
-      /*List<Computer> computers = db.getAllComputers();
-      for (Computer c : computers)
-    	  System.out.println(c);
-      */
         
     }
     
@@ -80,6 +44,6 @@ public class App {
               	}
           	}
     	}
-    	
+    	//sc.close();
     }
 }
