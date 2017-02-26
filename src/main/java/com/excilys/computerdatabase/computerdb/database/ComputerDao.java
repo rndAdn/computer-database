@@ -275,6 +275,5 @@ public class ComputerDao implements IComputerDAO{
 		computer.setCompagny(company);
 		return computer;
 	}
-
 	
 }

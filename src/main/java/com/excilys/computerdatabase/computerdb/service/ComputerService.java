@@ -2,9 +2,13 @@ package com.excilys.computerdatabase.computerdb.service;
 
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.ui.pages.PagesListCompany;
+import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
 
 public class ComputerService {
 	
@@ -79,5 +83,21 @@ public class ComputerService {
 			
 		}
 		return result;
+	}
+
+	public PagesList getComputers() {
+		PagesListComputer pagesList = new PagesListComputer();
+		ComputerDao computerDao = new ComputerDao();
+		try {
+			long nb_computer = computerDao.countComputers();
+			
+			pagesList.setNumberOfComputer(nb_computer);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return pagesList;
 	}
 }
