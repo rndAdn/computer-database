@@ -9,9 +9,7 @@ import com.excilys.computerdatabase.computerdb.database.Database;
 
 public class PagesListComputer extends PagesList {
 
-	public PagesListComputer(long l) {
-		super(l);
-	}
+
 
 	@Override
 	public List<Pageable> getList() {
@@ -23,6 +21,11 @@ public class PagesListComputer extends PagesList {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public void setNumberOfComputer(long nb_computer) {
+		this.totalNumberOfpages = (int)Math.ceil(nb_computer/ (double)rowByPages);
+		
 	}
 
 }

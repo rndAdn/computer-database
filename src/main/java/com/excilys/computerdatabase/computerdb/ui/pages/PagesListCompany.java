@@ -9,8 +9,8 @@ import com.excilys.computerdatabase.computerdb.database.Database;
 
 public class PagesListCompany extends PagesList {
 
-	public PagesListCompany(long l) {
-		super(l);
+	public PagesListCompany() {
+		super();
 	}
 
 	@Override
@@ -26,4 +26,7 @@ public class PagesListCompany extends PagesList {
 		return list;
 	}
 
+	public void setNumberOfCompany(long nb_company) {
+		this.totalNumberOfpages = (int)Math.ceil(nb_company/ (double)rowByPages);
+	}
 }
