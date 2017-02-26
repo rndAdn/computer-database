@@ -9,7 +9,7 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 public class ComputerService {
 	
 	
-	public static boolean ajoutComputer(Computer computer){
+	public boolean ajoutComputer(Computer computer){
 		ComputerDao dao = new ComputerDao();
 		boolean result = false;
 		try {
@@ -61,5 +61,23 @@ public class ComputerService {
 			System.out.println();
 		}
 		return optionalComputer;
+	}
+
+	public boolean updateComputer(Computer computer){
+		ComputerDao dao = new ComputerDao();
+		boolean result = false;
+		try {
+			result = dao.updateComputer(computer);
+		} catch (DaoException e) {
+			System.out.println();
+			System.out.println();
+			System.out.print(e.getMessage());
+			System.out.println(" Abandon de la mise à jour");
+		}
+		finally {
+			System.out.println();
+			
+		}
+		return result;
 	}
 }

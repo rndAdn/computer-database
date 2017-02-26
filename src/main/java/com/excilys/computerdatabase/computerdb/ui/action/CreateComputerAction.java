@@ -57,8 +57,8 @@ public class CreateComputerAction implements ActionMenu {
 		
 		Computer computer = new Computer();
 		computer.setName(name);
-		dateIntro.ifPresent(x -> computer.setDateIntroduced(x));
-		dateFin.ifPresent(x -> computer.setDateDiscontinued(x));
+		computer.setDateIntroduced(dateIntro.orElse(null));
+		computer.setDateDiscontinued(dateFin.orElse(null));
 		computer.setCompagny(optionalCompany.orElse(null));
 		
 		System.out.println(computer.getDetail());
@@ -72,7 +72,8 @@ public class CreateComputerAction implements ActionMenu {
 			System.out.print("Ordinateur non ajouté");
 			return; 
 		}
-		ComputerService.ajoutComputer(computer);
+		ComputerService computerService = new ComputerService();
+		computerService.ajoutComputer(computer);
 		System.out.println("Ordinateur ajouté");
 		
 
