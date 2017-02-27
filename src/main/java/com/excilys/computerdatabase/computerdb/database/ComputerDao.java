@@ -22,7 +22,7 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 //import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 
 

@@ -6,9 +6,9 @@ import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesListCompany;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class ComputerService {
 	

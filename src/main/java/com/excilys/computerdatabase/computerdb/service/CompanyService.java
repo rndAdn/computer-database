@@ -5,8 +5,8 @@ import java.util.Optional;
 import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesListCompany;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
 public class CompanyService {
 	

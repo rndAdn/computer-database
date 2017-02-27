@@ -2,7 +2,7 @@ package com.excilys.computerdatabase.computerdb.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class Computer implements Pageable {
 	

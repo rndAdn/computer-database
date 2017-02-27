@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public interface IComputerDAO {
 	

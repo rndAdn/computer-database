@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.pages;
+package com.excilys.computerdatabase.computerdb.service.pages;
 
 import java.util.List;
 import java.util.Scanner;

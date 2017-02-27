@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class CompanyDao implements ICompanyDAO{
 	private static final Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");

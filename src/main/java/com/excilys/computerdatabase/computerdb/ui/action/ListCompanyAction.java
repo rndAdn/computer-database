@@ -1,8 +1,8 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
-import com.excilys.computerdatabase.computerdb.ui.pages.Page;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.Page;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 
 import java.util.Scanner;
 

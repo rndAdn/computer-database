@@ -3,8 +3,8 @@ package com.excilys.computerdatabase.computerdb.ui.action;
 import java.util.Scanner;
 
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.ui.pages.Page;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.Page;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 
 public class ListComputerAction implements ActionMenu {
 
