@@ -1,14 +1,14 @@
 package com.excilys.computerdatabase.computerdb;
 
 import java.util.Scanner;
+
 import com.excilys.computerdatabase.computerdb.ui.MenuEnum;
 
 public class App {
-    public static void main( String[] args ){
-        
-        showMenu();
-        
-    }
+
+	public static void main( String[] args ) {
+		showMenu();
+	}
     
     
     
