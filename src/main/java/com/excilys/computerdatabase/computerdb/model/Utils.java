@@ -1,23 +1,28 @@
 package com.excilys.computerdatabase.computerdb.model;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Utils {
-	
+
+	private static Logger LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.model.Utils"); 
 
 	
-	public static Date stringToDate(String dateString){
-		Date date = null;
-		DateFormat sourceFormat = new SimpleDateFormat("dd-MM-yyyy");
+	public static Optional<LocalDate> stringToDate(String dateString){
+		Optional<LocalDate> optionalDate = Optional.empty();
 		try {
-			date = new Date(sourceFormat.parse(dateString).getTime());
-		} catch (ParseException e) {
-		}		
-		return date;
+			optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+		}
+		catch (DateTimeParseException e){
+			LOGGER.error("stringToDate " + dateString);
+		}
+				
+		return optionalDate;
 	}
 
 	
@@ -27,7 +32,7 @@ public class Utils {
 			id = Long.parseLong(idString);
 		}
 		catch (NumberFormatException e) {
-			e.printStackTrace();
+			LOGGER.warn("stringToId   NumberFormatExeption : " + idString );
 		}
 		return id;
 	}

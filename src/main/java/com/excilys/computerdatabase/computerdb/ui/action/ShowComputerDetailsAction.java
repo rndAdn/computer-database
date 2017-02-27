@@ -17,7 +17,6 @@ public class ShowComputerDetailsAction implements ActionMenu {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Entrez l'id de l'ordinateur : ");
 		String idString  = sc.nextLine();
-		//sc.close();
 		
 		try{
 			long id = Utils.stringToId(idString);
@@ -26,7 +25,6 @@ public class ShowComputerDetailsAction implements ActionMenu {
 			Optional<Computer> optionalComputer = computerDao.getComputerById(id);
 			if (! optionalComputer.isPresent()){
 				System.out.println("Ordinateur introuvable dans la base de donnée");
-				//sc.close();
 				return;
 			}
 			

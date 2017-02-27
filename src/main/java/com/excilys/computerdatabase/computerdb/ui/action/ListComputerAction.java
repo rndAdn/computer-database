@@ -1,28 +1,55 @@
 package com.excilys.computerdatabase.computerdb.ui.action;
 
-import java.util.List;
+import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.database.ComputerDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.database.Database;
-import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesList;
-import com.excilys.computerdatabase.computerdb.ui.pages.PagesListComputer;
+import com.excilys.computerdatabase.computerdb.service.ComputerService;
+import com.excilys.computerdatabase.computerdb.service.pages.Page;
+import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 
 public class ListComputerAction implements ActionMenu {
 
 	public void doAction() {
 		PagesList pagesList;
-		try {
-
-			ComputerDao computerDao = new ComputerDao();
-			pagesList = new PagesListComputer(computerDao.countComputers());
-			pagesList.showPage();
-		} catch (DaoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ComputerService computerService = new ComputerService();
+		pagesList = computerService.getComputers(); 		
 		
+		
+		Page page;
+		
+		do {
+			page = pagesList.getPage();
+			page.printContent();
+			
+			printFooter(pagesList);
+			
+		} while (readAction(pagesList));
+	}
+	
+	public void printFooter(PagesList pagesList){
+		System.out.print("page " + pagesList.getPageIndex() + "/"+ pagesList.getTotalPageNumber() + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
+	}
+	
+	private boolean readAction(PagesList pagesList){
+		Scanner sc = new Scanner(System.in);
+		
+		String action = sc.nextLine();
+		
+		if (action.equalsIgnoreCase("next") || action.equalsIgnoreCase("n")){
+			pagesList.nextPage();
+		}
+		else if (action.equalsIgnoreCase("previous") || action.equalsIgnoreCase("p")){
+			pagesList.previousPage();
+		}
+		else if (action.equalsIgnoreCase("first") || action.equalsIgnoreCase("f")){
+			pagesList.firstPage();
+		}
+		else if (action.equalsIgnoreCase("last") || action.equalsIgnoreCase("l")){
+			pagesList.lastPage();
+		}
+		else{
+			return false;
+		}
+		return true;
 		
 	}
 

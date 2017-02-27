@@ -11,55 +11,55 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.mysql.jdbc.StringUtils;
+public enum Database {
+	
+    INSTANCE;
 
-
-public class Database {
-	private static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private static String dbName = "computer-database-db";
-	private static String driver = "com.mysql.jdbc.Driver";
-	private static String userName = "admincdb";
-	private static String password = "qwerty1234";
-
-	/*private static String dbName;
-	private static String driver;
-	private static String userName;
-	private static String password;
-	*/
-    private static Database db;   
-    private static Logger logger;
+    private Connection connection;
     
-    
-    private Database() {
-        //System.out.println("Hello");
-    	
-    	logger = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.Database");
+    private String url;
+	private String dbName;
+	private String driver;
+	private String userName;
+	private String password;
+    private Logger LOGGER;
+
+    Database() {
+    	LOGGER = LoggerFactory.getLogger(getClass());
     	Class driver_class;
+    	LOGGER.info("Database Constructor " + this);
+    	
+    	try {
+    		Configuration config = new PropertiesConfiguration("database.properties");
+    		url = config.getString("url");
+    		dbName = config.getString("db_name");
+    		driver = config.getString("driver");
+    		userName = config.getString("username");
+    		password = config.getString("password");
+    	} catch (ConfigurationException ce) {
+    		ce.printStackTrace();
+    	}
+    	
+    	
 		try {
 			driver_class = Class.forName(driver);
 			Driver driver = (Driver) driver_class.newInstance();
 	        DriverManager.registerDriver(driver);
-	        //con= createConnection();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        
-        
+        connection = createConnection();
     }
 
-    private static Connection createConnection() {
-    	logger.info("connexion à la base de donnée ");
+    
+    private Connection createConnection() {
+    	LOGGER.info("connexion à la base de donnée ");
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, userName, password);
@@ -68,38 +68,30 @@ public class Database {
         }
         return connection;
     }
-    
-    public static Connection getConnection(){
-    	return Database.getInstance().createConnection();
-    }
 
-    
-    private static Database getInstance() {
-        if (db == null) {
-        	db = new Database();
-        }
-        return db;
+    public Connection getConnection(){
+    	if(connection == null){
+    		connection = createConnection();
+    	}
+        return connection;
     }
     
-    public static void closeConnection(Connection connection){
+    public void closeConnection(){
     	try {
 			connection.close();
-			logger.info("Connection Fermée");
+			connection = null;
+			LOGGER.info("Connection Fermée");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error("Connection non Fermée");
+			LOGGER.error("Connection non Fermée");
 		}
     }
     
-    public static void rollback(Connection connection){
+    public void rollback(){
     	try {
 			connection.rollback();
-			logger.info("Connection RollBack");
+			LOGGER.info("Connection RollBack");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error("Connection RollBack");
+			LOGGER.error("Connection RollBack");
 		}
     }
-    
-    
 }

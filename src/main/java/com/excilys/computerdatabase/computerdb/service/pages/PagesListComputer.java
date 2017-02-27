@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.pages;
+package com.excilys.computerdatabase.computerdb.service.pages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,7 @@ import com.excilys.computerdatabase.computerdb.database.Database;
 
 public class PagesListComputer extends PagesList {
 
-	public PagesListComputer(long l) {
-		super(l);
-	}
+
 
 	@Override
 	public List<Pageable> getList() {
@@ -20,10 +18,14 @@ public class PagesListComputer extends PagesList {
 			ComputerDao computerDao = new ComputerDao();
 			list = computerDao.getComputers((pageNumber-1) * rowByPages, rowByPages);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public void setNumberOfComputer(long nb_computer) {
+		this.totalNumberOfpages = (int)Math.ceil(nb_computer/ (double)rowByPages);
+		
 	}
 
 }

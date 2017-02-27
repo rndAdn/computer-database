@@ -1,12 +1,12 @@
 package com.excilys.computerdatabase.computerdb.database;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,22 +22,19 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 //import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.ui.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-//import ch.qos.logback.classic.Logger;
 
 
 public class ComputerDao implements IComputerDAO{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.database.ComputerDao");;
 	
-
-	// DONE
 	@Override
 	public Optional<Computer> getComputerById(long id) throws DaoException{
 		PreparedStatement selectStatement;
 		Optional<Computer> optionalComputer = Optional.empty();
-	    Connection connection = Database.getConnection();
+	    Connection connection = Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID);
@@ -55,19 +52,18 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("getComputerById : " + optionalComputer);
 		return optionalComputer;
 		
 	}     
 
-	// DONE
 	@Override
 	public List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException{
 		PreparedStatement selectStatement;
 		List<Computer> result = new ArrayList<>();
-	    Connection connection = Database.getConnection();
+	    Connection connection = Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
@@ -88,19 +84,18 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("getComputersByName result size : " + result.size());
 		return result;       
 	}  
 	
-	//DONE
 	@Override
     public List<Pageable> getComputers(int limitStart, int size) throws DaoException {
     	
 		PreparedStatement selectStatement;
 		List<Pageable> result = new ArrayList<>();
-	    Connection connection = Database.getConnection();
+	    Connection connection = Database.INSTANCE.getConnection();
 		
 		try {
 			selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
@@ -120,17 +115,16 @@ public class ComputerDao implements IComputerDAO{
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("getComputers result size : " + result.size());
 		return result;
 	}
     
-	//DONE
 	@Override
 	public boolean deleteComputer(Computer computer)  throws DaoException{
 		int result = -1;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		try {
 			PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 			
@@ -139,38 +133,36 @@ public class ComputerDao implements IComputerDAO{
 		} catch (SQLException e) {
 			
 			LOGGER.error("deleteComputer : " + e.getMessage());
-			Database.rollback(connection);
+			Database.INSTANCE.rollback();
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("deleteComputer : " + (result == 1));
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public boolean updateComputer(Computer computer)  throws DaoException{
 		int result = -1;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		try {
-			//logger.debug("Update de l'ordinateur " + computer);
 			PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
 			updateStatment.setString(1, computer.getName());
 			
-			Optional<Date> dateIntro = computer.getDateIntroduced();
+			Optional<LocalDate> dateIntro = computer.getDateIntroduced();
 			if(dateIntro.isPresent()){
-				updateStatment.setDate(2, dateIntro.get());
+				updateStatment.setObject(2, dateIntro.get());
 			}
 			else{
-				updateStatment.setNull(2, Types.NULL);
+				updateStatment.setObject(2, Types.NULL);
 			}
 			
 
-			Optional<Date> dateFin = computer.getDateDiscontinued();
+			Optional<LocalDate> dateFin = computer.getDateDiscontinued();
 			if(dateFin.isPresent()){
-				updateStatment.setDate(3, dateIntro.get());
+				updateStatment.setObject(3, dateIntro.get());
 			}
 			else{
 				updateStatment.setNull(3, Types.NULL);
@@ -186,38 +178,36 @@ public class ComputerDao implements IComputerDAO{
 			updateStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			LOGGER.error("updateComputer : " + e.getMessage());
-			Database.rollback(connection);
+			Database.INSTANCE.rollback();
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("updateComputer : " + (result == 1));
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public boolean insertComputer(Computer computer) throws DaoException {
 		int result = -1;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		try {
 
 			PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER);
 			
 			insertStatment.setString(1, computer.getName());
-			Optional<Date> dateIntro = computer.getDateIntroduced();
+			Optional<LocalDate> dateIntro = computer.getDateIntroduced();
 			if(dateIntro.isPresent()){
-				insertStatment.setDate(2, dateIntro.get());
+				insertStatment.setObject(2, dateIntro.get());
 			}
 			else{
 				insertStatment.setNull(2, Types.NULL);
 			}
-			
 
-			Optional<Date> dateFin = computer.getDateDiscontinued();
+			Optional<LocalDate> dateFin = computer.getDateDiscontinued();
 			if(dateFin.isPresent()){
-				insertStatment.setDate(3, dateIntro.get());
+				insertStatment.setObject(3, dateIntro.get());
 			}
 			else{
 				insertStatment.setNull(3, Types.NULL);
@@ -231,21 +221,20 @@ public class ComputerDao implements IComputerDAO{
 			result = insertStatment.executeUpdate(); 
 		} catch (SQLException e) {
 			LOGGER.error("insertComputer : " + e.getMessage());
-			Database.rollback(connection);
+			Database.INSTANCE.rollback();
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("insertComputer : " + (result == 1));
 		return result == 1;
 	}
 	
-	//DONE
 	@Override
 	public long countComputers() throws DaoException{
 		long number = 0;
-		Connection connection = Database.getConnection();
+		Connection connection = Database.INSTANCE.getConnection();
 		try {
 			Statement st = connection.createStatement();
 
@@ -253,14 +242,13 @@ public class ComputerDao implements IComputerDAO{
 			rset = st.executeQuery(COUNT_COMPUTERS);
 			if(rset.next()){
 				number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
-				//logger.debug("getNumberOfComputer : " + number);
 			}
 		} catch (SQLException e) {
 			LOGGER.error("countComputers : " + e.getMessage());
 			throw new DaoException(e.getMessage());
 		}
 		finally {
-			Database.closeConnection(connection);
+			Database.INSTANCE.closeConnection();
 		}
 		LOGGER.info("countComputers : " + number);
 		return number;
@@ -270,9 +258,13 @@ public class ComputerDao implements IComputerDAO{
     	Computer computer = new Computer();
     	computer.setId( rset.getLong("id"));
     	computer.setName( rset.getString("name"));
-    	computer.setDateIntroduced( rset.getDate("introduced"));
-		computer.setDateDiscontinued( rset.getDate("discontinued"));
-		
+    	try{
+    	computer.setDateIntroduced( rset.getObject("introduced", LocalDate.class));
+		computer.setDateDiscontinued( rset.getObject("discontinued", LocalDate.class));
+    	}
+    	catch(NullPointerException e){
+    		LOGGER.warn("mapComputer date null dans la bd get" );
+    	}
 		Company company = new Company();
 		long company_id = rset.getLong("company_id"); 
 		if(! rset.wasNull()){
@@ -281,9 +273,7 @@ public class ComputerDao implements IComputerDAO{
 			
 		}
 		computer.setCompagny(company);
-		//LOGGER.info("mapComputer : " + computer);
 		return computer;
 	}
-
 	
 }
