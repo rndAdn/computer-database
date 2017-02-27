@@ -241,7 +241,7 @@ public class ComputerDao implements IComputerDAO {
         return number;
     }
 
-    private Computer mapComputer(ResultSet rset) throws SQLException {
+    public Computer mapComputer(ResultSet rset) throws SQLException {
         Computer computer = new Computer();
         computer.setId(rset.getLong("id"));
         computer.setName(rset.getString("name"));
