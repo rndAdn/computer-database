@@ -249,7 +249,7 @@ public class ComputerDao implements IComputerDAO {
             computer.setDateIntroduced(rset.getObject("introduced", LocalDate.class));
             computer.setDateDiscontinued(rset.getObject("discontinued", LocalDate.class));
         } catch (NullPointerException e) {
-            LOGGER.warn("mapComputer date null dans la bd get");
+            LOGGER.warn("mapComputer date null dans la bd id : " + computer.getDetail());
         }
         Company company = new Company();
         long companyId = rset.getLong("company_id");
