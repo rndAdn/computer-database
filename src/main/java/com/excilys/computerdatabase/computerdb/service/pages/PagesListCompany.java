@@ -26,6 +26,7 @@ public class PagesListCompany extends PagesList {
     }
 
     public void setNumberOfCompany(long nbCompany) {
+        this.totalRow = nbCompany;
         this.totalNumberOfpages = (int) Math.ceil(nbCompany / (double) rowByPages);
     }
 }
