@@ -51,12 +51,13 @@ public class CreateComputerAction implements ActionMenu {
             long companyid = Utils.stringToId(companyIdString);
             optionalCompany = CompanyService.getCompanyByid(companyid);
         }
-
-        Computer computer = new Computer();
-        computer.setName(name);
-        computer.setDateIntroduced(dateIntro.orElse(null));
-        computer.setDateDiscontinued(dateFin.orElse(null));
-        computer.setCompagny(optionalCompany.orElse(null));
+           
+        Computer computer;
+        computer = new Computer.ComputerBuilder(name)
+                .dateIntroduced(dateIntro.orElse(null))
+                .dateDiscontinued(dateFin.orElse(null))
+                .company(optionalCompany.orElse(null))
+                .build();
 
         System.out.println(computer.getDetail());
 

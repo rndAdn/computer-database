@@ -242,23 +242,32 @@ public class ComputerDao implements IComputerDAO {
     }
 
     public Computer mapComputer(ResultSet rset) throws SQLException {
-        Computer computer = new Computer();
-        computer.setId(rset.getLong("id"));
-        computer.setName(rset.getString("name"));
+        long id = rset.getLong("id");
+        String name = rset.getString("name");
+        LocalDate intro = null;
+        LocalDate fin = null;
+        Company company = null;
+        
         try {
-            computer.setDateIntroduced(rset.getObject("introduced", LocalDate.class));
-            computer.setDateDiscontinued(rset.getObject("discontinued", LocalDate.class));
+            intro = rset.getObject("introduced", LocalDate.class);
+            fin = rset.getObject("discontinued", LocalDate.class);
         } catch (NullPointerException e) {
-            LOGGER.warn("mapComputer date null dans la bd id : " + computer.getDetail());
+            //LOGGER.warn("mapComputer date null dans la bd id : " + computer.getDetail());
         }
-        Company company = new Company();
         long companyId = rset.getLong("company_id");
         if (!rset.wasNull()) {
-            company.setId(companyId);
-            company.setName(rset.getString("company_name"));
-
+            String nameComapny = rset.getString("company_name");
+            company = new Company.CompanyBuilder(nameComapny)
+                    .id(companyId)
+                    .build();
         }
-        computer.setCompagny(company);
+        Computer computer = new Computer.ComputerBuilder(name)
+                .id(id)
+                .dateIntroduced(intro)
+                .dateDiscontinued(fin)
+                .company(company)
+                .build();
+        System.out.println("COMPANY UIGDUIGQAD  " + company);
         return computer;
     }
 }

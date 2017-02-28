@@ -3,33 +3,34 @@ package com.excilys.computerdatabase.computerdb.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
+import com.excilys.computerdatabase.computerdb.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class Computer implements Pageable {
 
-    private long id;
-    private String name;
-    private LocalDate dateIntroduced;
-    private LocalDate dateDiscontinued;
-    private Company company;
+    
 
-    public Computer() {
+    private final long id;
+    private final String name;
+    private final LocalDate dateIntroduced;
+    private final LocalDate dateDiscontinued;
+    private final Company company;
+
+    public Computer(ComputerBuilder computerBuilder) {
+        this.id = computerBuilder.id;
+        this.name = computerBuilder.name;
+        this.dateIntroduced = computerBuilder.dateIntroduced;
+        this.dateDiscontinued = computerBuilder.dateDiscontinued;
+        this.company = computerBuilder.company;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Optional<LocalDate> getDateIntroduced() {
@@ -37,16 +38,8 @@ public class Computer implements Pageable {
 
     }
 
-    public void setDateIntroduced(LocalDate dateIntroduced) {
-        this.dateIntroduced = dateIntroduced;
-    }
-
     public Optional<LocalDate> getDateDiscontinued() {
         return Optional.ofNullable(dateDiscontinued);
-    }
-
-    public void setDateDiscontinued(LocalDate dateDiscontinued) {
-        this.dateDiscontinued = dateDiscontinued;
     }
 
     public Optional<Company> getCompany() {
@@ -55,10 +48,6 @@ public class Computer implements Pageable {
 
     public Long getCompanyId() {
         return ((company != null) ? company.getId() : null);
-    }
-
-    public void setCompagny(Company company) {
-        this.company = company;
     }
 
     public String toString() {
@@ -134,6 +123,42 @@ public class Computer implements Pageable {
             return false;
         }
         return true;
+    }
+    
+    public static class ComputerBuilder {
+        private long id;
+        private final String name;
+        private LocalDate dateIntroduced;
+        private LocalDate dateDiscontinued;
+        private Company company;
+        
+        public ComputerBuilder(String name){
+            this.name = name;
+        }
+        
+        public ComputerBuilder dateIntroduced(LocalDate dateIntroduced){
+            this.dateIntroduced = dateIntroduced;
+            return this;
+        }
+        
+        public ComputerBuilder id(long id){
+            this.id = id;
+            return this;
+        }
+        
+        public ComputerBuilder dateDiscontinued(LocalDate dateDiscontinued){
+            this.dateDiscontinued = dateDiscontinued;
+            return this;
+        }
+        
+        public ComputerBuilder company(Company company){
+            this.company = company;
+            return this;
+        }
+        
+        public Computer build(){
+            return new Computer(this);
+        }
     }
 
 }

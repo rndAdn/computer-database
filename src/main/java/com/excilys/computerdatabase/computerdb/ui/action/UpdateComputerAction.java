@@ -72,11 +72,13 @@ public class UpdateComputerAction implements ActionMenu {
             long companyid = Utils.stringToId(companyIdString);
             optionalCompany = CompanyService.getCompanyByid(companyid);
         }
-
-        computer.setName(name);
-        computer.setDateIntroduced(dateIntro.orElse(null));
-        computer.setDateDiscontinued(dateFin.orElse(null));
-        computer.setCompagny(optionalCompany.orElse(null));
+        
+        computer = new Computer.ComputerBuilder(name)
+                .id(id)
+                .dateIntroduced(dateIntro.orElse(null))
+                .dateDiscontinued(dateFin.orElse(null))
+                .company(optionalCompany.orElse(null))
+                .build();
 
         System.out.println(computer.getDetail());
 

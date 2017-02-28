@@ -45,14 +45,15 @@ public class ComputerDaoTest {
         
         
         
-        assertEquals(computerName, computer.getName());
-        assertEquals(computerId, computer.getId());
+        assertEquals("Computer Name : ", computerName, computer.getName());
+        assertEquals("Computer Id : ", computerId, computer.getId());
         
-        assertEquals(intro, computer.getDateIntroduced().get());
-        assertEquals(fin, computer.getDateDiscontinued().get());
+        assertEquals("Date Intro : ", intro, computer.getDateIntroduced().get());
+        assertEquals("Date Fin : ", fin, computer.getDateDiscontinued().get());
         
-        assertEquals(companyId, computer.getCompany().get().getId());
-        assertEquals(companyName, computer.getCompany().get().getName());
+        assertEquals("Company Id : ", companyId, computer.getCompany().get().getId());
+        assertEquals("Company Name : ", companyName, computer.getCompany().get().getName());
+        
     }
 
 }
