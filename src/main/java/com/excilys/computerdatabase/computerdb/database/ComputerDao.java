@@ -52,7 +52,7 @@ public class ComputerDao implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException {
+    public List<Computer> getComputersByName(String name, long limitStart, long size) throws DaoException {
         PreparedStatement selectStatement;
         List<Computer> result = new ArrayList<>();
         Connection connection = Database.INSTANCE.getConnection();
@@ -61,8 +61,8 @@ public class ComputerDao implements IComputerDAO {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
             selectStatement.setString(1, name);
-            selectStatement.setInt(2, limitStart);
-            selectStatement.setInt(3, size);
+            selectStatement.setLong(2, limitStart);
+            selectStatement.setLong(3, size);
 
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
@@ -82,7 +82,7 @@ public class ComputerDao implements IComputerDAO {
     }
 
     @Override
-    public List<Pageable> getComputers(int limitStart, int size) throws DaoException {
+    public List<Pageable> getComputers(long limitStart, long size) throws DaoException {
 
         PreparedStatement selectStatement;
         List<Pageable> result = new ArrayList<>();
@@ -91,8 +91,8 @@ public class ComputerDao implements IComputerDAO {
         try {
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
 
-            selectStatement.setInt(1, limitStart);
-            selectStatement.setInt(2, size);
+            selectStatement.setLong(1, limitStart);
+            selectStatement.setLong(2, size);
 
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
