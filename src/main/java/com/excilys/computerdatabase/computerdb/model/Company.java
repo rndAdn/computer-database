@@ -4,28 +4,23 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class Company implements Pageable {
 
-    private long id;
-    private String name;
+    private final long id;
+    private final String name;
 
-    public Company() {
-
+    private Company(CompanyBuilder companyBuilder) {
+        this.id = companyBuilder.id;
+        this.name = companyBuilder.name;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String toString() {
         return "id : " + id + "\tname : " + name;
@@ -63,6 +58,22 @@ public class Company implements Pageable {
             return false;
         }
         return true;
+    }
+    
+    public static class CompanyBuilder{
+        private final long id;
+        private final String name;
+        
+        public CompanyBuilder(long id, String name){
+            this.id = id;
+            this.name = name;
+        }
+        
+        public Company build(){
+            return new Company(this);
+        }
+        
+        
     }
 
 }

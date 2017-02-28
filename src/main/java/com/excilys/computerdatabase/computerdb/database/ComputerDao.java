@@ -251,14 +251,13 @@ public class ComputerDao implements IComputerDAO {
         } catch (NullPointerException e) {
             LOGGER.warn("mapComputer date null dans la bd id : " + computer.getDetail());
         }
-        Company company = new Company();
         long companyId = rset.getLong("company_id");
         if (!rset.wasNull()) {
-            company.setId(companyId);
-            company.setName(rset.getString("company_name"));
-
+            String name = rset.getString("name");
+            Company company = new Company.CompanyBuilder(companyId, name).build();
+            computer.setCompagny(company);
         }
-        computer.setCompagny(company);
+        
         return computer;
     }
 }
