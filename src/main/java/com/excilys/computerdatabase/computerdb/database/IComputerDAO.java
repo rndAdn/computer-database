@@ -19,9 +19,9 @@ public interface IComputerDAO {
 
     Optional<Computer> getComputerById(long id) throws DaoException;
 
-    List<Computer> getComputersByName(String name, int limitStart, int size) throws DaoException;
+    List<Computer> getComputersByName(String name, long limitStart, long size) throws DaoException;
 
-    List<Pageable> getComputers(int limitStart, int size) throws DaoException;
+    List<Pageable> getComputers(long limitStart, long size) throws DaoException;
 
     boolean deleteComputer(Computer computer) throws DaoException;
 

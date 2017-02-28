@@ -78,7 +78,7 @@ public class ComputerService {
         return result;
     }
 
-    public PagesList getComputers() {
+    public PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
         ComputerDao computerDao = new ComputerDao();
         try {

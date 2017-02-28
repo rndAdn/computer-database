@@ -48,7 +48,7 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public List<Pageable> getCompanyByName(String name, int limitStart, int size) throws DaoException {
+    public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
         Connection connection = Database.INSTANCE.getConnection();
@@ -76,7 +76,7 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public List<Pageable> getCompanys(int limitStart, int size) throws DaoException {
+    public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;

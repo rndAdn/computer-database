@@ -4,12 +4,12 @@ import java.util.List;
 
 public abstract class PagesList {
 
-    protected int rowByPages = 30;
-    protected int pageNumber = 1;
-    protected int totalNumberOfpages;
+    protected long rowByPages = 30;
+    protected long pageNumber = 1;
+    protected long totalNumberOfpages;
     protected long totalRow;
 
-    protected abstract List<Pageable> getList();
+    public abstract List<Pageable> getList();
 
     public void nextPage() {
         pageNumber = Math.min(totalNumberOfpages, pageNumber + 1);
@@ -37,16 +37,18 @@ public abstract class PagesList {
     }
 
     public void setPageIndex(long pageNumber) {
-        pageNumber = Math.max(Math.min(totalNumberOfpages, pageNumber), 1);
+    	System.out.println("pN :" + pageNumber);
+        this.pageNumber = Math.max(Math.min(totalNumberOfpages, pageNumber), 1);
+        System.out.println("pN :" + pageNumber);
     }
 
     public long getTotalPageNumber() {
         return totalNumberOfpages;
     }
 
-    public void setRowByPages(int limit) {
+    public void setRowByPages(long limit) {
         this.rowByPages = limit;
-        this.totalNumberOfpages = (int) Math.ceil(totalRow / (double) rowByPages);
+        this.totalNumberOfpages = (long) Math.ceil(totalRow / (double) rowByPages);
     }
 
     public long getTotalRow() {
