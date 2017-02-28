@@ -61,12 +61,16 @@ public class Company implements Pageable {
     }
     
     public static class CompanyBuilder{
-        private final long id;
+        private long id;
         private final String name;
         
-        public CompanyBuilder(long id, String name){
-            this.id = id;
+        public CompanyBuilder(String name){
             this.name = name;
+        }
+        
+        public CompanyBuilder id(long id){
+            this.id = id;
+            return this;
         }
         
         public Company build(){

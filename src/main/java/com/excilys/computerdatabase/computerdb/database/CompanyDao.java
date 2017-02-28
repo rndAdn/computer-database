@@ -107,7 +107,9 @@ public class CompanyDao implements ICompanyDAO {
     public Company mapCompany(ResultSet rset) throws SQLException {
         long id = rset.getLong("id");
         String name = rset.getString("name");
-        Company company = new Company.CompanyBuilder(id, name).build();
+        Company company = new Company.CompanyBuilder(name)
+                .id(id)
+                .build();
         return company;
     }
 
