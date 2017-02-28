@@ -13,6 +13,7 @@ public class PagesListComputer extends PagesList {
         try {
             ComputerDao computerDao = new ComputerDao();
             list = computerDao.getComputers((pageNumber - 1) * rowByPages, rowByPages);
+            System.out.println(list.get(0) + "       " + pageNumber);
         } catch (DaoException e) {
             e.printStackTrace();
         }
