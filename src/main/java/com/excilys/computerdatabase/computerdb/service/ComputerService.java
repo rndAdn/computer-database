@@ -5,7 +5,6 @@ import java.util.Optional;
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class ComputerService {
