@@ -7,6 +7,7 @@ public abstract class PagesList {
     protected int rowByPages = 30;
     protected int pageNumber = 1;
     protected int totalNumberOfpages;
+    protected long totalRow;
 
     protected abstract List<Pageable> getList();
 
@@ -35,8 +36,21 @@ public abstract class PagesList {
         return pageNumber;
     }
 
+    public void setPageIndex(long pageNumber) {
+        pageNumber = Math.max(Math.min(totalNumberOfpages, pageNumber), 1);
+    }
+
     public long getTotalPageNumber() {
         return totalNumberOfpages;
+    }
+
+    public void setRowByPages(int limit) {
+        this.rowByPages = limit;
+        this.totalNumberOfpages = (int) Math.ceil(totalRow / (double) rowByPages);
+    }
+
+    public long getTotalRow() {
+        return totalRow;
     }
 
 }

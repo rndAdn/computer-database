@@ -20,6 +20,7 @@ public class PagesListComputer extends PagesList {
     }
 
     public void setNumberOfComputer(long nbComputer) {
+        this.totalRow = nbComputer;
         this.totalNumberOfpages = (int) Math.ceil(nbComputer / (double) rowByPages);
 
     }
