@@ -47,14 +47,15 @@ public class ComputerValidatorTest {
     
     @Test
     public void testCheckCompany_Empty(){
-        assertTrue(ComputerValidator.checkCompany(new Company()));    
+        Company company = new Company.CompanyBuilder("").build();
+        assertTrue(ComputerValidator.checkCompany(company));    
     }
     
     @Test
     public void testCheckCompany_Full(){
-        Company company = new Company();
-        company.setId(42);
-        company.setName("FABLER BJÖRN");
+        Company company = new Company.CompanyBuilder("FABLER BJÖRN")
+                .id(42)
+                .build();
         
         assertTrue(ComputerValidator.checkCompany(company));    
     }
