@@ -18,5 +18,9 @@ public class Page {
         }
         System.out.println("\n");
     }
+    
+    public List<Pageable> getList(){
+    	return computerList;
+    }
 
 }
