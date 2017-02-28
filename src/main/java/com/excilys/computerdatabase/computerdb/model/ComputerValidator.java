@@ -10,7 +10,7 @@ public class ComputerValidator {
     }
 
     public static boolean compareDate(Optional<LocalDate> dateIntro, Optional<LocalDate> dateFin) {
-        return !(dateIntro.isPresent() && dateFin.isPresent() && ! dateIntro.get().isBefore(dateFin.get()));
+        return !(dateIntro.isPresent() && dateFin.isPresent() && !dateIntro.get().isBefore(dateFin.get()));
     }
 
     public static boolean checkID(long id) {

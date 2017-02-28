@@ -16,11 +16,9 @@ public class Company implements Pageable {
         return id;
     }
 
-
     public String getName() {
         return name;
     }
-
 
     public String toString() {
         return "id : " + id + "\tname : " + name;
@@ -59,25 +57,24 @@ public class Company implements Pageable {
         }
         return true;
     }
-    
-    public static class CompanyBuilder{
+
+    public static class CompanyBuilder {
         private long id;
         private final String name;
-        
-        public CompanyBuilder(String name){
+
+        public CompanyBuilder(String name) {
             this.name = name;
         }
-        
-        public CompanyBuilder id(long id){
+
+        public CompanyBuilder id(long id) {
             this.id = id;
             return this;
         }
-        
-        public Company build(){
+
+        public Company build() {
             return new Company(this);
         }
-        
-        
+
     }
 
 }

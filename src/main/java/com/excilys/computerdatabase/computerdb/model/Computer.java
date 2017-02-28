@@ -3,13 +3,9 @@ package com.excilys.computerdatabase.computerdb.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
-import com.excilys.computerdatabase.computerdb.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class Computer implements Pageable {
-
-    
 
     private final long id;
     private final String name;
@@ -124,39 +120,39 @@ public class Computer implements Pageable {
         }
         return true;
     }
-    
+
     public static class ComputerBuilder {
         private long id;
         private final String name;
         private LocalDate dateIntroduced;
         private LocalDate dateDiscontinued;
         private Company company;
-        
-        public ComputerBuilder(String name){
+
+        public ComputerBuilder(String name) {
             this.name = name;
         }
-        
-        public ComputerBuilder dateIntroduced(LocalDate dateIntroduced){
+
+        public ComputerBuilder dateIntroduced(LocalDate dateIntroduced) {
             this.dateIntroduced = dateIntroduced;
             return this;
         }
-        
-        public ComputerBuilder id(long id){
+
+        public ComputerBuilder id(long id) {
             this.id = id;
             return this;
         }
-        
-        public ComputerBuilder dateDiscontinued(LocalDate dateDiscontinued){
+
+        public ComputerBuilder dateDiscontinued(LocalDate dateDiscontinued) {
             this.dateDiscontinued = dateDiscontinued;
             return this;
         }
-        
-        public ComputerBuilder company(Company company){
+
+        public ComputerBuilder company(Company company) {
             this.company = company;
             return this;
         }
-        
-        public Computer build(){
+
+        public Computer build() {
             return new Computer(this);
         }
     }

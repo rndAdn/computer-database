@@ -17,9 +17,9 @@ public class Utils {
         try {
             optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         } catch (DateTimeParseException e) {
-            //LOGGER.error("stringToDate Invalide : " + dateString);
-        } catch(NullPointerException e){
-            //LOGGER.error("stringToDate null : " + dateString);
+            // LOGGER.error("stringToDate Invalide : " + dateString);
+        } catch (NullPointerException e) {
+            // LOGGER.error("stringToDate null : " + dateString);
         }
 
         return optionalDate;
