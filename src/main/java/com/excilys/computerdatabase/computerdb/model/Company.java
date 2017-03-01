@@ -91,9 +91,9 @@ public class Company implements Pageable {
         }
 
         /**
-         * Build a Company.
+         * Build the Company.
          *
-         * @return A built COmpany
+         * @return A built Company
          */
         public Company build() {
             return new Company(this);

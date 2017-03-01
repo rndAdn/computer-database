@@ -47,8 +47,7 @@ public class AddComputer extends HttpServlet {
         String company = request.getParameter("companyId");
 
         addComputer(name, dateIntro, dateFin, company);
-        
-        
+
         doGet(request, response);
     }
 
@@ -64,17 +63,20 @@ public class AddComputer extends HttpServlet {
         }
         return dtoList;
     }
-    
-    
-    private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String companyIdStr){
-        
-        if(StringUtils.isBlank(name)) return false;
-        
+
+    private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String companyIdStr) {
+
+        if (StringUtils.isBlank(name)) {
+            return false;
+        }
+
         Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroStr);
         Optional<LocalDate> dateFin = Utils.stringToDate(dateFinStr);
 
-        if(!ComputerValidator.compareDate(dateIntro, dateFin)) return false;
-        
+        if (!ComputerValidator.compareDate(dateIntro, dateFin)) {
+            return false;
+        }
+
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdStr)) {
             long companyid = Utils.stringToId(companyIdStr);
@@ -84,7 +86,7 @@ public class AddComputer extends HttpServlet {
         Computer computer;
         computer = new Computer.ComputerBuilder(name).dateIntroduced(dateIntro.orElse(null))
                 .dateDiscontinued(dateFin.orElse(null)).company(optionalCompany.orElse(null)).build();
-        
+
         ComputerService.ajoutComputer(computer);
         return true;
     }

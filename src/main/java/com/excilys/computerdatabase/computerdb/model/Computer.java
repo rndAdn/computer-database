@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
+/**
+ * @author renaud
+ *
+ */
 public class Computer implements Pageable {
 
     private final long id;
@@ -13,6 +17,12 @@ public class Computer implements Pageable {
     private final LocalDate dateDiscontinued;
     private final Company company;
 
+    /**
+     * Computer Constructor.
+     *
+     * @param computerBuilder
+     *            .
+     */
     public Computer(ComputerBuilder computerBuilder) {
         this.id = computerBuilder.id;
         this.name = computerBuilder.name;
@@ -46,17 +56,17 @@ public class Computer implements Pageable {
         return ((company != null) ? company.getId() : null);
     }
 
+    @Override
     public String toString() {
         return "" + id + "\t" + name;
     }
 
+    /**
+     * Get a String representation of Computer.
+     *
+     * @return String representation
+     */
     public String getDetail() {
-        // String s = String.format("Id : %4d Nom : %15s Date Introduction :
-        // %10t Date fin : %10t Company : %10s", id, name, ((dateIntroduced !=
-        // null)?dateIntroduced:"NC"), ((dateDiscontinued !=
-        // null)?dateDiscontinued:"NC"), ((company!=
-        // null)?company.getName():"NC"));
-
         return "Id : " + id + "\tNom : " + name + "\tDate Introduction : "
                 + ((dateIntroduced != null) ? dateIntroduced : "NC") + "\tDate fin : "
                 + ((dateDiscontinued != null) ? dateDiscontinued : "NC") + "\tCompany : "
@@ -128,30 +138,69 @@ public class Computer implements Pageable {
         private LocalDate dateDiscontinued;
         private Company company;
 
+        /**
+         * Construct a ComputerBuilder with only the required value.
+         *
+         * @param name
+         *            name of computer
+         */
         public ComputerBuilder(String name) {
             this.name = name;
         }
 
+        /**
+         * Add the optional date of introduction.
+         *
+         * @param dateIntroduced
+         *            .
+         * @return itself
+         */
         public ComputerBuilder dateIntroduced(LocalDate dateIntroduced) {
             this.dateIntroduced = dateIntroduced;
             return this;
         }
 
+        /**
+         * Add the optional id of the computer.
+         *
+         * @param id
+         *            .
+         * @return itself
+         */
         public ComputerBuilder id(long id) {
             this.id = id;
             return this;
         }
 
+        /**
+         * Add the optional end of service date of the computer.
+         *
+         * @param dateDiscontinued
+         *            .
+         * @return itself
+         */
         public ComputerBuilder dateDiscontinued(LocalDate dateDiscontinued) {
             this.dateDiscontinued = dateDiscontinued;
             return this;
         }
 
+        /**
+         * Add the optional company of the computer.
+         *
+         * @param company
+         *            .
+         * @return itself
+         */
         public ComputerBuilder company(Company company) {
             this.company = company;
             return this;
         }
 
+        /**
+         * Build the Computer.
+         *
+         * @return A built Computer
+         */
         public Computer build() {
             return new Computer(this);
         }
