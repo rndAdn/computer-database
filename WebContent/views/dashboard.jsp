@@ -92,7 +92,7 @@
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
 		<ul class="pagination">
-			<li><a href="#" aria-label="Previous"> <span
+			<li><a href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber - 1}"/>" aria-label="Previous"> <span
 					aria-hidden="true">&laquo;</span>
 			</a></li>
 
@@ -102,7 +102,7 @@
 							value="${i}" /></a></li>
 			</c:forEach>
 
-			<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+			<li><a href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber + 1}"/>" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
 
