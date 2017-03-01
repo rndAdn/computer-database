@@ -37,7 +37,7 @@
 				</form>
 			</div>
 			<div class="pull-right">
-				<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+				<a class="btn btn-success" id="addComputer" href="addComputer">Add
 					Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 					onclick="$.fn.toggleEditMode();">Edit</a>
 			</div>
@@ -77,7 +77,7 @@
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
 							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick=""><c:out
+						<td><a href="editComputer" onclick=""><c:out
 									value="${computer.name}"></c:out></a></td>
 						<td><c:out value="${computer.dateIntroduced}"></c:out></td>
 						<td><c:out value="${computer.dateDiscontinued}"></c:out></td>
@@ -92,17 +92,20 @@
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
 		<ul class="pagination">
-			<li><a href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber - 1}"/>" aria-label="Previous"> <span
-					aria-hidden="true">&laquo;</span>
+			<li><a
+				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber - 1}"/>"
+				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 			</a></li>
 
-			<c:forEach var="i" begin="1" end="${totalPageNumber}" step="1">
+			<c:forEach var="i" begin="${(pageNumber - 3 > 0) ? (pageNumber - 3) : 1}" end="${(pageNumber + 3 < totalPageNumber) ? (pageNumber + 3) : totalPageNumber}" step="1">
 				<li><a
 					href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${i}"/>"><c:out
 							value="${i}" /></a></li>
 			</c:forEach>
 
-			<li><a href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber + 1}"/>" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+			<li><a
+				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber + 1}"/>"
+				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
 

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.ComputerDTO;
@@ -18,10 +19,12 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class Dashboard extends HttpServlet {
-
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
     long pageSize = 10;
     long pageNumber = 1;
     long totalPageNumber = 1;
+    long nbItem = -1;
     String search;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,47 +38,36 @@ public class Dashboard extends HttpServlet {
         try {
             pageSize = Long.parseLong(pageSizeString);
             pageNumber = Long.parseLong(pageNumberString);
-            totalPageNumber = Long.parseLong(pageNumberString);
         } catch (NumberFormatException e) {
 
         }
-
-        // System.out.println(pageNumber);
-        PagesListComputer pagesList = new ComputerService().getComputers();
-        System.out.println("pageSize " + pageSize);
-        System.out.println("pageNumber " + pageNumber);
-        System.out.println("totalPageNumber " + totalPageNumber);
-        pagesList.setRowByPages(pageSize);
-        pagesList.setPageIndex(pageNumber);
-        totalPageNumber = pagesList.getTotalPageNumber();
-        List<Pageable> list;
-        if (! StringUtils.isBlank(search)) {
-            list = pagesList.getListFilterByName(search);
-        }
-        else {
-            list = pagesList.getList();
-        }
         
-        List<ComputerDTO> dtoList = pageableListToComputerDTOList(list);
+        List<ComputerDTO> dtoList = getComputerList();
 
-        request.setAttribute("totalRowNumber", pagesList.getTotalRow());
+        request.setAttribute("totalRowNumber", nbItem);
         request.setAttribute("computersList", dtoList);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("pageNumber", pageNumber);
         request.setAttribute("totalPageNumber", totalPageNumber);
-
         this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
     }
     
-    private List<ComputerDTO> pageableListToComputerDTOList(List<Pageable> list){
+    private List<ComputerDTO> getComputerList(){
         List<ComputerDTO> dtoList = new ArrayList<>();
+        ComputerService computerService = new ComputerService();
+        PagesListComputer pagesListComputer = computerService.getComputers();
+        pagesListComputer.setRowByPages(pageSize);
+        pagesListComputer.setPageIndex(pageNumber);
+        nbItem = pagesListComputer.getTotalRow();
+        totalPageNumber = pagesListComputer.getTotalPageNumber();
+        List<Pageable> list = pagesListComputer.getList();
+        
         for (Pageable computer : list) {
-            Computer c = (Computer)computer ;
+            Computer c = (Computer) computer;
             dtoList.add(new ComputerDTO(c));
         }
-        
         return dtoList;
     }
-    
+
 }
