@@ -23,12 +23,12 @@
 	<section id="main">
 	<div class="container">
 		<h1 id="homeTitle">
-			<c:out value="${totalRowNumber}">bi</c:out>
+			<c:out value="${totalRowNumber}"></c:out>
 			Computers found
 		</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
-				<form id="searchForm" action="#" method="GET" class="form-inline">
+				<form id="searchForm" action="" method="GET" class="form-inline">
 
 					<input type="search" id="searchbox" name="search"
 						class="form-control" placeholder="Search name" /> <input
@@ -37,7 +37,7 @@
 				</form>
 			</div>
 			<div class="pull-right">
-				<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+				<a class="btn btn-success" id="addComputer" href="addComputer">Add
 					Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 					onclick="$.fn.toggleEditMode();">Edit</a>
 			</div>
@@ -77,11 +77,11 @@
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
 							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick=""><c:out
+						<td><a href="editComputer" onclick=""><c:out
 									value="${computer.name}"></c:out></a></td>
 						<td><c:out value="${computer.dateIntroduced}"></c:out></td>
 						<td><c:out value="${computer.dateDiscontinued}"></c:out></td>
-						<td><c:out value="${computer.company}"></c:out></td>
+						<td><c:out value="${computer.company.name}"></c:out></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -92,17 +92,20 @@
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
 		<ul class="pagination">
-			<li><a href="#" aria-label="Previous"> <span
-					aria-hidden="true">&laquo;</span>
+			<li><a
+				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber - 1}"/>"
+				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 			</a></li>
 
-			<c:forEach var="i" begin="1" end="${totalPageNumber}" step="1">
+			<c:forEach var="i" begin="${(pageNumber - 3 > 0) ? (pageNumber - 3) : 1}" end="${(pageNumber + 3 < totalPageNumber) ? (pageNumber + 3) : totalPageNumber}" step="1">
 				<li><a
 					href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${i}"/>"><c:out
 							value="${i}" /></a></li>
 			</c:forEach>
 
-			<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+			<li><a
+				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber + 1}"/>"
+				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
 
@@ -113,9 +116,9 @@
 		</div>
 	</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/dashboard.js"></script>
 
 </body>
 </html>

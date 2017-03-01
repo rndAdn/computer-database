@@ -29,4 +29,10 @@ public class PagesListCompany extends PagesList {
         this.totalRow = nbCompany;
         this.totalNumberOfpages = (int) Math.ceil(nbCompany / (double) rowByPages);
     }
+
+    @Override
+    public List<Pageable> getListFilterByName(String name) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

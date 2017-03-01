@@ -89,6 +89,29 @@ public class ComputerService {
     }
 
     /**
+     * Get a Computer from database by it's name.
+     *
+     * @param name
+     *            of computer in Database.
+     * @return PagesListComputer.
+     * @throws DaoException
+     *             .
+     */
+    public PagesListComputer getComputerByName(String name) {
+        PagesListComputer pagesList = new PagesListComputer();
+        ComputerDao computerDao = new ComputerDao();
+        try {
+            long nbComputer = computerDao.countComputers();
+
+            pagesList.setNumberOfComputer(nbComputer);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+
+        return pagesList;
+    }
+
+    /**
      * Update a Computer in database given a Computer.
      *
      * @param computer
@@ -116,7 +139,8 @@ public class ComputerService {
 
     /**
      * Get all Computer from database.
-     * @return a List<Pageable>
+     *
+     * @return a PagesListComputer
      * @throws DaoException
      *             .
      */
@@ -125,13 +149,10 @@ public class ComputerService {
         ComputerDao computerDao = new ComputerDao();
         try {
             long nbComputer = computerDao.countComputers();
-
             pagesList.setNumberOfComputer(nbComputer);
         } catch (DaoException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return pagesList;
     }
 }

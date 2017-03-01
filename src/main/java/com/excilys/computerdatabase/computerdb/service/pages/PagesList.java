@@ -11,6 +11,8 @@ public abstract class PagesList {
 
     public abstract List<Pageable> getList();
 
+    public abstract List<Pageable> getListFilterByName(String name);
+
     public void nextPage() {
         pageNumber = Math.min(totalNumberOfpages, pageNumber + 1);
     }
@@ -37,9 +39,7 @@ public abstract class PagesList {
     }
 
     public void setPageIndex(long pageNumber) {
-        System.out.println("pN :" + pageNumber);
         this.pageNumber = Math.max(Math.min(totalNumberOfpages, pageNumber), 1);
-        System.out.println("pN :" + pageNumber);
     }
 
     public long getTotalPageNumber() {

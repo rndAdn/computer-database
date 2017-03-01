@@ -13,7 +13,6 @@ public class PagesListComputer extends PagesList {
         try {
             ComputerDao computerDao = new ComputerDao();
             list = computerDao.getComputers((pageNumber - 1) * rowByPages, rowByPages);
-            System.out.println(list.get(0) + "       " + pageNumber);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -24,6 +23,18 @@ public class PagesListComputer extends PagesList {
         this.totalRow = nbComputer;
         this.totalNumberOfpages = (int) Math.ceil(nbComputer / (double) rowByPages);
 
+    }
+
+    @Override
+    public List<Pageable> getListFilterByName(String name) {
+        List<Pageable> list = new ArrayList<>();
+        try {
+            ComputerDao computerDao = new ComputerDao();
+            list = computerDao.getComputersByName(name, (pageNumber - 1) * rowByPages, rowByPages);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }

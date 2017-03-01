@@ -37,7 +37,7 @@ public class CompanyService {
      * @throws DaoException
      *             .
      */
-    public PagesList getCompanys() {
+    public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
         CompanyDao companyDao = new CompanyDao();
         try {
@@ -45,7 +45,6 @@ public class CompanyService {
 
             pagesList.setNumberOfCompany(nbCompany);
         } catch (DaoException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
