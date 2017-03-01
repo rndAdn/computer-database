@@ -13,7 +13,7 @@ public class ListCompanyAction implements ActionMenu {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListCompanyAction.class);
 
-
+    @Override
     public void doAction() {
         PagesList pagesList;
         CompanyService companyService = new CompanyService();

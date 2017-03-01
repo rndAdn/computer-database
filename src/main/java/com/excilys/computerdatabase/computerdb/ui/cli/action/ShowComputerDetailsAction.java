@@ -10,6 +10,7 @@ import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class ShowComputerDetailsAction implements ActionMenu {
 
+    @Override
     public void doAction() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Entrez l'id de l'ordinateur : ");

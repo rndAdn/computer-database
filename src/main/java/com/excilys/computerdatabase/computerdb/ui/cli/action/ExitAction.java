@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class ExitAction implements ActionMenu {
 
+    @Override
     public void doAction() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Quitter l'application ? [o/N] : ");

@@ -9,6 +9,11 @@ public abstract class PagesList {
     protected long totalNumberOfpages;
     protected long totalRow;
 
+    /**
+     * Get item List of current page.
+     *
+     * @return Pageable List.
+     */
     public abstract List<Pageable> getList();
 
     public abstract List<Pageable> getListFilterByName(String name);
