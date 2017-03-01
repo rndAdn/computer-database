@@ -52,15 +52,15 @@ public class ComputerDao implements IComputerDAO {
     }
 
     @Override
-    public List<Computer> getComputersByName(String name, long limitStart, long size) throws DaoException {
+    public List<Pageable> getComputersByName(String name, long limitStart, long size) throws DaoException {
         PreparedStatement selectStatement;
-        List<Computer> result = new ArrayList<>();
+        List<Pageable> result = new ArrayList<>();
         Connection connection = Database.INSTANCE.getConnection();
 
         try {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
-            selectStatement.setString(1, name);
+            selectStatement.setString(1, "%" + name + "%");
             selectStatement.setLong(2, limitStart);
             selectStatement.setLong(3, size);
 
@@ -272,7 +272,6 @@ public class ComputerDao implements IComputerDAO {
         }
         Computer computer = new Computer.ComputerBuilder(name).id(id).dateIntroduced(intro).dateDiscontinued(fin)
                 .company(company).build();
-        System.out.println("COMPANY UIGDUIGQAD  " + company);
         return computer;
     }
 }
