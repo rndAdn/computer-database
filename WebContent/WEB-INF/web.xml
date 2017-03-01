@@ -11,7 +11,7 @@
 		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/dashboard</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>EditComputer</servlet-name>
 		<servlet-class>com.excilys.computerdatabase.computerdb.ui.web.EditComputer</servlet-class>
@@ -20,7 +20,7 @@
 		<servlet-name>EditComputer</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AddComputer</servlet-name>
 		<servlet-class>com.excilys.computerdatabase.computerdb.ui.web.AddComputer</servlet-class>
