@@ -87,11 +87,12 @@ public class ComputerService {
         }
         return optionalComputer;
     }
-    
+
     /**
      * Get a Computer from database by it's name.
      *
-     * @param name of computer in Database.
+     * @param name
+     *            of computer in Database.
      * @return PagesListComputer.
      * @throws DaoException
      *             .
@@ -138,6 +139,7 @@ public class ComputerService {
 
     /**
      * Get all Computer from database.
+     *
      * @return a PagesListComputer
      * @throws DaoException
      *             .
@@ -147,12 +149,10 @@ public class ComputerService {
         ComputerDao computerDao = new ComputerDao();
         try {
             long nbComputer = computerDao.countComputers();
-
             pagesList.setNumberOfComputer(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();
         }
-
         return pagesList;
     }
 }

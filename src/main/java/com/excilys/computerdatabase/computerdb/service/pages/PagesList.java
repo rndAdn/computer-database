@@ -10,7 +10,7 @@ public abstract class PagesList {
     protected long totalRow;
 
     public abstract List<Pageable> getList();
-    
+
     public abstract List<Pageable> getListFilterByName(String name);
 
     public void nextPage() {
