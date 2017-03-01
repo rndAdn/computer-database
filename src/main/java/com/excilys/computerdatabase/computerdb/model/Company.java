@@ -7,6 +7,12 @@ public class Company implements Pageable {
     private final long id;
     private final String name;
 
+    /**
+     * Company Constructor.
+     *
+     * @param companyBuilder
+     *            .
+     */
     private Company(CompanyBuilder companyBuilder) {
         this.id = companyBuilder.id;
         this.name = companyBuilder.name;
@@ -20,6 +26,7 @@ public class Company implements Pageable {
         return name;
     }
 
+    @Override
     public String toString() {
         return "id : " + id + "\tname : " + name;
     }
@@ -62,15 +69,32 @@ public class Company implements Pageable {
         private long id;
         private final String name;
 
+        /**
+         * create a CompanyBuilder with the name of the Company.
+         *
+         * @param name of the Company
+         */
         public CompanyBuilder(String name) {
             this.name = name;
         }
 
+        /**
+         * Set the computer id.
+         *
+         * @param id
+         *            of the Computer
+         * @return Itself
+         */
         public CompanyBuilder id(long id) {
             this.id = id;
             return this;
         }
 
+        /**
+         * Build a Company.
+         *
+         * @return A built COmpany
+         */
         public Company build() {
             return new Company(this);
         }

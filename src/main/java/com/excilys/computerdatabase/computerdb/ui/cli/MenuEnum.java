@@ -1,13 +1,13 @@
-package com.excilys.computerdatabase.computerdb.ui;
+package com.excilys.computerdatabase.computerdb.ui.cli;
 
-import com.excilys.computerdatabase.computerdb.ui.action.ActionMenu;
-import com.excilys.computerdatabase.computerdb.ui.action.CreateComputerAction;
-import com.excilys.computerdatabase.computerdb.ui.action.DeleteComputerAction;
-import com.excilys.computerdatabase.computerdb.ui.action.ExitAction;
-import com.excilys.computerdatabase.computerdb.ui.action.ListCompanyAction;
-import com.excilys.computerdatabase.computerdb.ui.action.ListComputerAction;
-import com.excilys.computerdatabase.computerdb.ui.action.ShowComputerDetailsAction;
-import com.excilys.computerdatabase.computerdb.ui.action.UpdateComputerAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.ActionMenu;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.CreateComputerAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.DeleteComputerAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.ExitAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.ListCompanyAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.ListComputerAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.ShowComputerDetailsAction;
+import com.excilys.computerdatabase.computerdb.ui.cli.action.UpdateComputerAction;
 
 public enum MenuEnum {
 

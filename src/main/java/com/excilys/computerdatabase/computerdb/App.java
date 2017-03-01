@@ -2,14 +2,31 @@ package com.excilys.computerdatabase.computerdb;
 
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.ui.MenuEnum;
+import com.excilys.computerdatabase.computerdb.ui.cli.MenuEnum;
 
+/**
+ * @author renaud
+ *
+ */
+/**
+ * @author renaud
+ *
+ */
 public class App {
 
+    /**
+     * Main method for Command Line Interface.
+     *
+     * @param args Main Args.
+     */
     public static void main(String[] args) {
         showMenu();
     }
 
+    /**
+     * Print CLI menu.
+     *
+     */
     public static void showMenu() {
         Scanner sc = new Scanner(System.in);
         while (true) {

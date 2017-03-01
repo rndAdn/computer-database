@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.action;
+package com.excilys.computerdatabase.computerdb.ui.cli.action;
 
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.pages.Page;

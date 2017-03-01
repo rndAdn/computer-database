@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class Dashboard extends HttpServlet {
@@ -32,9 +31,8 @@ public class Dashboard extends HttpServlet {
         } catch (NumberFormatException e) {
 
         }
-        
-        
-        //System.out.println(pageNumber);
+
+        // System.out.println(pageNumber);
         PagesListComputer pagesList = new ComputerService().getComputers();
         System.out.println("pageSize " + pageSize);
         System.out.println("pageNumber " + pageNumber);
@@ -49,9 +47,6 @@ public class Dashboard extends HttpServlet {
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("pageNumber", pageNumber);
         request.setAttribute("totalPageNumber", totalPageNumber);
-        
-
-        
 
         this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 

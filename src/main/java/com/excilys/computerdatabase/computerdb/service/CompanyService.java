@@ -10,6 +10,16 @@ import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
 public class CompanyService {
 
+    /**
+     * Get a Company from DAO by it's id.
+     *
+     * @param id
+     *            Company id in Database.
+     * @return A Optional<Company>. empty if the Company doesn't exist in the
+     *         database.
+     * @throws DaoException
+     *             .
+     */
     public static Optional<Company> getCompanyByid(long id) {
         CompanyDao companyDao = new CompanyDao();
         try {
@@ -20,6 +30,13 @@ public class CompanyService {
         return Optional.empty();
     }
 
+    /**
+     * Get all Company from database.
+     *
+     * @return a PagesList
+     * @throws DaoException
+     *             .
+     */
     public PagesList getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
         CompanyDao companyDao = new CompanyDao();

@@ -104,15 +104,23 @@ public class CompanyDao implements ICompanyDAO {
         return result;
     }
 
+    /**
+     * Get a company from a ResultSet.
+     *
+     * @param rset
+     *            ResultSset of Company from database.
+     * @return A Company
+     * @throws SQLException
+     *             Bad info in ResultSet
+     */
     public Company mapCompany(ResultSet rset) throws SQLException {
         long id = rset.getLong("id");
         String name = rset.getString("name");
-        Company company = new Company.CompanyBuilder(name)
-                .id(id)
-                .build();
+        Company company = new Company.CompanyBuilder(name).id(id).build();
         return company;
     }
 
+    @Override
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
         Connection connection = Database.INSTANCE.getConnection();

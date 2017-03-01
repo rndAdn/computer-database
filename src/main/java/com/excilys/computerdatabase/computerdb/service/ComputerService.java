@@ -9,6 +9,15 @@ import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class ComputerService {
 
+    /**
+     * Insert a Computer in database given a Computer.
+     *
+     * @param computer
+     *            Representation of the computer to create
+     * @return true if the computer is created in database
+     * @throws DaoException
+     *             .
+     */
     public boolean ajoutComputer(Computer computer) {
         ComputerDao dao = new ComputerDao();
         boolean result = false;
@@ -26,6 +35,15 @@ public class ComputerService {
         return result;
     }
 
+    /**
+     * Delete a Computer in database given a Computer.
+     *
+     * @param computer
+     *            Representation of the computer to delete
+     * @return true if computer is delete false otherwise
+     * @throws DaoException
+     *             .
+     */
     public boolean deleteComputer(Computer computer) {
         ComputerDao computerDao = new ComputerDao();
         boolean result = false;
@@ -44,6 +62,16 @@ public class ComputerService {
 
     }
 
+    /**
+     * Get a Computer from database by it's id.
+     *
+     * @param id
+     *            Computer id in Database.
+     * @return A Optional<Computer>. empty if the Computer doesn't exist in the
+     *         database.
+     * @throws DaoException
+     *             .
+     */
     public Optional<Computer> getComputerById(long id) {
         ComputerDao computerDao = new ComputerDao();
         Optional<Computer> optionalComputer = Optional.empty();
@@ -60,6 +88,15 @@ public class ComputerService {
         return optionalComputer;
     }
 
+    /**
+     * Update a Computer in database given a Computer.
+     *
+     * @param computer
+     *            Representation of the computer to update
+     * @return true if the computer is update in database
+     * @throws DaoException
+     *             .
+     */
     public boolean updateComputer(Computer computer) {
         ComputerDao dao = new ComputerDao();
         boolean result = false;
@@ -77,6 +114,12 @@ public class ComputerService {
         return result;
     }
 
+    /**
+     * Get all Computer from database.
+     * @return a List<Pageable>
+     * @throws DaoException
+     *             .
+     */
     public PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
         ComputerDao computerDao = new ComputerDao();

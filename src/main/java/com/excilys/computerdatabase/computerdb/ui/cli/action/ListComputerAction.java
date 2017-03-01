@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.action;
+package com.excilys.computerdatabase.computerdb.ui.cli.action;
 
 import java.util.Scanner;
 

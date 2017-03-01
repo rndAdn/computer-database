@@ -241,6 +241,16 @@ public class ComputerDao implements IComputerDAO {
         return number;
     }
 
+
+    /**
+     * Get a Computer from a ResultSet.
+     *
+     * @param rset
+     *            ResultSset of Computer from database.
+     * @return A Computer
+     * @throws SQLException
+     *             Bad info in ResultSet
+     */
     public Computer mapComputer(ResultSet rset) throws SQLException {
         long id = rset.getLong("id");
         String name = rset.getString("name");
