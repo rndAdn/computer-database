@@ -42,7 +42,7 @@ public class CompanyService {
         try {
             long nbCompany = companyDao.getNumberOfCompany();
 
-            pagesList.setNumberOfCompany(nbCompany);
+            pagesList.setTotalNumberOfRow(nbCompany);
         } catch (DaoException e) {
             e.printStackTrace();
         }

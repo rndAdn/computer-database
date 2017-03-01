@@ -8,10 +8,6 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 
 public class PagesListCompany extends PagesList {
 
-    public PagesListCompany() {
-        super();
-    }
-
     @Override
     public List<Pageable> getList() {
 
@@ -23,11 +19,6 @@ public class PagesListCompany extends PagesList {
             e.printStackTrace();
         }
         return list;
-    }
-
-    public void setNumberOfCompany(long nbCompany) {
-        this.totalRow = nbCompany;
-        this.totalNumberOfpages = (int) Math.ceil(nbCompany / (double) rowByPages);
     }
 
     @Override

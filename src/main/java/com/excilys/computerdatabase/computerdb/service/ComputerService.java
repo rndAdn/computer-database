@@ -103,7 +103,7 @@ public class ComputerService {
         try {
             long nbComputer = computerDao.countComputers();
 
-            pagesList.setNumberOfComputer(nbComputer);
+            pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -149,7 +149,7 @@ public class ComputerService {
         ComputerDao computerDao = new ComputerDao();
         try {
             long nbComputer = computerDao.countComputers();
-            pagesList.setNumberOfComputer(nbComputer);
+            pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();
         }
