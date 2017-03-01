@@ -28,7 +28,7 @@
 		</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
-				<form id="searchForm" action="#" method="GET" class="form-inline">
+				<form id="searchForm" action="" method="GET" class="form-inline">
 
 					<input type="search" id="searchbox" name="search"
 						class="form-control" placeholder="Search name" /> <input
@@ -81,7 +81,7 @@
 									value="${computer.name}"></c:out></a></td>
 						<td><c:out value="${computer.dateIntroduced}"></c:out></td>
 						<td><c:out value="${computer.dateDiscontinued}"></c:out></td>
-						<td><c:out value="${computer.company}"></c:out></td>
+						<td><c:out value="${computer.company.name}"></c:out></td>
 					</tr>
 				</c:forEach>
 			</tbody>
