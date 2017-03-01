@@ -45,7 +45,6 @@ public class CompanyService {
 
             pagesList.setNumberOfCompany(nbCompany);
         } catch (DaoException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

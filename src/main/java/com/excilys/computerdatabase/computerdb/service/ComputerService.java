@@ -128,7 +128,6 @@ public class ComputerService {
 
             pagesList.setNumberOfComputer(nbComputer);
         } catch (DaoException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
