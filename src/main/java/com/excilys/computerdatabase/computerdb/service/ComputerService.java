@@ -18,7 +18,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public boolean ajoutComputer(Computer computer) {
+    public static boolean ajoutComputer(Computer computer) {
         ComputerDao dao = new ComputerDao();
         boolean result = false;
         try {
@@ -44,7 +44,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public boolean deleteComputer(Computer computer) {
+    public static boolean deleteComputer(Computer computer) {
         ComputerDao computerDao = new ComputerDao();
         boolean result = false;
         try {
@@ -72,7 +72,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public Optional<Computer> getComputerById(long id) {
+    public static Optional<Computer> getComputerById(long id) {
         ComputerDao computerDao = new ComputerDao();
         Optional<Computer> optionalComputer = Optional.empty();
         try {
@@ -97,7 +97,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public PagesListComputer getComputerByName(String name) {
+    public static PagesListComputer getComputerByName(String name) {
         PagesListComputer pagesList = new PagesListComputer();
         ComputerDao computerDao = new ComputerDao();
         try {
@@ -120,7 +120,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public boolean updateComputer(Computer computer) {
+    public static boolean updateComputer(Computer computer) {
         ComputerDao dao = new ComputerDao();
         boolean result = false;
         try {
@@ -144,7 +144,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public PagesListComputer getComputers() {
+    public static PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
         ComputerDao computerDao = new ComputerDao();
         try {

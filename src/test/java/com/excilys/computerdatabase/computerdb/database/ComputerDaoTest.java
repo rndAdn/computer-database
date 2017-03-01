@@ -41,7 +41,7 @@ public class ComputerDaoTest {
         Mockito.when(resultSet.getLong("company_id")).thenReturn(companyId);
         Mockito.when(resultSet.getString("company_name")).thenReturn(companyName);
         
-        Computer computer = computerDao.mapComputer(resultSet);
+        Computer computer = MapperComputer.mapComputer(resultSet);
         
         
         

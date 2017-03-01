@@ -30,10 +30,8 @@ public class Dashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        search = "";
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
-        search = request.getParameter("search");
 
         try {
             pageSize = Long.parseLong(pageSizeString);
@@ -55,8 +53,7 @@ public class Dashboard extends HttpServlet {
 
     private List<ComputerDTO> getComputerList() {
         List<ComputerDTO> dtoList = new ArrayList<>();
-        ComputerService computerService = new ComputerService();
-        PagesListComputer pagesListComputer = computerService.getComputers();
+        PagesListComputer pagesListComputer = ComputerService.getComputers();
         pagesListComputer.setRowByPages(pageSize);
         pagesListComputer.setPageIndex(pageNumber);
         nbItem = pagesListComputer.getTotalRow();
