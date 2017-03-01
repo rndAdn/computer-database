@@ -33,7 +33,7 @@ public class CompanyDao implements ICompanyDAO {
 
             ResultSet rset = selectStatement.executeQuery();
             if (rset.next()) {
-                optionalCompany = Optional.of(mapCompany(rset));
+                optionalCompany = Optional.of(MapperCompany.mapCompany(rset));
             }
 
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class CompanyDao implements ICompanyDAO {
             ResultSet rset = selectStatement.executeQuery();
 
             while (rset.next()) {
-                result.add(mapCompany(rset));
+                result.add(MapperCompany.mapCompany(rset));
             }
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
@@ -91,7 +91,7 @@ public class CompanyDao implements ICompanyDAO {
             ResultSet rset = selectStatement.executeQuery();
 
             while (rset.next()) {
-                result.add(mapCompany(rset));
+                result.add(MapperCompany.mapCompany(rset));
             }
 
         } catch (SQLException e) {
@@ -102,22 +102,6 @@ public class CompanyDao implements ICompanyDAO {
         }
         LOGGER.info("getCompanys result size : " + result.size());
         return result;
-    }
-
-    /**
-     * Get a company from a ResultSet.
-     *
-     * @param rset
-     *            ResultSset of Company from database.
-     * @return A Company
-     * @throws SQLException
-     *             Bad info in ResultSet
-     */
-    public Company mapCompany(ResultSet rset) throws SQLException {
-        long id = rset.getLong("id");
-        String name = rset.getString("name");
-        Company company = new Company.CompanyBuilder(name).id(id).build();
-        return company;
     }
 
     @Override

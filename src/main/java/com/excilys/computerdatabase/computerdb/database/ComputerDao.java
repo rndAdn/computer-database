@@ -38,7 +38,7 @@ public class ComputerDao implements IComputerDAO {
             ResultSet rset = selectStatement.executeQuery();
 
             if (rset.next()) {
-                optionalComputer = Optional.of(mapComputer(rset));
+                optionalComputer = Optional.of(MapperComputer.mapComputer(rset));
             }
 
         } catch (SQLException e) {
@@ -68,7 +68,7 @@ public class ComputerDao implements IComputerDAO {
             rset = selectStatement.executeQuery();
 
             while (rset.next()) {
-                result.add(mapComputer(rset));
+                result.add(MapperComputer.mapComputer(rset));
             }
 
         } catch (SQLException e) {
@@ -98,7 +98,7 @@ public class ComputerDao implements IComputerDAO {
             rset = selectStatement.executeQuery();
 
             while (rset.next()) {
-                result.add(mapComputer(rset));
+                result.add(MapperComputer.mapComputer(rset));
             }
 
         } catch (SQLException e) {
@@ -242,36 +242,4 @@ public class ComputerDao implements IComputerDAO {
     }
 
 
-    /**
-     * Get a Computer from a ResultSet.
-     *
-     * @param rset
-     *            ResultSset of Computer from database.
-     * @return A Computer
-     * @throws SQLException
-     *             Bad info in ResultSet
-     */
-    public Computer mapComputer(ResultSet rset) throws SQLException {
-        long id = rset.getLong("id");
-        String name = rset.getString("name");
-        LocalDate intro = null;
-        LocalDate fin = null;
-        Company company = null;
-
-        try {
-            intro = rset.getObject("introduced", LocalDate.class);
-            fin = rset.getObject("discontinued", LocalDate.class);
-        } catch (NullPointerException e) {
-            // LOGGER.warn("mapComputer date null dans la bd id : " +
-            // computer.getDetail());
-        }
-        long companyId = rset.getLong("company_id");
-        if (!rset.wasNull()) {
-            String nameComapny = rset.getString("company_name");
-            company = new Company.CompanyBuilder(nameComapny).id(companyId).build();
-        }
-        Computer computer = new Computer.ComputerBuilder(name).id(id).dateIntroduced(intro).dateDiscontinued(fin)
-                .company(company).build();
-        return computer;
-    }
 }
