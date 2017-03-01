@@ -19,7 +19,7 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
 public class Dashboard extends HttpServlet {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
     long pageSize = 10;
     long pageNumber = 1;
@@ -41,7 +41,7 @@ public class Dashboard extends HttpServlet {
         } catch (NumberFormatException e) {
 
         }
-        
+
         List<ComputerDTO> dtoList = getComputerList();
 
         request.setAttribute("totalRowNumber", nbItem);
@@ -52,8 +52,8 @@ public class Dashboard extends HttpServlet {
         this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
     }
-    
-    private List<ComputerDTO> getComputerList(){
+
+    private List<ComputerDTO> getComputerList() {
         List<ComputerDTO> dtoList = new ArrayList<>();
         ComputerService computerService = new ComputerService();
         PagesListComputer pagesListComputer = computerService.getComputers();
@@ -62,7 +62,7 @@ public class Dashboard extends HttpServlet {
         nbItem = pagesListComputer.getTotalRow();
         totalPageNumber = pagesListComputer.getTotalPageNumber();
         List<Pageable> list = pagesListComputer.getList();
-        
+
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
             dtoList.add(new ComputerDTO(c));

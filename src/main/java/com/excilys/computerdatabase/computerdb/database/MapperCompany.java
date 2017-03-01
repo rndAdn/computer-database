@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.excilys.computerdatabase.computerdb.model.Company;
 
 public class MapperCompany {
-    
+
     /**
      * Get a company from a ResultSet.
      *
