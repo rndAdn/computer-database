@@ -148,7 +148,7 @@ public class CompanyDaoTest {
         Mockito.when(resultSet.getLong("id")).thenReturn(id);
         Mockito.when(resultSet.getString("name")).thenReturn(name);
         
-        Company company = companyDao.mapCompany(resultSet);
+        Company company = MapperCompany.mapCompany(resultSet);
         
         assertEquals(name, company.getName());
         assertEquals(id, company.getId());

@@ -36,7 +36,7 @@ public class CompanyService {
      * @throws DaoException
      *             .
      */
-    public PagesListCompany getCompanys() {
+    public static PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
         CompanyDao companyDao = new CompanyDao();
         try {
