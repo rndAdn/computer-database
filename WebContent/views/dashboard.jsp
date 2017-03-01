@@ -23,7 +23,7 @@
 	<section id="main">
 	<div class="container">
 		<h1 id="homeTitle">
-			<c:out value="${totalRowNumber}">bi</c:out>
+			<c:out value="${totalRowNumber}"></c:out>
 			Computers found
 		</h1>
 		<div id="actions" class="form-horizontal">
@@ -113,9 +113,9 @@
 		</div>
 	</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/dashboard.js"></script>
 
 </body>
 </html>
