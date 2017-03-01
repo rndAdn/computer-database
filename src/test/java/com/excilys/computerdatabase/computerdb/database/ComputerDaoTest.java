@@ -15,12 +15,10 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 
 public class ComputerDaoTest {
     
-    private ComputerDao computerDao;
     private ResultSet resultSet;
     
     @Before
     public void executerAvantChaqueTest() {
-        computerDao = new ComputerDao();
         resultSet = Mockito.mock(ResultSet.class);
     }
     
