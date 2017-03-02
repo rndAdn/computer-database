@@ -65,6 +65,7 @@ public class CompanyDao implements ICompanyDAO {
             while (rset.next()) {
                 result.add(MapperCompany.mapCompany(rset));
             }
+
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -83,6 +84,7 @@ public class CompanyDao implements ICompanyDAO {
         Connection connection = Database.INSTANCE.getConnection();
 
         try {
+            connection.setAutoCommit(false);
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
 
             selectStatement.setLong(1, limitStart);
@@ -93,6 +95,7 @@ public class CompanyDao implements ICompanyDAO {
             while (rset.next()) {
                 result.add(MapperCompany.mapCompany(rset));
             }
+            connection.commit();
 
         } catch (SQLException e) {
             LOGGER.error("getCompanys : " + e.getMessage());

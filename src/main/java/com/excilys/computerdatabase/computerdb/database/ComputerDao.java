@@ -114,10 +114,12 @@ public class ComputerDao implements IComputerDAO {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
+            connection.setAutoCommit(false);
             PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 
             deleteStatment.setLong(1, computer.getId());
             deleteStatment.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
@@ -135,6 +137,7 @@ public class ComputerDao implements IComputerDAO {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
+            connection.setAutoCommit(false);
             PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
             updateStatment.setString(1, computer.getName());
 
@@ -163,6 +166,7 @@ public class ComputerDao implements IComputerDAO {
             updateStatment.setLong(5, computer.getId());
 
             updateStatment.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
             Database.INSTANCE.rollback();
@@ -179,7 +183,7 @@ public class ComputerDao implements IComputerDAO {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
-
+            connection.setAutoCommit(false);
             PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER);
 
             insertStatment.setString(1, computer.getName());
@@ -206,6 +210,7 @@ public class ComputerDao implements IComputerDAO {
             }
 
             result = insertStatment.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
             Database.INSTANCE.rollback();
