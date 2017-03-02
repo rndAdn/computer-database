@@ -67,7 +67,7 @@ public class ComputerService {
      *
      * @param id
      *            Computer id in Database.
-     * @return A Optional<Computer>. empty if the Computer doesn't exist in the
+     * @return A Optional Computer. empty if the Computer doesn't exist in the
      *         database.
      * @throws DaoException
      *             .

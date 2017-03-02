@@ -25,15 +25,13 @@ public class Utils {
         try {
             optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         } catch (DateTimeParseException e) {
-            System.out.println("stringToDate Invalide : -" + dateString);
             try {
                 optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             } catch (DateTimeParseException e1) {
-                System.out.println("stringToDate Invalide : /" + dateString);
+                LOGGER.error("stringToDate Invalide : " + dateString);
             }
-            // LOGGER.error("stringToDate Invalide : " + dateString);
         } catch (NullPointerException e) {
-            // LOGGER.error("stringToDate null : " + dateString);
+            LOGGER.error("stringToDate null : " + dateString);
         }
 
         return optionalDate;

@@ -22,7 +22,7 @@ public interface IComputerDAO {
      *
      * @param id
      *            Computer id in Database.
-     * @return A Optional<Computer>. empty if the Computer doesn't exist in the
+     * @return A Optional Computer. empty if the Computer doesn't exist in the
      *         database.
      * @throws DaoException
      *             .
@@ -38,7 +38,7 @@ public interface IComputerDAO {
      *            Start of first result.
      * @param size
      *            Max list size
-     * @return a List<Pageable>
+     * @return a List Pageable
      * @throws DaoException
      *             .
      */
@@ -51,7 +51,7 @@ public interface IComputerDAO {
      *            Start of first result.
      * @param size
      *            Max list size
-     * @return a List<Pageable>
+     * @return a List Pageable
      * @throws DaoException
      *             .
      */
