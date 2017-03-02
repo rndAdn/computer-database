@@ -38,7 +38,8 @@ public class ComputerDao implements IComputerDAO {
             if (rset.next()) {
                 optionalComputer = Optional.of(MapperComputer.mapComputer(rset));
             }
-
+            rset.close();
+            selectStatement.close();
         } catch (SQLException e) {
             LOGGER.error("getComputerById : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -68,7 +69,8 @@ public class ComputerDao implements IComputerDAO {
             while (rset.next()) {
                 result.add(MapperComputer.mapComputer(rset));
             }
-
+            rset.close();
+            selectStatement.close();
         } catch (SQLException e) {
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -98,7 +100,8 @@ public class ComputerDao implements IComputerDAO {
             while (rset.next()) {
                 result.add(MapperComputer.mapComputer(rset));
             }
-
+            rset.close();
+            selectStatement.close();
         } catch (SQLException e) {
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -120,6 +123,7 @@ public class ComputerDao implements IComputerDAO {
             deleteStatment.setLong(1, computer.getId());
             deleteStatment.executeUpdate();
             connection.commit();
+            deleteStatment.close();
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
@@ -167,6 +171,7 @@ public class ComputerDao implements IComputerDAO {
 
             updateStatment.executeUpdate();
             connection.commit();
+            updateStatment.close();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
             Database.INSTANCE.rollback();
@@ -211,6 +216,7 @@ public class ComputerDao implements IComputerDAO {
 
             result = insertStatment.executeUpdate();
             connection.commit();
+            insertStatment.close();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
             Database.INSTANCE.rollback();
@@ -234,6 +240,8 @@ public class ComputerDao implements IComputerDAO {
             if (rset.next()) {
                 number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
             }
+            rset.close();
+            st.close();
         } catch (SQLException e) {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());

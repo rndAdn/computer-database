@@ -36,6 +36,9 @@ public class CompanyDao implements ICompanyDAO {
                 optionalCompany = Optional.of(MapperCompany.mapCompany(rset));
             }
 
+            rset.close();
+            selectStatement.close();
+
         } catch (SQLException e) {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -65,7 +68,8 @@ public class CompanyDao implements ICompanyDAO {
             while (rset.next()) {
                 result.add(MapperCompany.mapCompany(rset));
             }
-
+            rset.close();
+            selectStatement.close();
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -96,7 +100,8 @@ public class CompanyDao implements ICompanyDAO {
                 result.add(MapperCompany.mapCompany(rset));
             }
             connection.commit();
-
+            rset.close();
+            selectStatement.close();
         } catch (SQLException e) {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
@@ -120,6 +125,8 @@ public class CompanyDao implements ICompanyDAO {
             if (rset.next()) {
                 number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
             }
+            rset.close();
+            st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         } finally {
