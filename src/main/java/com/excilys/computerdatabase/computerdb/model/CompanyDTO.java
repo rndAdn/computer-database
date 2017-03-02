@@ -18,7 +18,7 @@ public class CompanyDTO {
 
     /** Constructor of a Company DTO with a Optional company.
      * if Company is empty id is equals to -1 and name to "-"
-     * @param company Optional<Company>
+     * @param company Optional Company
      */
     public CompanyDTO(Optional<Company> company) {
         if (company.isPresent()) {

@@ -14,7 +14,7 @@ public class CompanyService {
      *
      * @param id
      *            Company id in Database.
-     * @return A Optional<Company>. empty if the Company doesn't exist in the
+     * @return A Optional Company. empty if the Company doesn't exist in the
      *         database.
      * @throws DaoException
      *             .

@@ -19,7 +19,7 @@ public interface ICompanyDAO {
      *
      * @param id
      *            Company id in Database.
-     * @return A Optional<Company>. empty if the Company doesn't exist in the
+     * @return A Optional Company . empty if the Company doesn't exist in the
      *         database.
      * @throws DaoException
      *             .
@@ -35,7 +35,7 @@ public interface ICompanyDAO {
      *            Start of first result.
      * @param size
      *            Max list size
-     * @return a List<Pageable>
+     * @return a List Pageable
      * @throws DaoException
      *             .
      */
@@ -48,7 +48,7 @@ public interface ICompanyDAO {
      *            Start of first result.
      * @param size
      *            Max list size
-     * @return a List<Pageable>
+     * @return a List Pageable
      * @throws DaoException
      *             .
      */
