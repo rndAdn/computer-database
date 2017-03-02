@@ -90,6 +90,12 @@ public abstract class PagesList {
         return totalNumberOfpages;
     }
 
+    /**
+     * Set the limit of item by page and set the number of page.
+     *
+     * @param limit
+     *            of row on each page
+     */
     public void setRowByPages(long limit) {
         this.rowByPages = limit;
         this.totalNumberOfpages = (long) Math.ceil(totalRow / (double) rowByPages);
@@ -99,6 +105,12 @@ public abstract class PagesList {
         return totalRow;
     }
 
+    /**
+     * Set the total number of item to display.
+     *
+     * @param nbRow
+     *            .
+     */
     public void setTotalNumberOfRow(long nbRow) {
         this.totalRow = nbRow;
         this.totalNumberOfpages = (int) Math.ceil(nbRow / (double) rowByPages);

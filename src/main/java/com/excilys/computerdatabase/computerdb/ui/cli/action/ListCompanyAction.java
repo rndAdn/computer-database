@@ -14,7 +14,7 @@ public class ListCompanyAction implements ActionMenu {
     private static final Logger LOGGER = LoggerFactory.getLogger(ListCompanyAction.class);
 
     @Override
-    public void doAction() {
+    public void executeAction() {
         PagesList pagesList;
         CompanyService companyService = new CompanyService();
         pagesList = companyService.getCompanys();
@@ -31,11 +31,24 @@ public class ListCompanyAction implements ActionMenu {
         } while (readAction(pagesList));
     }
 
+    /**
+     * Show footer of pagesList in CLI.
+     *
+     * @param pagesList
+     *            .
+     */
     public void printFooter(PagesList pagesList) {
         System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalPageNumber()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
+    /**
+     * Read user input in pageList (next page, ...).
+     *
+     * @param pagesList
+     *            .
+     * @return true if input is correct
+     */
     private boolean readAction(PagesList pagesList) {
         Scanner sc = new Scanner(System.in);
 
