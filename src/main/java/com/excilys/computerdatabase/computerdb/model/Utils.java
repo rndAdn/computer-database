@@ -10,31 +10,51 @@ import org.slf4j.LoggerFactory;
 
 public class Utils {
 
-	private static Logger LOGGER = LoggerFactory.getLogger("com.excilys.computerdatabase.computerdb.model.Utils"); 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
-	
-	public static Optional<LocalDate> stringToDate(String dateString){
-		Optional<LocalDate> optionalDate = Optional.empty();
-		try {
-			optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-		}
-		catch (DateTimeParseException e){
-			LOGGER.error("stringToDate " + dateString);
-		}
-				
-		return optionalDate;
-	}
+    /**
+     * Transform a date represented by a String to a LocalDate given a pattern
+     * (dd-MM-yyyy).
+     *
+     * @param dateString
+     *            .
+     * @return LocalDate or a optional.empty
+     */
+    public static Optional<LocalDate> stringToDate(String dateString) {
+        Optional<LocalDate> optionalDate = Optional.empty();
+        try {
+            optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        } catch (DateTimeParseException e) {
+            System.out.println("stringToDate Invalide : -" + dateString);
+            try {
+                optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            } catch (DateTimeParseException e1) {
+                System.out.println("stringToDate Invalide : /" + dateString);
+            }
+            // LOGGER.error("stringToDate Invalide : " + dateString);
+        } catch (NullPointerException e) {
+            // LOGGER.error("stringToDate null : " + dateString);
+        }
 
-	
-	public static long stringToId(String idString){
-		long id = -1;
-		try {
-			id = Long.parseLong(idString);
-		}
-		catch (NumberFormatException e) {
-			LOGGER.warn("stringToId   NumberFormatExeption : " + idString );
-		}
-		return id;
-	}
+        return optionalDate;
+    }
+
+    /**
+     * Transform a id represented by a String to a long. dosen't check id the id
+     * is valid.
+     *
+     * @param idString
+     *            string to transform
+     * @return a long id.
+     */
+    public static long stringToId(String idString) {
+        long id = -1;
+        try {
+            id = Long.parseLong(idString);
+        } catch (NumberFormatException e) {
+            LOGGER.warn("stringToId   NumberFormatExeption : " + idString);
+        }
+        return id;
+    }
 
 }

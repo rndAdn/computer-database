@@ -1,9 +1,13 @@
 package com.excilys.computerdatabase.computerdb.database;
 
-public class DaoException extends Exception{
+public class DaoException extends Exception {
 
-	public DaoException(String message) {
-		super(message);
-	}
+
+    /**
+     * @param message exception message
+     */
+    public DaoException(String message) {
+        super(message);
+    }
 
 }
