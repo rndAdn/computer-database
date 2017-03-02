@@ -19,12 +19,6 @@ public class PagesListComputer extends PagesList {
         return list;
     }
 
-    public void setNumberOfComputer(long nbComputer) {
-        this.totalRow = nbComputer;
-        this.totalNumberOfpages = (int) Math.ceil(nbComputer / (double) rowByPages);
-
-    }
-
     @Override
     public List<Pageable> getListFilterByName(String name) {
         List<Pageable> list = new ArrayList<>();

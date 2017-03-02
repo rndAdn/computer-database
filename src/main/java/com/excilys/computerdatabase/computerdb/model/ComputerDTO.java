@@ -8,6 +8,11 @@ public class ComputerDTO {
     private final String dateDiscontinued;
     private final CompanyDTO company;
 
+    /**
+     * Constructor of a Computer DTO with a computer.
+     * replace every data with a string and empty optional by "-" String
+     * @param computer .
+     */
     public ComputerDTO(Computer computer) {
         this.id = computer.getId();
         this.name = computer.getName();

@@ -8,7 +8,8 @@ import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
 
 public class ListComputerAction implements ActionMenu {
 
-    public void doAction() {
+    @Override
+    public void executeAction() {
         PagesList pagesList;
         ComputerService computerService = new ComputerService();
         pagesList = computerService.getComputers();
@@ -24,11 +25,24 @@ public class ListComputerAction implements ActionMenu {
         } while (readAction(pagesList));
     }
 
+    /**
+     * Show footer of pagesList in CLI.
+     *
+     * @param pagesList
+     *            .
+     */
     public void printFooter(PagesList pagesList) {
         System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalPageNumber()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
+    /**
+     * Read user input in pageList (next page, ...).
+     *
+     * @param pagesList
+     *            .
+     * @return true if input is correct
+     */
     private boolean readAction(PagesList pagesList) {
         Scanner sc = new Scanner(System.in);
 

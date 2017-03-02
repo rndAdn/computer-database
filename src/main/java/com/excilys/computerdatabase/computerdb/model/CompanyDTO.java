@@ -6,11 +6,20 @@ public class CompanyDTO {
     private final long id;
     private final String name;
 
+    /**
+     * Constructor of a Company DTO with a company.
+     *
+     * @param company .
+     */
     public CompanyDTO(Company company) {
         this.id = company.getId();
         this.name = company.getName();
     }
 
+    /** Constructor of a Company DTO with a Optional company.
+     * if Company is empty id is equals to -1 and name to "-"
+     * @param company Optional<Company>
+     */
     public CompanyDTO(Optional<Company> company) {
         if (company.isPresent()) {
             this.id = company.get().getId();

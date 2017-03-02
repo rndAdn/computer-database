@@ -14,7 +14,8 @@ import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class UpdateComputerAction implements ActionMenu {
 
-    public void doAction() {
+    @Override
+    public void executeAction() {
 
         Scanner sc = new Scanner(System.in);
         System.out.print("Entrez l'id de l'ordinateur à modifier : ");
