@@ -21,7 +21,8 @@ public class PagesListCompany extends Pages {
             } else {
                 list = CompanyDao.INSTANCE.getCompanyByName(filter, (pageNumber - 1) * rowByPages, rowByPages);
                 totalRow = CompanyDao.INSTANCE.getNumberOfCompany();
-                // TODO : ADD requete  totalRow = CompanyDao.INSTANCE.getNumberOfCompany();
+                // TODO : ADD requete totalRow =
+                // CompanyDao.INSTANCE.getNumberOfCompany();
             }
         } catch (DaoException e) {
             e.printStackTrace();

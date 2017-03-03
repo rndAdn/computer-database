@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,17 +24,69 @@ public enum ComputerDao {
 
     INSTANCE;
 
-    private static final String SELECT_COMPUTER_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE c.id = ?";
-    private static final String SELECT_COMPUTER_BY_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE UPPER(c.name) LIKE UPPER(?) LIMIT ?, ?";
-    private static final String SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id LIMIT ?, ?";
-    private static final String DELETE_COMPUTER = "DELETE FROM computer WHERE id=?;";
-    private static final String INSERT_COMPUTER = "INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);";
-    private static final String UPDATE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
-    private static final String COUNT_TOTAL_COLUMN_NAME = "total";
-    private static final String COUNT_COMPUTERS = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer";
-    private static final String COUNT_COMPUTERS_BY_NAME = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer WHERE UPPER(name) LIKE UPPER(?)";
-    private static final Logger LOGGER = LoggerFactory
+    private final String SELECT_COMPUTER_BY_ID;
+    private final String SELECT_COMPUTER_BY_NAME;
+    private final String SELECT_ALL_COMPUTERS_WITH_LIMIT;
+    private final String DELETE_COMPUTER;
+    private final String INSERT_COMPUTER;
+    private final String UPDATE_COMPUTER;
+    private final String COUNT_COMPUTERS;
+    private final String COUNT_COMPUTERS_BY_NAME;
+    private final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.ComputerDao");
+    private String computerTable;
+    private String computerId;
+    private String computerName;
+    private String computerDateIntro;
+    private String computerDateFin;
+    private String computerCompanyId;
+    private String computerCompanyName;
+    private String countTotal;
+    private String companyTable;
+    private String companyId;
+    private String companyName;
+
+    private ComputerDao() {
+        try {
+            Configuration config = new PropertiesConfiguration("query.properties");
+            computerTable = config.getString("ComputerTable");
+            computerId = config.getString("ComputerId");
+            computerName = config.getString("ComputerName");
+            computerDateIntro = config.getString("ComputerDateIntro");
+            computerDateFin = config.getString("ComputerDateFin");
+            computerCompanyId = config.getString("ComputerCompanyId");
+            computerCompanyName = config.getString("ComputerCompanyName");
+            countTotal = config.getString("CountTotal");
+
+            companyTable = config.getString("CompanyTable");
+            companyId = config.getString("CompanyId");
+            companyName = config.getString("CompanyName");
+        } catch (ConfigurationException ce) {
+            ce.printStackTrace();
+        }
+
+        SELECT_COMPUTER_BY_ID = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
+                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
+                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
+                + companyId + " WHERE " + computerId + " = ?";
+        SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
+                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
+                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) " + "LIMIT ?, ?";
+        SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
+                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
+                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
+                + companyId + " LIMIT ?, ?";
+        DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
+        INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
+                + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
+        UPDATE_COMPUTER = "UPDATE " + computerTable + " SET " + computerName + "=?, " + computerDateIntro + "=?, "
+                + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
+        COUNT_COMPUTERS = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable;
+        COUNT_COMPUTERS_BY_NAME = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable
+                + " WHERE UPPER(" + computerName + ") LIKE UPPER(?)";
+
+    }
 
     /**
      * Get a Computer from database by it's id.
@@ -219,14 +274,6 @@ public enum ComputerDao {
 
             Long companyId = computer.getCompanyId();
 
-            String SELECT_COMPUTER_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE c.id = ?";
-            String SELECT_COMPUTER_BY_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE UPPER(c.name) LIKE UPPER(?) LIMIT ?, ?";
-            String SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id LIMIT ?, ?";
-            String DELETE_COMPUTER = "DELETE FROM computer WHERE id=?;";
-            String INSERT_COMPUTER = "INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);";
-            String UPDATE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
-            String COUNT_TOTAL_COLUMN_NAME = "total";
-            String COUNT_COMPUTERS = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer";
             if (companyId == null) {
                 updateStatment.setNull(4, java.sql.Types.INTEGER);
             } else {
@@ -318,7 +365,7 @@ public enum ComputerDao {
             ResultSet rset = null;
             rset = st.executeQuery(COUNT_COMPUTERS);
             if (rset.next()) {
-                number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+                number = rset.getLong(countTotal);
             }
             rset.close();
             st.close();
@@ -331,7 +378,7 @@ public enum ComputerDao {
         LOGGER.info("countComputers : " + number);
         return number;
     }
-    
+
     public long countComputersWithName(String name) throws DaoException {
         long number = 0;
         Connection connection = Database.INSTANCE.getConnection();
@@ -341,7 +388,7 @@ public enum ComputerDao {
             ResultSet rset = null;
             rset = st.executeQuery();
             if (rset.next()) {
-                number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+                number = rset.getLong(countTotal);
             }
             rset.close();
             st.close();
