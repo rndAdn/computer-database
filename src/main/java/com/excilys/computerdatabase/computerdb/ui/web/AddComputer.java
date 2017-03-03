@@ -52,7 +52,7 @@ public class AddComputer extends HttpServlet {
         List<CompanyDTO> dtoList = new ArrayList<>();
         CompanyService companyService = new CompanyService();
         PagesListCompany pagesListCompany = companyService.getCompanys();
-        List<Pageable> list = pagesListCompany.getList();
+        List<Pageable> list = pagesListCompany.getCurrentPage().getList();
 
         for (Pageable company : list) {
             Company c = (Company) company;
