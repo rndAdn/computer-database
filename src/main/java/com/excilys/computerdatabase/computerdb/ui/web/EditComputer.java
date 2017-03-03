@@ -67,7 +67,7 @@ public class EditComputer extends HttpServlet {
 
     }
 
-    private List<ComputerDTO> pageableListToComputerDTOList(List<Pageable> list) {
+    /*private List<ComputerDTO> pageableListToComputerDTOList(List<Pageable> list) {
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
@@ -75,6 +75,6 @@ public class EditComputer extends HttpServlet {
         }
 
         return dtoList;
-    }
+    }*/
 
 }

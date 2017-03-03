@@ -53,7 +53,7 @@ public class AddComputer extends HttpServlet {
 
         for (Pageable company : list) {
             Company c = (Company) company;
-            dtoList.add(new CompanyDTO(c));
+            dtoList.add(new CompanyDTO.CompanyDTOBuilder().id(c.getId()).name(c.getName()).build());
         }
         return dtoList;
     }

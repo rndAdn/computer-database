@@ -86,7 +86,7 @@ public class Dashboard extends HttpServlet {
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
-            dtoList.add(new ComputerDTO(c));
+            dtoList.add(new ComputerDTO.ComputerDTOBuilder(c.getName()).build()); // TODO : continuer
         }
         return dtoList;
     }
