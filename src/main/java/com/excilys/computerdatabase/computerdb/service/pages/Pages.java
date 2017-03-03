@@ -2,35 +2,48 @@ package com.excilys.computerdatabase.computerdb.service.pages;
 
 import java.util.List;
 
-public abstract class PagesList {
-
+public abstract class Pages {
+    
     protected long rowByPages = 30;
     protected long pageNumber = 1;
-    protected long totalNumberOfpages;
     protected long totalRow;
-
+    protected String filter;
+    
     /**
      * Get item List of current page.
      *
      * @return Pageable List.
      */
-    public abstract List<Pageable> getList();
-
+    public abstract List<Pageable> getItems();
+    
     /**
-     * Get item List of current page filter by Name.
+     * Get the current page.
      *
-     * @param name
-     *            .
-     * @return Pageable List.
+     * @return The current page
      */
-    public abstract List<Pageable> getListFilterByName(String name);
-
+    public Page getCurrentPage() {
+        List<Pageable> pageables = getItems();
+        return new Page(pageables);
+    }
+    
+    public void resetFilter(){
+        filter = "";
+    }
+    
+    public void setFilter(String pattern){
+        this.filter = pattern;
+    }
+    
+    public String getFilter(){
+        return filter;
+    }
+    
     /**
      * Switch to next Page.
      *
      */
     public void nextPage() {
-        pageNumber = Math.min(totalNumberOfpages, pageNumber + 1);
+        pageNumber = Math.min(getTotalNumberOfPage(), pageNumber + 1);
     }
 
     /**
@@ -54,19 +67,9 @@ public abstract class PagesList {
      *
      */
     public void lastPage() {
-        pageNumber = totalNumberOfpages;
+        pageNumber = getTotalNumberOfPage();
     }
-
-    /**
-     * Get the current page.
-     *
-     * @return The current page
-     */
-    public Page getPage() {
-        List<Pageable> computers = getList();
-        return new Page(computers);
-    }
-
+    
     /**
      * Get the current page index.
      *
@@ -83,13 +86,9 @@ public abstract class PagesList {
      *            .
      */
     public void setPageIndex(long pageNumber) {
-        this.pageNumber = Math.max(Math.min(totalNumberOfpages, pageNumber), 1);
+        this.pageNumber = Math.max(Math.min(getTotalNumberOfPage(), pageNumber), 1);
     }
-
-    public long getTotalPageNumber() {
-        return totalNumberOfpages;
-    }
-
+    
     /**
      * Set the limit of item by page and set the number of page.
      *
@@ -98,13 +97,16 @@ public abstract class PagesList {
      */
     public void setRowByPages(long limit) {
         this.rowByPages = limit;
-        this.totalNumberOfpages = (long) Math.ceil(totalRow / (double) rowByPages);
     }
-
+    
     public long getTotalRow() {
         return totalRow;
     }
-
+    
+    public long getTotalNumberOfPage() {
+        return (long) Math.ceil(totalRow / (double) rowByPages);
+    }
+    
     /**
      * Set the total number of item to display.
      *
@@ -113,7 +115,6 @@ public abstract class PagesList {
      */
     public void setTotalNumberOfRow(long nbRow) {
         this.totalRow = nbRow;
-        this.totalNumberOfpages = (int) Math.ceil(nbRow / (double) rowByPages);
     }
-
+    
 }

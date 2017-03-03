@@ -32,7 +32,7 @@ public class Page {
     /**
      * Get the list of element in the page.
      *
-     * @return List<Pageable>
+     * @return List Pageable
      */
     public List<Pageable> getList() {
         return computerList;

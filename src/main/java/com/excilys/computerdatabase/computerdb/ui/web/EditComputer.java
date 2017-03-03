@@ -26,7 +26,7 @@ public class EditComputer extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        search = "";
+        /*search = "";
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
         search = request.getParameter("search");
@@ -63,10 +63,11 @@ public class EditComputer extends HttpServlet {
         request.setAttribute("totalPageNumber", totalPageNumber);
 
         this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
+        */
 
     }
 
-    private List<ComputerDTO> pageableListToComputerDTOList(List<Pageable> list) {
+    /*private List<ComputerDTO> pageableListToComputerDTOList(List<Pageable> list) {
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
@@ -74,6 +75,6 @@ public class EditComputer extends HttpServlet {
         }
 
         return dtoList;
-    }
+    }*/
 
 }

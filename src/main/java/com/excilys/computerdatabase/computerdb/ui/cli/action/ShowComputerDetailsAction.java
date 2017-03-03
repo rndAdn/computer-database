@@ -19,8 +19,7 @@ public class ShowComputerDetailsAction implements ActionMenu {
         try {
             long id = Utils.stringToId(idString);
 
-            ComputerDao computerDao = new ComputerDao();
-            Optional<Computer> optionalComputer = computerDao.getComputerById(id);
+            Optional<Computer> optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
             if (!optionalComputer.isPresent()) {
                 System.out.println("Ordinateur introuvable dans la base de donnée");
                 return;

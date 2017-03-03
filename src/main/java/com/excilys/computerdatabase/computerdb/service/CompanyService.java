@@ -7,22 +7,22 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
-public class CompanyService {
+public enum CompanyService {
 
+    INSTANCE;
     /**
      * Get a Company from DAO by it's id.
      *
      * @param id
      *            Company id in Database.
-     * @return A Optional<Company>. empty if the Company doesn't exist in the
+     * @return A Optional Company. empty if the Company doesn't exist in the
      *         database.
      * @throws DaoException
      *             .
      */
-    public static Optional<Company> getCompanyByid(long id) {
-        CompanyDao companyDao = new CompanyDao();
+    public Optional<Company> getCompanyByid(long id) {
         try {
-            return companyDao.getCompanyById(id);
+            return CompanyDao.INSTANCE.getCompanyById(id);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -36,11 +36,10 @@ public class CompanyService {
      * @throws DaoException
      *             .
      */
-    public static PagesListCompany getCompanys() {
+    public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
-        CompanyDao companyDao = new CompanyDao();
         try {
-            long nbCompany = companyDao.getNumberOfCompany();
+            long nbCompany = CompanyDao.INSTANCE.getNumberOfCompany();
 
             pagesList.setTotalNumberOfRow(nbCompany);
         } catch (DaoException e) {

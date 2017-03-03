@@ -7,8 +7,9 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
-public class ComputerService {
-
+public enum ComputerService {
+    
+    INSTANCE;
     /**
      * Insert a Computer in database given a Computer.
      *
@@ -18,11 +19,10 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean ajoutComputer(Computer computer) {
-        ComputerDao dao = new ComputerDao();
+    public boolean ajoutComputer(Computer computer) {
         boolean result = false;
         try {
-            result = dao.insertComputer(computer);
+            result = ComputerDao.INSTANCE.insertComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -44,11 +44,10 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean deleteComputer(Computer computer) {
-        ComputerDao computerDao = new ComputerDao();
+    public boolean deleteComputer(Computer computer) {
         boolean result = false;
         try {
-            result = computerDao.deleteComputer(computer);
+            result = ComputerDao.INSTANCE.deleteComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -67,16 +66,15 @@ public class ComputerService {
      *
      * @param id
      *            Computer id in Database.
-     * @return A Optional<Computer>. empty if the Computer doesn't exist in the
+     * @return A Optional Computer. empty if the Computer doesn't exist in the
      *         database.
      * @throws DaoException
      *             .
      */
-    public static Optional<Computer> getComputerById(long id) {
-        ComputerDao computerDao = new ComputerDao();
+    public Optional<Computer> getComputerById(long id) {
         Optional<Computer> optionalComputer = Optional.empty();
         try {
-            optionalComputer = computerDao.getComputerById(id);
+            optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -97,11 +95,10 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static PagesListComputer getComputerByName(String name) {
+    public PagesListComputer getComputerByName(String name) {
         PagesListComputer pagesList = new PagesListComputer();
-        ComputerDao computerDao = new ComputerDao();
         try {
-            long nbComputer = computerDao.countComputers();
+            long nbComputer = ComputerDao.INSTANCE.countComputers();
 
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
@@ -120,11 +117,10 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean updateComputer(Computer computer) {
-        ComputerDao dao = new ComputerDao();
+    public boolean updateComputer(Computer computer) {
         boolean result = false;
         try {
-            result = dao.updateComputer(computer);
+            result = ComputerDao.INSTANCE.updateComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -144,11 +140,10 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static PagesListComputer getComputers() {
+    public PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
-        ComputerDao computerDao = new ComputerDao();
         try {
-            long nbComputer = computerDao.countComputers();
+            long nbComputer = ComputerDao.INSTANCE.countComputers();
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();

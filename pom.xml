@@ -19,7 +19,7 @@
 		<maven-checkstyle-plugin.configLocation>config/checkstyle/checkstyle.xml</maven-checkstyle-plugin.configLocation>
 		<maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-		<maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
 		<maven-slf4j.version>1.6.4</maven-slf4j.version>
 		<maven-logback.version>1.2.1</maven-logback.version>
 		<maven-apache.commons.version>3.0</maven-apache.commons.version>
