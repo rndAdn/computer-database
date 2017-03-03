@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,7 @@ public class Dashboard extends HttpServlet {
 
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
+        search = request.getParameter("search");
 
         try {
             pageSize = Long.parseLong(pageSizeString);
@@ -42,11 +44,12 @@ public class Dashboard extends HttpServlet {
 
         List<ComputerDTO> dtoList = getComputerList();
 
-        request.setAttribute("totalRowNumber", nbItem);
-        request.setAttribute("computersList", dtoList);
-        request.setAttribute("pageSize", pageSize);
-        request.setAttribute("pageNumber", pageNumber);
-        request.setAttribute("totalPageNumber", totalPageNumber);
+        request.getSession().setAttribute("totalRowNumber", nbItem);
+        request.getSession().setAttribute("computersList", dtoList);
+        request.getSession().setAttribute("pageSize", pageSize);
+        request.getSession().setAttribute("pageNumber", pageNumber);
+        request.getSession().setAttribute("totalPageNumber", totalPageNumber);
+        request.getSession().setAttribute("search", search);
         this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
     }
@@ -57,9 +60,13 @@ public class Dashboard extends HttpServlet {
         pagesListComputer.setRowByPages(pageSize);
         pagesListComputer.setPageIndex(pageNumber);
         nbItem = pagesListComputer.getTotalRow();
-        totalPageNumber = pagesListComputer.getTotalPageNumber();
-        List<Pageable> list = pagesListComputer.getList();
-
+        if (! StringUtils.isBlank(search)) {
+            pagesListComputer.setFilter(search);
+        }
+        
+        List<Pageable> list = pagesListComputer.getCurrentPage().getList();
+        totalPageNumber = pagesListComputer.getTotalNumberOfPage();
+        nbItem = pagesListComputer.getTotalRow();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
             dtoList.add(new ComputerDTO(c));
