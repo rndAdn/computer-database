@@ -2,7 +2,7 @@ package com.excilys.computerdatabase.computerdb.ui.cli.action;
 
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.pages.Page;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.Pages;
 
 import java.util.Scanner;
 
@@ -15,20 +15,20 @@ public class ListCompanyAction implements ActionMenu {
 
     @Override
     public void executeAction() {
-        PagesList pagesList;
+        Pages pages;
         CompanyService companyService = new CompanyService();
-        pagesList = companyService.getCompanys();
+        pages = companyService.getCompanys();
 
-        Page page = pagesList.getPage();
+        Page page = pages.getCurrentPage();
 
         page.printContent();
 
         do {
             page.printContent();
 
-            printFooter(pagesList);
+            printFooter(pages);
 
-        } while (readAction(pagesList));
+        } while (readAction(pages));
     }
 
     /**
@@ -37,8 +37,8 @@ public class ListCompanyAction implements ActionMenu {
      * @param pagesList
      *            .
      */
-    public void printFooter(PagesList pagesList) {
-        System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalPageNumber()
+    public void printFooter(Pages pagesList) {
+        System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalNumberOfPage()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
@@ -49,7 +49,7 @@ public class ListCompanyAction implements ActionMenu {
      *            .
      * @return true if input is correct
      */
-    private boolean readAction(PagesList pagesList) {
+    private boolean readAction(Pages pagesList) {
         Scanner sc = new Scanner(System.in);
 
         String action = sc.nextLine();

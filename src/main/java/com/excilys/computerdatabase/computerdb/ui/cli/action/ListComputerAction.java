@@ -4,20 +4,20 @@ import java.util.Scanner;
 
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Page;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesList;
+import com.excilys.computerdatabase.computerdb.service.pages.Pages;
 
 public class ListComputerAction implements ActionMenu {
 
     @Override
     public void executeAction() {
-        PagesList pagesList;
+        Pages pagesList;
         ComputerService computerService = new ComputerService();
         pagesList = computerService.getComputers();
 
         Page page;
 
         do {
-            page = pagesList.getPage();
+            page = pagesList.getCurrentPage();
             page.printContent();
 
             printFooter(pagesList);
@@ -31,8 +31,8 @@ public class ListComputerAction implements ActionMenu {
      * @param pagesList
      *            .
      */
-    public void printFooter(PagesList pagesList) {
-        System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalPageNumber()
+    public void printFooter(Pages pages) {
+        System.out.print("page " + pages.getPageIndex() + "/" + pages.getTotalNumberOfPage()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
@@ -43,7 +43,7 @@ public class ListComputerAction implements ActionMenu {
      *            .
      * @return true if input is correct
      */
-    private boolean readAction(PagesList pagesList) {
+    private boolean readAction(Pages pagesList) {
         Scanner sc = new Scanner(System.in);
 
         String action = sc.nextLine();
