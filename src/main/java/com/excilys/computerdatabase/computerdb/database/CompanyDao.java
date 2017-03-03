@@ -23,6 +23,7 @@ public enum CompanyDao {
     private static final String SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM company LIMIT ?, ?";
     private static final String COUNT_TOTAL_COLUMN_NAME = "total";
     private static final String COUNT_COMPANY = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company";
+    private static final String COUNT_COMPANY_BY_NAME = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company WHERE UPPER(name) LIKE UPPER(?)";
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
@@ -166,6 +167,36 @@ public enum CompanyDao {
 
             ResultSet rset = null;
             rset = st.executeQuery(COUNT_COMPANY);
+            if (rset.next()) {
+                number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+            }
+            rset.close();
+            st.close();
+        } catch (SQLException e1) {
+            throw new DaoException(e1.getMessage());
+        } finally {
+            Database.INSTANCE.closeConnection();
+        }
+        LOGGER.info("getNumberOfCompany result : " + number);
+        return number;
+    }
+    
+    /**
+     * Get number of company in database.
+     *
+     * @return Total number of company in the database.
+     * @throws DaoException
+     *             .
+     */
+    public long getNumberOfCompanyByName(String name) throws DaoException {
+        long number = 0;
+        Connection connection = Database.INSTANCE.getConnection();
+
+        try {
+            PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME);
+            st.setString(1, "%" + name + "%");
+            ResultSet rset = null;
+            rset = st.executeQuery();
             if (rset.next()) {
                 number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
             }

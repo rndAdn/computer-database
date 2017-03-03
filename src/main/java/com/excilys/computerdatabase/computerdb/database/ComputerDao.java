@@ -29,6 +29,7 @@ public enum ComputerDao {
     private static final String UPDATE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
     private static final String COUNT_TOTAL_COLUMN_NAME = "total";
     private static final String COUNT_COMPUTERS = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer";
+    private static final String COUNT_COMPUTERS_BY_NAME = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer WHERE UPPER(name) LIKE UPPER(?)";
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.ComputerDao");
 
@@ -316,6 +317,29 @@ public enum ComputerDao {
 
             ResultSet rset = null;
             rset = st.executeQuery(COUNT_COMPUTERS);
+            if (rset.next()) {
+                number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+            }
+            rset.close();
+            st.close();
+        } catch (SQLException e) {
+            LOGGER.error("countComputers : " + e.getMessage());
+            throw new DaoException(e.getMessage());
+        } finally {
+            Database.INSTANCE.closeConnection();
+        }
+        LOGGER.info("countComputers : " + number);
+        return number;
+    }
+    
+    public long countComputersWithName(String name) throws DaoException {
+        long number = 0;
+        Connection connection = Database.INSTANCE.getConnection();
+        try {
+            PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME);
+            st.setString(1, "%" + name + "%");
+            ResultSet rset = null;
+            rset = st.executeQuery();
             if (rset.next()) {
                 number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
             }
