@@ -50,8 +50,7 @@ public class AddComputer extends HttpServlet {
 
     private List<CompanyDTO> getCompanyList() {
         List<CompanyDTO> dtoList = new ArrayList<>();
-        CompanyService companyService = new CompanyService();
-        PagesListCompany pagesListCompany = companyService.getCompanys();
+        PagesListCompany pagesListCompany = CompanyService.INSTANCE.getCompanys();
         List<Pageable> list = pagesListCompany.getCurrentPage().getList();
 
         for (Pageable company : list) {
@@ -77,14 +76,14 @@ public class AddComputer extends HttpServlet {
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdStr)) {
             long companyid = Utils.stringToId(companyIdStr);
-            optionalCompany = CompanyService.getCompanyByid(companyid);
+            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
         }
 
         Computer computer;
         computer = new Computer.ComputerBuilder(name).dateIntroduced(dateIntro.orElse(null))
                 .dateDiscontinued(dateFin.orElse(null)).company(optionalCompany.orElse(null)).build();
 
-        ComputerService.ajoutComputer(computer);
+        ComputerService.INSTANCE.ajoutComputer(computer);
         return true;
     }
 

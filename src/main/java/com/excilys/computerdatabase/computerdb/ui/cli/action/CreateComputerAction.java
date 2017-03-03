@@ -50,7 +50,7 @@ public class CreateComputerAction implements ActionMenu {
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdString)) {
             long companyid = Utils.stringToId(companyIdString);
-            optionalCompany = CompanyService.getCompanyByid(companyid);
+            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
         }
 
         Computer computer;
@@ -67,8 +67,7 @@ public class CreateComputerAction implements ActionMenu {
             System.out.print("Ordinateur non ajouté");
             return;
         }
-        ComputerService computerService = new ComputerService();
-        computerService.ajoutComputer(computer);
+        ComputerService.INSTANCE.ajoutComputer(computer);
         System.out.println("Ordinateur ajouté");
 
     }

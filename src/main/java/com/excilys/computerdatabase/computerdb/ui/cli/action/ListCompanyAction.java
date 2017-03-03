@@ -16,8 +16,7 @@ public class ListCompanyAction implements ActionMenu {
     @Override
     public void executeAction() {
         Pages pages;
-        CompanyService companyService = new CompanyService();
-        pages = companyService.getCompanys();
+        pages = CompanyService.INSTANCE.getCompanys();
 
         Page page = pages.getCurrentPage();
 

@@ -56,7 +56,7 @@ public class Dashboard extends HttpServlet {
 
     private List<ComputerDTO> getComputerList() {
         List<ComputerDTO> dtoList = new ArrayList<>();
-        PagesListComputer pagesListComputer = ComputerService.getComputers();
+        PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
         pagesListComputer.setRowByPages(pageSize);
         pagesListComputer.setPageIndex(pageNumber);
         nbItem = pagesListComputer.getTotalRow();

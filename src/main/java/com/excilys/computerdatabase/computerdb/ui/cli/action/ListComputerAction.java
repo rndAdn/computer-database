@@ -11,8 +11,7 @@ public class ListComputerAction implements ActionMenu {
     @Override
     public void executeAction() {
         Pages pagesList;
-        ComputerService computerService = new ComputerService();
-        pagesList = computerService.getComputers();
+        pagesList = ComputerService.INSTANCE.getComputers();
 
         Page page;
 
