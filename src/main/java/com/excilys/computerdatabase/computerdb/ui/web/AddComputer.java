@@ -44,8 +44,6 @@ public class AddComputer extends HttpServlet {
         String company = request.getParameter("companyId");
 
         addComputer(name, dateIntro, dateFin, company);
-
-        doGet(request, response);
     }
 
     private List<CompanyDTO> getCompanyList() {
