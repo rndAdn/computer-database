@@ -39,5 +39,8 @@ public class ComputerValidator {
     public static boolean checkID(long id) {
         return (id > 0);
     }
-
+    
+    public static boolean isValideComputer(String id, String dateIntro, String dateFin, String idCompany){
+        return false;
+    }
 }

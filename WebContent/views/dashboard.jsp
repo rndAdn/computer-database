@@ -13,6 +13,7 @@
 <link href="./css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
+	<c:set var="href" scope="session" value="?" />
 	<header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href="dashboard"> Application - Computer
@@ -23,7 +24,7 @@
 	<section id="main">
 	<div class="container">
 		<h1 id="homeTitle">
-			<c:out value="${totalRowNumber}"></c:out>
+			${totalRowNumber}
 			Computers found
 		</h1>
 		<div id="actions" class="form-horizontal">
@@ -31,7 +32,7 @@
 				<form id="searchForm" action="" method="GET" class="form-inline">
 
 					<input type="search" id="searchbox" name="search"
-						class="form-control" placeholder="Search name" /> <input
+						class="form-control" placeholder="Search name : ${search}" /> <input
 						type="submit" id="searchsubmit" value="Filter by name"
 						class="btn btn-primary" />
 				</form>
@@ -93,26 +94,29 @@
 	<div class="container text-center">
 		<ul class="pagination">
 			<li><a
-				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber - 1}"/>"
+				href="?pageSize=${pageSize}&pageNumber=${pageNumber - 1}&search=${search}"
 				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 			</a></li>
 
-			<c:forEach var="i" begin="${(pageNumber - 3 > 0) ? (pageNumber - 3) : 1}" end="${(pageNumber + 3 < totalPageNumber) ? (pageNumber + 3) : totalPageNumber}" step="1">
+			<c:forEach var="i"
+				begin="${(pageNumber - 3 > 0) ? (pageNumber - 3) : 1}"
+				end="${(pageNumber + 3 < totalPageNumber) ? (pageNumber + 3) : totalPageNumber}"
+				step="1">
 				<li><a
-					href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${i}"/>"><c:out
+					href="?pageSize=${pageSize}&pageNumber=${i}&search=${search}"><c:out
 							value="${i}" /></a></li>
 			</c:forEach>
 
 			<li><a
-				href="?pageSize=<c:out value="${pageSize}"/>&pageNumber=<c:out value="${pageNumber + 1}"/>"
+				href="?pageSize=${pageSize}&pageNumber=${pageNumber + 1}&search=${search}"
 				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
 
 		<div class="btn-group btn-group-sm pull-right" role="group">
-			<a type="button" class="btn btn-default" href="?pageSize=10">10</a> <a
-				type="button" class="btn btn-default" href="?pageSize=50">50</a> <a
-				type="button" class="btn btn-default" href="?pageSize=100">100</a>
+			<a type="button" class="btn btn-default" href="?pageSize=10&pageNumber=1&search=${search}">10</a> <a
+				type="button" class="btn btn-default" href="?pageSize=50&pageNumber=1&search=${search}">50</a> <a
+				type="button" class="btn btn-default" href="?pageSize=100&pageNumber=1&search=${search}">100</a>
 		</div>
 	</div>
 	</footer>

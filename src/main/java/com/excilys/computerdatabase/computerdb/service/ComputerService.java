@@ -7,8 +7,9 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 
-public class ComputerService {
-
+public enum ComputerService {
+    
+    INSTANCE;
     /**
      * Insert a Computer in database given a Computer.
      *
@@ -18,7 +19,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean ajoutComputer(Computer computer) {
+    public boolean ajoutComputer(Computer computer) {
         boolean result = false;
         try {
             result = ComputerDao.INSTANCE.insertComputer(computer);
@@ -43,7 +44,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean deleteComputer(Computer computer) {
+    public boolean deleteComputer(Computer computer) {
         boolean result = false;
         try {
             result = ComputerDao.INSTANCE.deleteComputer(computer);
@@ -70,7 +71,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static Optional<Computer> getComputerById(long id) {
+    public Optional<Computer> getComputerById(long id) {
         Optional<Computer> optionalComputer = Optional.empty();
         try {
             optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
@@ -94,7 +95,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static PagesListComputer getComputerByName(String name) {
+    public PagesListComputer getComputerByName(String name) {
         PagesListComputer pagesList = new PagesListComputer();
         try {
             long nbComputer = ComputerDao.INSTANCE.countComputers();
@@ -116,7 +117,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static boolean updateComputer(Computer computer) {
+    public boolean updateComputer(Computer computer) {
         boolean result = false;
         try {
             result = ComputerDao.INSTANCE.updateComputer(computer);
@@ -139,7 +140,7 @@ public class ComputerService {
      * @throws DaoException
      *             .
      */
-    public static PagesListComputer getComputers() {
+    public PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
         try {
             long nbComputer = ComputerDao.INSTANCE.countComputers();

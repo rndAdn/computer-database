@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +21,43 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 public enum CompanyDao {
     INSTANCE;
 
-    private static final String SELECT_COMPANY_BY_ID = "SELECT * FROM company WHERE id = ?";
-    private static final String SELECT_COMPANY_BY_NAME = "SELECT * FROM company WHERE name = ? LIMIT ?, ?";
-    private static final String SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM company LIMIT ?, ?";
-    private static final String COUNT_TOTAL_COLUMN_NAME = "total";
-    private static final String COUNT_COMPANY = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company";
-
+    
+    
+    
+    
+    
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
+    private String companyTable;
+    private String companyId;
+    private String companyName;
+    private String countTotal;
+
+    private final String SELECT_COMPANY_BY_ID;
+    private final String SELECT_COMPANY_BY_NAME;
+    private final String SELECT_ALL_COMPANY_WITH_LIMIT;
+    private final String COUNT_COMPANY;
+    private final String COUNT_COMPANY_BY_NAME;
+    
+    CompanyDao() {
+        try {
+            Configuration config = new PropertiesConfiguration("query.properties");
+            companyTable = config.getString("CompanyTable");
+            companyId = config.getString("CompanyId");
+            companyName = config.getString("CompanyName");
+            countTotal = config.getString("CountTotal");
+        } catch (ConfigurationException ce) {
+            ce.printStackTrace();
+        }
+
+        SELECT_COMPANY_BY_ID = "SELECT * FROM " + companyTable + " WHERE " + companyId + " = ?";
+        SELECT_COMPANY_BY_NAME = "SELECT * FROM " + companyTable + " WHERE " + companyName + " = ? LIMIT ?, ?";
+        SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM " + companyTable + " LIMIT ?, ?";
+        COUNT_COMPANY = "SELECT count(" + companyId + ") as " + countTotal + " FROM " + companyTable;
+        COUNT_COMPANY_BY_NAME = "SELECT count(" + companyId + ") as " + countTotal + " FROM company WHERE UPPER("
+                + companyName + ") LIKE UPPER(?)";
+
+    }
 
     /**
      * Get a Company from database by it's id.
@@ -59,7 +91,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyById result :" + optionalCompany);
         return optionalCompany;
@@ -102,7 +134,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyByName result size : " + result.size());
         return result;
@@ -144,7 +176,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanys result size : " + result.size());
         return result;
@@ -167,16 +199,47 @@ public enum CompanyDao {
             ResultSet rset = null;
             rset = st.executeQuery(COUNT_COMPANY);
             if (rset.next()) {
-                number = rset.getLong(COUNT_TOTAL_COLUMN_NAME);
+                number = rset.getLong(countTotal);
             }
             rset.close();
             st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
     }
+
+    /**
+     * Get number of company in database.
+     *
+     * @return Total number of company in the database.
+     * @throws DaoException
+     *             .
+     */
+    public long getNumberOfCompanyByName(String name) throws DaoException {
+        long number = 0;
+        Connection connection = Database.INSTANCE.getConnection();
+
+        try {
+            PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME);
+            st.setString(1, "%" + name + "%");
+            ResultSet rset = null;
+            rset = st.executeQuery();
+            if (rset.next()) {
+                number = rset.getLong(countTotal);
+            }
+            rset.close();
+            st.close();
+        } catch (SQLException e1) {
+            throw new DaoException(e1.getMessage());
+        } finally {
+            Database.INSTANCE.closeConnection(connection);
+        }
+        LOGGER.info("getNumberOfCompany result : " + number);
+        return number;
+    }
+
 }
