@@ -7,8 +7,9 @@ import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
-public class CompanyService {
+public enum CompanyService {
 
+    INSTANCE;
     /**
      * Get a Company from DAO by it's id.
      *
@@ -19,7 +20,7 @@ public class CompanyService {
      * @throws DaoException
      *             .
      */
-    public static Optional<Company> getCompanyByid(long id) {
+    public Optional<Company> getCompanyByid(long id) {
         try {
             return CompanyDao.INSTANCE.getCompanyById(id);
         } catch (DaoException e) {
@@ -35,7 +36,7 @@ public class CompanyService {
      * @throws DaoException
      *             .
      */
-    public static PagesListCompany getCompanys() {
+    public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
         try {
             long nbCompany = CompanyDao.INSTANCE.getNumberOfCompany();
