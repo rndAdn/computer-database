@@ -64,7 +64,7 @@ public enum ComputerDao {
             LOGGER.error("getComputerById : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputerById : " + optionalComputer);
         return optionalComputer;
@@ -107,7 +107,7 @@ public enum ComputerDao {
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputersByName result size : " + result.size());
         return result;
@@ -148,7 +148,7 @@ public enum ComputerDao {
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputers result size : " + result.size());
         return result;
@@ -177,10 +177,10 @@ public enum ComputerDao {
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
-            Database.INSTANCE.rollback();
+            Database.INSTANCE.rollback(connection);
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("deleteComputer : " + (result == 1));
         return result == 1;
@@ -240,10 +240,10 @@ public enum ComputerDao {
             updateStatment.close();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
-            Database.INSTANCE.rollback();
+            Database.INSTANCE.rollback(connection);
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("updateComputer : " + (result == 1));
         return result == 1;
@@ -293,10 +293,10 @@ public enum ComputerDao {
             insertStatment.close();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
-            Database.INSTANCE.rollback();
+            Database.INSTANCE.rollback(connection);
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("insertComputer : " + (result == 1));
         return result == 1;
@@ -326,7 +326,7 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("countComputers : " + number);
         return number;
@@ -349,7 +349,7 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("countComputers : " + number);
         return number;

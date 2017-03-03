@@ -15,7 +15,6 @@ public enum Database {
 
     INSTANCE;
 
-    private Connection connection;
 
     private String url;
     private String dbName;
@@ -56,7 +55,6 @@ public enum Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        connection = createConnection();
     }
 
     /**
@@ -81,17 +79,14 @@ public enum Database {
      * @return A Connection
      */
     public Connection getConnection() {
-        if (connection == null) {
-            connection = createConnection();
-        }
-        return connection;
+        return createConnection();
     }
 
     /**
      * Close the Connection.
      *
      */
-    public void closeConnection() {
+    public void closeConnection(Connection connection ) {
         try {
             connection.close();
             connection = null;
@@ -104,7 +99,7 @@ public enum Database {
     /**
      * Undo database commit.
      */
-    public void rollback() {
+    public void rollback(Connection connection) {
         try {
             connection.rollback();
             LOGGER.info("Connection RollBack");

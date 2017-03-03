@@ -60,7 +60,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyById result :" + optionalCompany);
         return optionalCompany;
@@ -103,7 +103,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyByName result size : " + result.size());
         return result;
@@ -145,7 +145,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanys result size : " + result.size());
         return result;
@@ -175,7 +175,7 @@ public enum CompanyDao {
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
@@ -205,7 +205,7 @@ public enum CompanyDao {
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection();
+            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
