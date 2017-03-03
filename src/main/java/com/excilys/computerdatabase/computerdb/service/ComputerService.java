@@ -19,10 +19,9 @@ public class ComputerService {
      *             .
      */
     public static boolean ajoutComputer(Computer computer) {
-        ComputerDao dao = new ComputerDao();
         boolean result = false;
         try {
-            result = dao.insertComputer(computer);
+            result = ComputerDao.INSTANCE.insertComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -45,10 +44,9 @@ public class ComputerService {
      *             .
      */
     public static boolean deleteComputer(Computer computer) {
-        ComputerDao computerDao = new ComputerDao();
         boolean result = false;
         try {
-            result = computerDao.deleteComputer(computer);
+            result = ComputerDao.INSTANCE.deleteComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -73,10 +71,9 @@ public class ComputerService {
      *             .
      */
     public static Optional<Computer> getComputerById(long id) {
-        ComputerDao computerDao = new ComputerDao();
         Optional<Computer> optionalComputer = Optional.empty();
         try {
-            optionalComputer = computerDao.getComputerById(id);
+            optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -99,9 +96,8 @@ public class ComputerService {
      */
     public static PagesListComputer getComputerByName(String name) {
         PagesListComputer pagesList = new PagesListComputer();
-        ComputerDao computerDao = new ComputerDao();
         try {
-            long nbComputer = computerDao.countComputers();
+            long nbComputer = ComputerDao.INSTANCE.countComputers();
 
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
@@ -121,10 +117,9 @@ public class ComputerService {
      *             .
      */
     public static boolean updateComputer(Computer computer) {
-        ComputerDao dao = new ComputerDao();
         boolean result = false;
         try {
-            result = dao.updateComputer(computer);
+            result = ComputerDao.INSTANCE.updateComputer(computer);
         } catch (DaoException e) {
             System.out.println();
             System.out.println();
@@ -146,9 +141,8 @@ public class ComputerService {
      */
     public static PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
-        ComputerDao computerDao = new ComputerDao();
         try {
-            long nbComputer = computerDao.countComputers();
+            long nbComputer = ComputerDao.INSTANCE.countComputers();
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();

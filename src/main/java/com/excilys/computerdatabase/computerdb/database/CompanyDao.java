@@ -15,12 +15,28 @@ import org.slf4j.LoggerFactory;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public class CompanyDao implements ICompanyDAO {
+public enum CompanyDao {
+    INSTANCE;
+
+    private static final String SELECT_COMPANY_BY_ID = "SELECT * FROM company WHERE id = ?";
+    private static final String SELECT_COMPANY_BY_NAME = "SELECT * FROM company WHERE name = ? LIMIT ?, ?";
+    private static final String SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM company LIMIT ?, ?";
+    private static final String COUNT_TOTAL_COLUMN_NAME = "total";
+    private static final String COUNT_COMPANY = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company";
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
 
-    @Override
+    /**
+     * Get a Company from database by it's id.
+     *
+     * @param id
+     *            Company id in Database.
+     * @return A Optional<Company>. empty if the Company doesn't exist in the
+     *         database.
+     * @throws DaoException
+     *             .
+     */
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         PreparedStatement selectStatement;
@@ -50,7 +66,19 @@ public class CompanyDao implements ICompanyDAO {
 
     }
 
-    @Override
+    /**
+     * Find all Company from database by name.
+     *
+     * @param name
+     *            Of Company(s) to find
+     * @param limitStart
+     *            Start of first result.
+     * @param size
+     *            Max list size
+     * @return a List<Pageable>
+     * @throws DaoException
+     *             .
+     */
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
@@ -80,7 +108,17 @@ public class CompanyDao implements ICompanyDAO {
         return result;
     }
 
-    @Override
+    /**
+     * Get all Company from database.
+     *
+     * @param limitStart
+     *            Start of first result.
+     * @param size
+     *            Max list size
+     * @return a List<Pageable>
+     * @throws DaoException
+     *             .
+     */
     public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
         List<Pageable> result = new ArrayList<>();
@@ -112,7 +150,13 @@ public class CompanyDao implements ICompanyDAO {
         return result;
     }
 
-    @Override
+    /**
+     * Get number of company in database.
+     *
+     * @return Total number of company in the database.
+     * @throws DaoException
+     *             .
+     */
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
         Connection connection = Database.INSTANCE.getConnection();

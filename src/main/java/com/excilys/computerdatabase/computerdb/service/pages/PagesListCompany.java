@@ -13,8 +13,7 @@ public class PagesListCompany extends PagesList {
 
         List<Pageable> list = new ArrayList<>();
         try {
-            CompanyDao companyDao = new CompanyDao();
-            list = companyDao.getCompanys((pageNumber - 1) * rowByPages, rowByPages);
+            list = CompanyDao.INSTANCE.getCompanys((pageNumber - 1) * rowByPages, rowByPages);
         } catch (DaoException e) {
             e.printStackTrace();
         }

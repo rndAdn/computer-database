@@ -20,9 +20,8 @@ public class CompanyService {
      *             .
      */
     public static Optional<Company> getCompanyByid(long id) {
-        CompanyDao companyDao = new CompanyDao();
         try {
-            return companyDao.getCompanyById(id);
+            return CompanyDao.INSTANCE.getCompanyById(id);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -38,9 +37,8 @@ public class CompanyService {
      */
     public static PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
-        CompanyDao companyDao = new CompanyDao();
         try {
-            long nbCompany = companyDao.getNumberOfCompany();
+            long nbCompany = CompanyDao.INSTANCE.getNumberOfCompany();
 
             pagesList.setTotalNumberOfRow(nbCompany);
         } catch (DaoException e) {
