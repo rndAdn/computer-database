@@ -1,16 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>com.excilys.mgajovski</groupId>
-	<artifactId>computer_database</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-
-	<name>computer-database</name>
-	<url>http://maven.apache.org</url>
-
-	<properties>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.excilys.computerdatabase</groupId>
+  <artifactId>computerdb</artifactId>
+  <packaging>war</packaging>
+  <version>1.0.0</version>
+  <name>computerdb Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
@@ -20,98 +17,11 @@
 		<maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
-		<maven-slf4j.version>1.6.4</maven-slf4j.version>
+		<maven-slf4j.version>1.7.16</maven-slf4j.version>
 		<maven-logback.version>1.2.1</maven-logback.version>
 		<maven-apache.commons.version>3.0</maven-apache.commons.version>
 	</properties>
-
-	<build>
-		<plugins>
-			<!-- Compilateur JDK Java -->
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-
-			<!-- Générateur de Rapport -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>${maven-site-plugin.version}</version>
-				<configuration>
-					<locales>en,fr</locales>
-				</configuration>
-			</plugin>
-
-			<!-- Ajout du checkStyle au projet -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>${maven-checkstyle-plugin.version}</version>
-				<configuration>
-					<configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jxr-plugin</artifactId>
-						<version>${maven-jxr-plugin.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
-
-	<reporting>
-		<plugins>
-			<!-- Rapports de résultats de tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
-			</plugin>
-
-			<!-- Vérificaion de styles -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>${maven-checkstyle-plugin.version}</version>
-				<configuration>
-					<configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
-				</configuration>
-
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>checkstyle</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-
-			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le 
-				rapport -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>${maven-jxr-plugin.version}</version>
-			</plugin>
-			<!--&ndash;&gt; -->
-
-			<!-- Ajout de la javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-			</plugin>
-		</plugins>
-	</reporting>
-
-	<dependencies>
+  <dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -162,4 +72,106 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+
+  <build>
+    <finalName>computerdb</finalName>
+
+    <plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+        <configuration>
+        <url>http://localhost:8080/manager/text</url>
+        <server>tomcat</server>
+        <username>admin</username>
+        <password>admin</password>
+        <path>/${project.artifactId}</path>
+        <update>true</update>
+     </configuration>
+				<version>2.0</version>
+			</plugin>
+			<!-- Compilateur JDK Java -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+
+			<!-- Générateur de Rapport -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+				<configuration>
+					<locales>en,fr</locales>
+				</configuration>
+			</plugin>
+
+			<!-- Ajout du checkStyle au projet -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<configuration>
+					<configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jxr-plugin</artifactId>
+						<version>${maven-jxr-plugin.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+  </build>
+
+  <reporting>
+		<plugins>
+			<!-- Rapports de résultats de tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+			</plugin>
+
+			<!-- Vérificaion de styles -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<configuration>
+					<configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
+				</configuration>
+
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le
+				rapport -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven-jxr-plugin.version}</version>
+			</plugin>
+			<!--&ndash;&gt; -->
+
+			<!-- Ajout de la javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
 </project>

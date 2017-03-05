@@ -31,7 +31,7 @@ public class AddComputer extends HttpServlet {
         List<CompanyDTO> list = getCompanyList();
         request.setAttribute("companylist", list);
 
-        this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 
     }
 
