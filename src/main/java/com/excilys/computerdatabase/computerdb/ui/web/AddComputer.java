@@ -1,23 +1,19 @@
 package com.excilys.computerdatabase.computerdb.ui.web;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
@@ -31,8 +27,7 @@ import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public class AddComputer extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
-    
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -54,7 +49,7 @@ public class AddComputer extends HttpServlet {
         LOGGER.info("Computer Demande Add : " + company);
 
         boolean add = addComputer(name, dateIntro, dateFin, company);
-        
+
         if (add) {
             LOGGER.info("Computer Add OK");
         }
@@ -78,10 +73,10 @@ public class AddComputer extends HttpServlet {
             return false;
         }
         String companyId, companyName;
-        String [] companyInfo = company.split(":");
+        String[] companyInfo = company.split(":");
         companyId = companyInfo[0];
         companyName = companyInfo[1];
-        
+
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
         if (ControllerComputer.checkCompanyId(companyId)) {
@@ -90,7 +85,7 @@ public class AddComputer extends HttpServlet {
                     .name(companyName);
         }
         companyDTO = companyDTOBuilder.build();
-        
+
         ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
                 .dateIntroduced(dateIntroStr)
                 .dateDiscontinued(dateFinStr)
@@ -98,7 +93,7 @@ public class AddComputer extends HttpServlet {
                 .build();
 
         Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
-        
+
         ComputerService.INSTANCE.ajoutComputer(computer);
         return true;
     }
