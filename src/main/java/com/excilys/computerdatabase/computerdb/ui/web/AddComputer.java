@@ -50,8 +50,9 @@ public class AddComputer extends HttpServlet {
         String dateIntro = request.getParameter("introduced");
         String dateFin = request.getParameter("discontinued");
         String company = request.getParameter("company");
+        System.out.println("Computer Demande Add : " + company);
         LOGGER.info("Computer Demande Add : " + company);
-        
+
         boolean add = addComputer(name, dateIntro, dateFin, company);
         
         if (add) {
@@ -73,20 +74,20 @@ public class AddComputer extends HttpServlet {
 
     private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String company) {
 
-        if (! ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
+        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
-        String companyId, CompanyName;
+        String companyId, companyName;
         String [] companyInfo = company.split(":");
         companyId = companyInfo[0];
-        CompanyName = companyInfo[1];
+        companyName = companyInfo[1];
         
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
         if (ControllerComputer.checkCompanyId(companyId)) {
             companyDTOBuilder = companyDTOBuilder
                     .id(Utils.stringToId(companyId))
-                    .name(CompanyName);
+                    .name(companyName);
         }
         companyDTO = companyDTOBuilder.build();
         
