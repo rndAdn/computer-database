@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public enum ComputerDao {

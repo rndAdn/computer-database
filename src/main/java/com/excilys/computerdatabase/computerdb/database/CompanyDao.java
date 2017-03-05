@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.mapper.MapperCompany;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public enum CompanyDao {

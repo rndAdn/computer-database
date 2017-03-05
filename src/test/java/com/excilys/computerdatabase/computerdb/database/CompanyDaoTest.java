@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.computerdb.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.computerdatabase.computerdb.model.mapper.MapperCompany;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
