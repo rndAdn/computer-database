@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.computerdb.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
@@ -9,8 +10,10 @@ import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
+import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
+import org.apache.commons.lang.StringUtils;
 
 public enum ComputerService {
     
@@ -181,4 +184,18 @@ public enum ComputerService {
         }
         return pagesList;
     }
+
+    public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber) {
+        PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
+        pagesListComputer.setRowByPages(pageSize);
+        pagesListComputer.setPageIndex(pageNumber);
+        if (!StringUtils.isBlank(search)) {
+            pagesListComputer.setFilter(search);
+        }
+        List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
+        PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), dtoList);
+        return listComputerDTO;
+    }
+
+
 }

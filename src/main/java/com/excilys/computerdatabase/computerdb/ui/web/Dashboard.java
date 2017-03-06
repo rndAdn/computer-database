@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,9 @@ public class Dashboard extends HttpServlet {
             throws ServletException, IOException {
 
         this.getJspAttribute(request, response);
-        List<ComputerDTO> dtolistComputer = getComputerList();
-        LOGGER.info("RENAUD");
+        PageListComputerDTO dtolistComputer = ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber);
+        totalPageNumber = dtolistComputer.getTotalPage();
+        nbItem = dtolistComputer.getTotalRow();
         this.setJspAttribute(request, response, dtolistComputer);
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
         String selected = request.getParameter("selection");
@@ -67,9 +69,9 @@ public class Dashboard extends HttpServlet {
         }
     }
     
-    private void setJspAttribute(HttpServletRequest request, HttpServletResponse response, List<ComputerDTO> dtolistComputer){
+    private void setJspAttribute(HttpServletRequest request, HttpServletResponse response, PageListComputerDTO dtolistComputer){
         request.getSession().setAttribute("totalRowNumber", nbItem);
-        request.getSession().setAttribute("computersList", dtolistComputer);
+        request.getSession().setAttribute("computersList", dtolistComputer.getComputerDTOList());
         request.getSession().setAttribute("pageSize", pageSize);
         request.getSession().setAttribute("pageNumber", pageNumber);
         request.getSession().setAttribute("totalPageNumber", totalPageNumber);
@@ -78,31 +80,5 @@ public class Dashboard extends HttpServlet {
     
     
     
-
-    private List<ComputerDTO> getComputerList() {
-        PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
-        pagesListComputer.setRowByPages(pageSize);
-        pagesListComputer.setPageIndex(pageNumber);
-        if (! StringUtils.isBlank(search)) {
-            pagesListComputer.setFilter(search);
-        }
-        
-        List<ComputerDTO> dtoList = mapperPagelistComputerToDTO(pagesListComputer);  
-        totalPageNumber = pagesListComputer.getTotalNumberOfPage();
-        nbItem = pagesListComputer.getTotalRow();
-        
-        return dtoList;
-    }
-    
-    
-    public static List<ComputerDTO> mapperPagelistComputerToDTO(PagesListComputer pagesListComputer){
-        List<Pageable> list = pagesListComputer.getCurrentPage().getList();
-        List<ComputerDTO> dtoList = new ArrayList<>();
-        for (Pageable computer : list) {
-            Computer c = (Computer) computer;
-            dtoList.add(ComputerDTOMapper.mapperComputerDTO(c));
-        }
-        return dtoList;
-    }
 
 }
