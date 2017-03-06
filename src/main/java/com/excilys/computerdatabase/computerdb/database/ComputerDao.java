@@ -102,9 +102,8 @@ public enum ComputerDao {
     public Optional<Computer> getComputerById(long id) throws DaoException {
         PreparedStatement selectStatement;
         Optional<Computer> optionalComputer = Optional.empty();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID);
 
             selectStatement.setLong(1, id);
@@ -119,8 +118,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputerById : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputerById : " + optionalComputer);
         return optionalComputer;
@@ -138,9 +135,8 @@ public enum ComputerDao {
     public List<Pageable> getComputersByName(String name, long limitStart, long size) throws DaoException {
         PreparedStatement selectStatement;
         List<Pageable> result = new ArrayList<>();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
             selectStatement.setString(1, "%" + name + "%");
@@ -160,8 +156,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputersByName result size : " + result.size());
         return result;
@@ -179,9 +173,8 @@ public enum ComputerDao {
 
         PreparedStatement selectStatement;
         List<Pageable> result = new ArrayList<>();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
 
             selectStatement.setLong(1, limitStart);
@@ -198,8 +191,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputers result size : " + result.size());
         return result;
@@ -238,7 +229,7 @@ public enum ComputerDao {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computer1 Representation of the computer to update
+     * @param computer Representation of the computer to update
      * @return true if the computer is update in database
      * @throws DaoException .
      */
@@ -351,7 +342,7 @@ public enum ComputerDao {
         try {
             Statement st = connection.createStatement();
 
-            ResultSet rset = null;
+            ResultSet rset;
             rset = st.executeQuery(COUNT_COMPUTERS);
             if (rset.next()) {
                 number = rset.getLong(countTotal);

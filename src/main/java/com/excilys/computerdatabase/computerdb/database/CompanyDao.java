@@ -67,9 +67,8 @@ public enum CompanyDao {
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID);
 
             selectStatement.setLong(1, id);
@@ -85,8 +84,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyById result :" + optionalCompany);
         return optionalCompany;
@@ -105,9 +102,8 @@ public enum CompanyDao {
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME);
 
             selectStatement.setString(1, name);
@@ -124,8 +120,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyByName result size : " + result.size());
         return result;
@@ -143,9 +137,8 @@ public enum CompanyDao {
 
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             connection.setAutoCommit(false);
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
 
@@ -163,8 +156,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanys result size : " + result.size());
         return result;
@@ -178,9 +169,8 @@ public enum CompanyDao {
      */
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             Statement st = connection.createStatement();
 
             ResultSet rset = null;
@@ -192,8 +182,6 @@ public enum CompanyDao {
             st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
@@ -207,9 +195,8 @@ public enum CompanyDao {
      */
     public long getNumberOfCompanyByName(String name) throws DaoException {
         long number = 0;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME);
             st.setString(1, "%" + name + "%");
             ResultSet rset = null;
@@ -221,8 +208,6 @@ public enum CompanyDao {
             st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
