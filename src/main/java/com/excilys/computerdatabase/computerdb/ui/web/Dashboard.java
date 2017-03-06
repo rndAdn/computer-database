@@ -41,7 +41,16 @@ public class Dashboard extends HttpServlet {
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 
     }
-    
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String selected = request.getParameter("selection");
+
+        LOGGER.warn("HELLO : " + selected);
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+    }
+
+
     private void getJspAttribute(HttpServletRequest request, HttpServletResponse response){
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
