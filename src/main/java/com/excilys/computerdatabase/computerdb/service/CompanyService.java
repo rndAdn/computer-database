@@ -1,10 +1,15 @@
 package com.excilys.computerdatabase.computerdb.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
+import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
 public enum CompanyService {
@@ -47,6 +52,19 @@ public enum CompanyService {
         }
 
         return pagesList;
+    }
+
+
+    public List<CompanyDTO> getCompanyDTOList() {
+        List<CompanyDTO> dtoList = new ArrayList<>();
+        PagesListCompany pagesListCompany = getCompanys();
+        List<Pageable> list = pagesListCompany.getCurrentPage().getList();
+
+        for (Pageable company : list) {
+            Company c = (Company) company;
+            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
+        }
+        return dtoList;
     }
 
 }

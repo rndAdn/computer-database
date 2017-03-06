@@ -37,7 +37,7 @@ public class EditComputer extends HttpServlet {
             throws ServletException, IOException {
         String idStr = request.getParameter("computerId");
 
-        List<CompanyDTO> list = getCompanyList();
+        List<CompanyDTO> list = CompanyService.INSTANCE.getCompanyDTOList();
         request.setAttribute("companylist", list);
 
         try {
@@ -104,17 +104,5 @@ public class EditComputer extends HttpServlet {
 
         ComputerService.INSTANCE.updateComputer(computer);
         return true;
-    }
-
-    private List<CompanyDTO> getCompanyList() {
-        List<CompanyDTO> dtoList = new ArrayList<>();
-        PagesListCompany pagesListCompany = CompanyService.INSTANCE.getCompanys();
-        List<Pageable> list = pagesListCompany.getCurrentPage().getList();
-
-        for (Pageable company : list) {
-            Company c = (Company) company;
-            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
-        }
-        return dtoList;
     }
 }

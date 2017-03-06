@@ -12,18 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
-import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
-import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
-import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public class AddComputer extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
@@ -31,7 +22,7 @@ public class AddComputer extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<CompanyDTO> list = getCompanyList();
+        List<CompanyDTO> list = CompanyService.INSTANCE.getCompanyDTOList();
         request.setAttribute("companylist", list);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
@@ -58,17 +49,6 @@ public class AddComputer extends HttpServlet {
         //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
 
-    private List<CompanyDTO> getCompanyList() {
-        List<CompanyDTO> dtoList = new ArrayList<>();
-        PagesListCompany pagesListCompany = CompanyService.INSTANCE.getCompanys();
-        List<Pageable> list = pagesListCompany.getCurrentPage().getList();
-
-        for (Pageable company : list) {
-            Company c = (Company) company;
-            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
-        }
-        return dtoList;
-    }
 
     private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String company) {
 
