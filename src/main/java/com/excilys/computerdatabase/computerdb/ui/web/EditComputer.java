@@ -70,7 +70,8 @@ public class EditComputer extends HttpServlet {
         
         LOGGER.info("Web update computer : " + update);
         
-        this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/dashboard");
     }
     
     private boolean updateComputer(String name, String dateIntroStr, String dateFinStr, String company) {

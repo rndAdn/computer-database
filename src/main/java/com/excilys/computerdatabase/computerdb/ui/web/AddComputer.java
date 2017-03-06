@@ -53,6 +53,8 @@ public class AddComputer extends HttpServlet {
         if (add) {
             LOGGER.info("Computer Add OK");
         }
+        
+        response.sendRedirect(request.getContextPath() + "/dashboard");
         //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
 
