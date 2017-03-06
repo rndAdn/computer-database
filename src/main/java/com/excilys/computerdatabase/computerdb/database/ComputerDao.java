@@ -283,7 +283,7 @@ public enum ComputerDao {
 
             updateStatment.setLong(5, computer.getId());
 
-            updateStatment.executeUpdate();
+            result = updateStatment.executeUpdate();
             connection.commit();
             updateStatment.close();
         } catch (SQLException e) {
@@ -293,7 +293,7 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection(connection);
         }
-        LOGGER.info("updateComputer : " + (result == 1));
+        LOGGER.info("updateComputer : " + (result == 1) + " " + result);
         return result == 1;
     }
 
