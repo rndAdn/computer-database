@@ -34,20 +34,22 @@ public class Dashboard extends HttpServlet {
             throws ServletException, IOException {
 
         this.getJspAttribute(request, response);
-
         List<ComputerDTO> dtolistComputer = getComputerList();
-
+        LOGGER.info("RENAUD");
         this.setJspAttribute(request, response, dtolistComputer);
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 
     }
 
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("jiohufzfzefhnio");
         String selected = request.getParameter("selection");
 
-        LOGGER.warn("HELLO : " + selected);
-        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+        LOGGER.info("HELLO : " + selected);
+        
+        this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
 
 
