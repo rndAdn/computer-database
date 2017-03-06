@@ -67,8 +67,8 @@ public class ComputerDTO {
     public static class ComputerDTOBuilder {
         private long id;
         private final String name;
-        private String dateIntroduced = "-";
-        private String dateDiscontinued = "-";
+        private String dateIntroduced = "";
+        private String dateDiscontinued = "";
         private CompanyDTO company;
 
         /**

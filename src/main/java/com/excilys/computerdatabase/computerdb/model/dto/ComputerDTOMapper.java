@@ -42,10 +42,10 @@ public class ComputerDTOMapper {
         if (fin.isPresent()) {
             computerBuilder.dateDiscontinued(intro.get());
         }
+
+        Optional<Company> company = CompanyDTOMapper.mapperCompanyDTO(computerDTO.getCompany());
         
-        Company company = CompanyDTOMapper.mapperCompanyDTO(computerDTO.getCompany());
-        
-        computerBuilder.company(company);
+        computerBuilder.company(company.orElse(null));
         return computerBuilder.build();
     }
 }

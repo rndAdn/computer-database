@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
+import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class CompanyDTOMapper {
 
@@ -20,9 +22,11 @@ public class CompanyDTOMapper {
         return companyDTO;
     }
     
-    public static Company mapperCompanyDTO(CompanyDTO companyDTO) {
-        Company company = new Company.CompanyBuilder(companyDTO.getName()).id(companyDTO.getId()).build();
-        return company;
+    public static Optional<Company> mapperCompanyDTO(CompanyDTO companyDTO) {
+        Optional<Company> companyOptional = Optional.empty();
+        if (ComputerValidator.checkID(companyDTO.getId()))
+            companyOptional.of(new Company.CompanyBuilder(companyDTO.getName()).id(companyDTO.getId()).build());
+        return companyOptional;
     }
 
 }
