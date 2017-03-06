@@ -32,19 +32,16 @@ public class Dashboard extends HttpServlet {
         this.setJspAttribute(request, response, dtolistComputer);
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
         String selected = request.getParameter("selection");
-
-        LOGGER.info("HELLOGET : " + selected);
     }
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("jiohufzfzefhnio");
         String selected = request.getParameter("selection");
-
-        LOGGER.info("HELLOPOST : " + selected);
-
-        this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+        String[] idsStr = selected.split(",");
+        boolean result = ComputerService.INSTANCE.removeComputers(idsStr);
+        LOGGER.info("remove computers : " + result);
+        response.sendRedirect(request.getContextPath() + "/dashboard");
     }
 
 

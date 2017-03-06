@@ -14,10 +14,14 @@ import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public enum ComputerService {
 
     INSTANCE;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
     /**
      * Insert a Computer in database given a Computer.
@@ -185,6 +189,25 @@ public enum ComputerService {
         List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
         PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), dtoList);
         return listComputerDTO;
+    }
+
+    public boolean removeComputers(String[] idsStr){ // TODO : create function in DAO to use rollBack if delete error
+        for (String idStr : idsStr) {
+            long id = Long.parseLong(idStr);
+            Optional<Computer> computerOptional = getComputerById(id);
+            if (!computerOptional.isPresent()) {
+                LOGGER.error("delete computer not present : " + id);
+                return false;
+            }
+            Computer computer = computerOptional.get();
+            boolean deleted = deleteComputer(computer);
+            if (!deleted) {
+                LOGGER.error("delete computer : " + computer.getDetail());
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

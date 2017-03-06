@@ -220,7 +220,7 @@ public enum ComputerDao {
             PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 
             deleteStatment.setLong(1, computer.getId());
-            deleteStatment.executeUpdate();
+            result = deleteStatment.executeUpdate();
             connection.commit();
             deleteStatment.close();
         } catch (SQLException e) {
