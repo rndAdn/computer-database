@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
-import com.excilys.computerdatabase.computerdb.model.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
@@ -38,7 +37,9 @@ public class Dashboard extends HttpServlet {
         LOGGER.info("RENAUD");
         this.setJspAttribute(request, response, dtolistComputer);
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+        String selected = request.getParameter("selection");
 
+        LOGGER.info("HELLOGET : " + selected);
     }
 
     
@@ -47,7 +48,7 @@ public class Dashboard extends HttpServlet {
         System.out.println("jiohufzfzefhnio");
         String selected = request.getParameter("selection");
 
-        LOGGER.info("HELLO : " + selected);
+        LOGGER.info("HELLOPOST : " + selected);
         
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
