@@ -72,32 +72,11 @@ public class AddComputer extends HttpServlet {
 
     private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String company) {
 
-        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
-            return false;
-        }
         String companyId, companyName;
         String[] companyInfo = company.split(":");
         companyId = companyInfo[0];
         companyName = companyInfo[1];
-
-        CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
-        CompanyDTO companyDTO;
-        if (ControllerComputer.checkCompanyId(companyId)) {
-            companyDTOBuilder = companyDTOBuilder
-                    .id(Utils.stringToId(companyId))
-                    .name(companyName);
-        }
-        companyDTO = companyDTOBuilder.build();
-
-        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
-                .dateIntroduced(dateIntroStr)
-                .dateDiscontinued(dateFinStr)
-                .company(companyDTO)
-                .build();
-
-        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
-
-        ComputerService.INSTANCE.ajoutComputer(computer);
+        ComputerService.INSTANCE.ajoutComputer(name, dateIntroStr, dateFinStr, companyId, companyName);
         return true;
     }
 

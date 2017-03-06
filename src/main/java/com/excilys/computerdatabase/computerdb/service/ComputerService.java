@@ -5,7 +5,12 @@ import java.util.Optional;
 import com.excilys.computerdatabase.computerdb.database.ComputerDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.Utils;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
+import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public enum ComputerService {
     
@@ -34,6 +39,32 @@ public enum ComputerService {
         }
         return result;
     }
+
+    public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId, String companyName) {
+        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
+            return false;
+        }
+
+        CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
+        CompanyDTO companyDTO;
+        if (ControllerComputer.checkCompanyId(companyId)) {
+            companyDTOBuilder = companyDTOBuilder
+                    .id(Utils.stringToId(companyId))
+                    .name(companyName);
+        }
+        companyDTO = companyDTOBuilder.build();
+
+        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
+                .dateIntroduced(dateIntroStr)
+                .dateDiscontinued(dateFinStr)
+                .company(companyDTO)
+                .build();
+
+        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
+
+        return ajoutComputer(computer);
+    }
+
 
     /**
      * Delete a Computer in database given a Computer.
