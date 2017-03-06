@@ -2,8 +2,6 @@ package com.excilys.computerdatabase.computerdb.database;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -36,7 +34,6 @@ public enum Database {
      */
     Database() {
         LOGGER = LoggerFactory.getLogger(getClass());
-        Class driverClass;
         LOGGER.info("Database Constructor " + this);
 
         try {
@@ -48,8 +45,8 @@ public enum Database {
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
         }
-        
-        
+
+
         Properties props = new Properties();
         props.setProperty("dataSourceClassName", dataSourceClassName);
         props.setProperty("dataSource.user", userName);
@@ -89,9 +86,8 @@ public enum Database {
 
     /**
      * Close the Connection.
-     *
      */
-    public void closeConnection(Connection connection ) {
+    public void closeConnection(Connection connection) {
         try {
             connection.close();
             connection = null;

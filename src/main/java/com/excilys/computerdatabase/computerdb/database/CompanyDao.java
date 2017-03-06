@@ -22,11 +22,7 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 public enum CompanyDao {
     INSTANCE;
 
-    
-    
-    
-    
-    
+
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
     private String companyTable;
@@ -39,7 +35,7 @@ public enum CompanyDao {
     private final String SELECT_ALL_COMPANY_WITH_LIMIT;
     private final String COUNT_COMPANY;
     private final String COUNT_COMPANY_BY_NAME;
-    
+
     CompanyDao() {
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
@@ -63,12 +59,10 @@ public enum CompanyDao {
     /**
      * Get a Company from database by it's id.
      *
-     * @param id
-     *            Company id in Database.
+     * @param id Company id in Database.
      * @return A Optional<Company>. empty if the Company doesn't exist in the
-     *         database.
-     * @throws DaoException
-     *             .
+     * database.
+     * @throws DaoException .
      */
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
@@ -102,15 +96,11 @@ public enum CompanyDao {
     /**
      * Find all Company from database by name.
      *
-     * @param name
-     *            Of Company(s) to find
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param name       Of Company(s) to find
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List<Pageable>
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
@@ -144,13 +134,10 @@ public enum CompanyDao {
     /**
      * Get all Company from database.
      *
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List<Pageable>
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
@@ -187,8 +174,7 @@ public enum CompanyDao {
      * Get number of company in database.
      *
      * @return Total number of company in the database.
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
@@ -217,8 +203,7 @@ public enum CompanyDao {
      * Get number of company in database.
      *
      * @return Total number of company in the database.
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public long getNumberOfCompanyByName(String name) throws DaoException {
         long number = 0;

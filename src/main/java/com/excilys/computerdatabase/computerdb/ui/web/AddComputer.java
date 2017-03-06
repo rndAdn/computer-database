@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.computerdb.ui.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -44,7 +43,7 @@ public class AddComputer extends HttpServlet {
         if (add) {
             LOGGER.info("Computer Add OK");
         }
-        
+
         response.sendRedirect(request.getContextPath() + "/dashboard");
         //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }

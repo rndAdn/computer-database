@@ -9,25 +9,20 @@ import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class ControllerComputer {
-    
-    
-    public static boolean checkComputer(String name, String dateIntroStr, String dateFinStr){
+
+
+    public static boolean checkComputer(String name, String dateIntroStr, String dateFinStr) {
         if (StringUtils.isBlank(name)) {
             return false;
         }
-        
+
         Optional<LocalDate> intro = Utils.stringToDate(dateIntroStr);
         Optional<LocalDate> fin = Utils.stringToDate(dateFinStr);
-        
-        if (! ComputerValidator.compareDate(intro, fin)) {
-            return false;
-        }
-        
-        
-        return true;
+
+        return ComputerValidator.compareDate(intro, fin);
     }
-    
-    
+
+
     public static boolean checkCompanyId(String idCompany) {
         long id = Utils.stringToId(idCompany);
         return ComputerValidator.checkID(id);

@@ -8,8 +8,7 @@ public class ComputerValidator {
     /**
      * Check if the company is not null.
      *
-     * @param company
-     *            to check
+     * @param company to check
      * @return true if the company is not null
      */
     public static boolean checkCompany(Company company) {
@@ -19,10 +18,8 @@ public class ComputerValidator {
     /**
      * Compare if dateIntro if before dateFin.
      *
-     * @param dateIntro
-     *            .
-     * @param dateFin
-     *            .
+     * @param dateIntro .
+     * @param dateFin   .
      * @return true if dateIntro is before dateFin.
      */
     public static boolean compareDate(Optional<LocalDate> dateIntro, Optional<LocalDate> dateFin) {
@@ -32,15 +29,14 @@ public class ComputerValidator {
     /**
      * Check if id is valid non-null positive number.
      *
-     * @param id
-     *            to check
+     * @param id to check
      * @return true if id is valid non-null positive number.
      */
     public static boolean checkID(long id) {
         return (id > 0);
     }
-    
-    public static boolean isValideComputer(String id, String dateIntro, String dateFin, String idCompany){
+
+    public static boolean isValideComputer(String id, String dateIntro, String dateFin, String idCompany) {
         return false;
     }
 }

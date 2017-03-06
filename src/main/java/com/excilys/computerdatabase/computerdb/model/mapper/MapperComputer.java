@@ -6,19 +6,15 @@ import java.time.LocalDate;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
-import com.excilys.computerdatabase.computerdb.model.Computer.ComputerBuilder;
 
 public class MapperComputer {
 
     /**
      * Get a Computer from a ResultSet.
      *
-     * @param rset
-     *            ResultSset of Computer from database.
+     * @param rset ResultSset of Computer from database.
      * @return A Computer
-     * @throws SQLException
-     *             Bad info in ResultSet
+     * @throws SQLException Bad info in ResultSet
      */
     public static Computer mapComputer(ResultSet rset) throws SQLException {
         long id = rset.getLong("id");
@@ -44,5 +40,5 @@ public class MapperComputer {
         return computer;
     }
 
-    
+
 }

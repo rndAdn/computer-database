@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.computerdb.ui.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,13 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +19,10 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public class EditComputer extends HttpServlet {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EditComputer.class);
     long id = -1;
 
@@ -42,7 +35,7 @@ public class EditComputer extends HttpServlet {
 
         try {
             id = Long.parseLong(idStr);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
 
         }
         Optional<Computer> computerOptional = ComputerService.INSTANCE.getComputerById(id);
@@ -53,27 +46,27 @@ public class EditComputer extends HttpServlet {
         request.setAttribute("companyId", cId);
         this.getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
     }
-    
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String name = request.getParameter("computerName");
         String dateIntro = request.getParameter("computerIntroduced");
         String dateFin = request.getParameter("computerDiscontinued");
         String company = request.getParameter("company");
-        
+
         LOGGER.info("Computer Demande Edit : " + name);
         LOGGER.info("Computer Demande Edit : " + dateIntro);
         LOGGER.info("Computer Demande Edit : " + dateFin);
         LOGGER.info("Computer Demande Edit : " + company);
 
         boolean update = updateComputer(name, dateIntro, dateFin, company);
-        
+
         LOGGER.info("Web update computer : " + update);
-        
+
         //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
-    
+
     private boolean updateComputer(String name, String dateIntroStr, String dateFinStr, String company) {
 
         if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {

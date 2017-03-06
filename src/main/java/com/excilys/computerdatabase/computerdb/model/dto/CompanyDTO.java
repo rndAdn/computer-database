@@ -14,8 +14,10 @@ public class CompanyDTO {
         this.name = company.getName();
     }*/
 
-    /** Constructor of a Company DTO with a Optional company.
+    /**
+     * Constructor of a Company DTO with a Optional company.
      * if Company is empty id is equals to -1 and name to "-"
+     *
      * @param company Optional Company
      */
     /*public CompanyDTO(Optional<Company> company) {
@@ -27,7 +29,6 @@ public class CompanyDTO {
             this.name = "-";
         }
     }*/
-    
     private CompanyDTO(CompanyDTOBuilder company) {
         this.id = company.id;
         this.name = company.name;
@@ -40,7 +41,7 @@ public class CompanyDTO {
     public String getName() {
         return name;
     }
-    
+
     public static class CompanyDTOBuilder {
         private long id = 0;
         private String name = "";
@@ -49,15 +50,14 @@ public class CompanyDTO {
         /**
          * Set the computer id.
          *
-         * @param id
-         *            of the Computer
+         * @param id of the Computer
          * @return Itself
          */
         public CompanyDTOBuilder id(long id) {
             this.id = id;
             return this;
         }
-        
+
         public CompanyDTOBuilder name(String name) {
             this.name = name;
             return this;

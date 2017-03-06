@@ -27,12 +27,12 @@ public class ComputerDTOMapper {
     }
 
     public static Computer mapperComputerDTO(ComputerDTO computerDTO) {
-        
+
         ComputerBuilder computerBuilder = new ComputerBuilder(computerDTO.getName());
         computerBuilder.id(computerDTO.getId());
         Optional<LocalDate> intro = Utils.stringToDate(computerDTO.getDateIntroduced());
         Optional<LocalDate> fin = Utils.stringToDate(computerDTO.getDateDiscontinued());
-        
+
         if (intro.isPresent()) {
             computerBuilder.dateIntroduced(intro.get());
         }
@@ -41,12 +41,12 @@ public class ComputerDTOMapper {
         }
 
         Optional<Company> company = CompanyDTOMapper.mapperCompanyDTO(computerDTO.getCompany());
-        
+
         computerBuilder.company(company.orElse(null));
         return computerBuilder.build();
     }
 
-    public static List<ComputerDTO> mapperPagelistComputerToDTO(PagesListComputer pagesListComputer){
+    public static List<ComputerDTO> mapperPagelistComputerToDTO(PagesListComputer pagesListComputer) {
         List<Pageable> list = pagesListComputer.getCurrentPage().getList();
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
