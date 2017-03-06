@@ -17,14 +17,21 @@ import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
+import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public class EditComputer extends HttpServlet {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(EditComputer.class);
+    long id = -1;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,7 +40,6 @@ public class EditComputer extends HttpServlet {
         List<CompanyDTO> list = getCompanyList();
         request.setAttribute("companylist", list);
 
-        long id = -1;
         try {
             id = Long.parseLong(idStr);
         } catch (NumberFormatException e){
@@ -46,6 +52,57 @@ public class EditComputer extends HttpServlet {
         request.setAttribute("computer", computerDTO);
         request.setAttribute("companyId", cId);
         this.getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String name = request.getParameter("computerName");
+        String dateIntro = request.getParameter("computerIntroduced");
+        String dateFin = request.getParameter("computerDiscontinued");
+        String company = request.getParameter("company");
+        
+        LOGGER.info("Computer Demande Edit : " + name);
+        LOGGER.info("Computer Demande Edit : " + dateIntro);
+        LOGGER.info("Computer Demande Edit : " + dateFin);
+        LOGGER.info("Computer Demande Edit : " + company);
+
+        boolean update = updateComputer(name, dateIntro, dateFin, company);
+        
+        LOGGER.info("Web update computer : " + update);
+        
+        this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+    }
+    
+    private boolean updateComputer(String name, String dateIntroStr, String dateFinStr, String company) {
+
+        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
+            return false;
+        }
+        String companyId, companyName;
+        String[] companyInfo = company.split(":");
+        companyId = companyInfo[0];
+        companyName = companyInfo[1];
+
+        CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
+        CompanyDTO companyDTO;
+        if (ControllerComputer.checkCompanyId(companyId)) {
+            companyDTOBuilder = companyDTOBuilder
+                    .id(Utils.stringToId(companyId))
+                    .name(companyName);
+        }
+        companyDTO = companyDTOBuilder.build();
+
+        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
+                .id(id)
+                .dateIntroduced(dateIntroStr)
+                .dateDiscontinued(dateFinStr)
+                .company(companyDTO)
+                .build();
+
+        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
+
+        ComputerService.INSTANCE.updateComputer(computer);
+        return true;
     }
 
     private List<CompanyDTO> getCompanyList() {

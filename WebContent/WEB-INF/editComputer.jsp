@@ -32,23 +32,23 @@
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
-                            <input type="text" class="form-control" id="computerName" value="${computer.name}"
+                            <input type="text" name="computerName" class="form-control" id="computerName" value="${computer.name}"
                                    placeholder="Computer name">
                         </div>
                         <div class="form-group">
                             <label for="introduced">Introduced date</label>
-                            <input type="date" class="form-control" id="introduced" value="${computer.dateIntroduced}"
+                            <input type="date" name="computerIntroduced" class="form-control" id="introduced" value="${computer.dateIntroduced}"
                                    placeholder="Introduced date">
                         </div>
                         <div class="form-group">
                             <label for="discontinued">Discontinued date</label>
-                            <input type="date" class="form-control" id="discontinued"
+                            <input type="date" name="computerDiscontinued" class="form-control" id="discontinued"
                                    value="${computer.dateDiscontinued}" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
                             <label for="companyId">Company</label>
-                            <select class="form-control" id="companyId">
-                                <option value="0">--</option>
+                            <select name="company" class="form-control" id="companyId">
+                                <option value="0:--">--</option>
                                 <c:forEach items="${companylist}" var="company">
                                     <c:choose>
                                         <c:when test="${companyId == company.id}">
