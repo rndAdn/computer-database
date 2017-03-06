@@ -69,15 +69,16 @@ public enum ComputerDao {
         SELECT_COMPUTER_BY_ID = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE " + computerId + " = ?";
+                + companyId + " WHERE " + computerId + " = ? ORDER BY " + computerName;
         SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)" + "LIMIT ?, ?";
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
+                + ") LIKE UPPER(?) ORDER BY " + computerName + " LIMIT ?, ? ";
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " LIMIT ?, ?";
+                + companyId + " ORDER BY " + computerName +" LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
@@ -194,7 +195,7 @@ public enum ComputerDao {
 
             selectStatement.setLong(1, limitStart);
             selectStatement.setLong(2, size);
-
+            LOGGER.error("getComputers : " + selectStatement);
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
 
