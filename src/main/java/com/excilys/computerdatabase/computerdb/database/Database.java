@@ -1,15 +1,21 @@
 package com.excilys.computerdatabase.computerdb.database;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public enum Database {
 
@@ -22,6 +28,8 @@ public enum Database {
     private String userName;
     private String password;
     private Logger LOGGER;
+    private HikariDataSource ds;
+    private String dataSourceClassName;
 
     /**
      * Database private Constructor.
@@ -33,28 +41,25 @@ public enum Database {
 
         try {
             Configuration config = new PropertiesConfiguration("database.properties");
-            url = config.getString("url");
             dbName = config.getString("db_name");
-            driver = config.getString("driver");
-            userName = config.getString("username");
-            password = config.getString("password");
+            dataSourceClassName = config.getString("dataSourceClassName");
+            userName = config.getString("dataSource.user");
+            password = config.getString("dataSource.password");
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
         }
+        
+        
+        Properties props = new Properties();
+        props.setProperty("dataSourceClassName", dataSourceClassName);
+        props.setProperty("dataSource.user", userName);
+        props.setProperty("dataSource.password", password);
+        props.setProperty("dataSource.databaseName", dbName);
+        props.put("dataSource.logWriter", new PrintWriter(System.out));
 
-        try {
-            driverClass = Class.forName(driver);
-            Driver driver = (Driver) driverClass.newInstance();
-            DriverManager.registerDriver(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        HikariConfig config = new HikariConfig(props);
+        ds = new HikariDataSource(config);
+
     }
 
     /**
@@ -66,7 +71,7 @@ public enum Database {
         LOGGER.info("connexion à la base de donnée ");
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, userName, password);
+            connection = ds.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }

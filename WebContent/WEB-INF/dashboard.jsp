@@ -17,7 +17,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href="dashboard"> Application - Computer
-			Database </a>
+			Database ABBNA</a>
 	</div>
 	</header>
 
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<form id="deleteForm" action="#" method="POST">
+	<form id="deleteForm" action="dashboard" method="POST">
 		<input type="hidden" name="selection" value="">
 	</form>
 

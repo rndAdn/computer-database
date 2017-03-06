@@ -69,15 +69,16 @@ public enum ComputerDao {
         SELECT_COMPUTER_BY_ID = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE " + computerId + " = ?";
+                + companyId + " WHERE " + computerId + " = ? ORDER BY " + computerName;
         SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) " + "LIMIT ?, ?";
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
+                + ") LIKE UPPER(?) ORDER BY " + computerName + " LIMIT ?, ? ";
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " LIMIT ?, ?";
+                + companyId + " ORDER BY " + computerName +" LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
@@ -85,7 +86,8 @@ public enum ComputerDao {
                 + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
         COUNT_COMPUTERS = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable;
         COUNT_COMPUTERS_BY_NAME = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable
-                + " WHERE UPPER(" + computerName + ") LIKE UPPER(?)";
+                + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)";
 
     }
 
@@ -148,8 +150,10 @@ public enum ComputerDao {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
             selectStatement.setString(1, "%" + name + "%");
-            selectStatement.setLong(2, limitStart);
-            selectStatement.setLong(3, size);
+            selectStatement.setString(2, "%" + name + "%");
+            selectStatement.setLong(3, limitStart);
+            selectStatement.setLong(4, size);
+            LOGGER.error("getComputersByName : " + selectStatement);
 
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
@@ -191,7 +195,7 @@ public enum ComputerDao {
 
             selectStatement.setLong(1, limitStart);
             selectStatement.setLong(2, size);
-
+            LOGGER.error("getComputers : " + selectStatement);
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
 
@@ -245,7 +249,7 @@ public enum ComputerDao {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computer
+     * @param computer1
      *            Representation of the computer to update
      * @return true if the computer is update in database
      * @throws DaoException
@@ -283,7 +287,7 @@ public enum ComputerDao {
 
             updateStatment.setLong(5, computer.getId());
 
-            updateStatment.executeUpdate();
+            result = updateStatment.executeUpdate();
             connection.commit();
             updateStatment.close();
         } catch (SQLException e) {
@@ -293,7 +297,7 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection(connection);
         }
-        LOGGER.info("updateComputer : " + (result == 1));
+        LOGGER.info("updateComputer : " + (result == 1) + " " + result);
         return result == 1;
     }
 
@@ -386,6 +390,7 @@ public enum ComputerDao {
         try {
             PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME);
             st.setString(1, "%" + name + "%");
+            st.setString(2, "%" + name + "%");
             ResultSet rset = null;
             rset = st.executeQuery();
             if (rset.next()) {

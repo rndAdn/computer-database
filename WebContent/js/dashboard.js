@@ -64,6 +64,7 @@ $(function() {
     $.fn.deleteSelected = function() {
         if (confirm("Are you sure you want to delete the selected computers?")) { 
             $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
+            alert('This is a custom alert box', 'Alert Dialog');
             $('#deleteForm').submit();
         }
     };
@@ -90,4 +91,3 @@ $(document).keydown(function(e) {
             break;
     }
 });
-
