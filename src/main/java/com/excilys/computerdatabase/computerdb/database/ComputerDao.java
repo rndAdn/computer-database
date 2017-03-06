@@ -73,7 +73,7 @@ public enum ComputerDao {
         SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) " + "LIMIT ?, ?";
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)" + "LIMIT ?, ?";
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
@@ -85,7 +85,8 @@ public enum ComputerDao {
                 + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
         COUNT_COMPUTERS = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable;
         COUNT_COMPUTERS_BY_NAME = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable
-                + " WHERE UPPER(" + computerName + ") LIKE UPPER(?)";
+                + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
+                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)";
 
     }
 
@@ -148,8 +149,10 @@ public enum ComputerDao {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
             selectStatement.setString(1, "%" + name + "%");
-            selectStatement.setLong(2, limitStart);
-            selectStatement.setLong(3, size);
+            selectStatement.setString(2, "%" + name + "%");
+            selectStatement.setLong(3, limitStart);
+            selectStatement.setLong(4, size);
+            LOGGER.error("getComputersByName : " + selectStatement);
 
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
@@ -245,7 +248,7 @@ public enum ComputerDao {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computer
+     * @param computer1
      *            Representation of the computer to update
      * @return true if the computer is update in database
      * @throws DaoException
@@ -386,6 +389,7 @@ public enum ComputerDao {
         try {
             PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME);
             st.setString(1, "%" + name + "%");
+            st.setString(2, "%" + name + "%");
             ResultSet rset = null;
             rset = st.executeQuery();
             if (rset.next()) {
