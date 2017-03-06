@@ -150,3 +150,6 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 
 # End of https://www.gitignore.io/api/code-java,java,eclipse,intellij+iml,maven
+/.idea/
+Supprimerait .idea/
+Supprimerait WebContent/WEB-INF/lib/

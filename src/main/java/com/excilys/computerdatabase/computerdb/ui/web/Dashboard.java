@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.ComputerDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
+import com.excilys.computerdatabase.computerdb.model.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
@@ -36,10 +38,19 @@ public class Dashboard extends HttpServlet {
         List<ComputerDTO> dtolistComputer = getComputerList();
 
         this.setJspAttribute(request, response, dtolistComputer);
-        this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 
     }
-    
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String selected = request.getParameter("selection");
+
+        LOGGER.warn("HELLO : " + selected);
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
+    }
+
+
     private void getJspAttribute(HttpServletRequest request, HttpServletResponse response){
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
@@ -86,7 +97,7 @@ public class Dashboard extends HttpServlet {
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;
-            dtoList.add(new ComputerDTO.ComputerDTOBuilder(c.getName()).build()); // TODO : continuer
+            dtoList.add(ComputerDTOMapper.mapperComputerDTO(c));
         }
         return dtoList;
     }

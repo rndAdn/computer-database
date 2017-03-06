@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.model;
+package com.excilys.computerdatabase.computerdb.model.dto;
 
 public class CompanyDTO {
     private final long id;

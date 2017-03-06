@@ -45,7 +45,7 @@
 		</div>
 	</div>
 
-	<form id="deleteForm" action="#" method="POST">
+	<form id="deleteForm" action="" method="POST">
 		<input type="hidden" name="selection" value="">
 	</form>
 
@@ -58,7 +58,7 @@
 
 					<th class="editMode" style="width: 60px; height: 22px;"><input
 						type="checkbox" id="selectall" /> <span
-						style="vertical-align: top;"> - <a href="#"
+						style="vertical-align: top;"> - <a href=""
 							id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 								class="fa fa-trash-o fa-lg"></i>
 						</a>
@@ -77,8 +77,8 @@
 				<c:forEach items="${computersList}" var="computer">
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer" onclick=""><c:out
+							class="cb" value="${computer.id}"></td>
+						<td><a href="editComputer?computerId=${computer.id}" onclick=""><c:out
 									value="${computer.name}"></c:out></a></td>
 						<td><c:out value="${computer.dateIntroduced}"></c:out></td>
 						<td><c:out value="${computer.dateDiscontinued}"></c:out></td>

@@ -1,5 +1,6 @@
-package com.excilys.computerdatabase.computerdb.model;
+package com.excilys.computerdatabase.computerdb.model.dto;
 
+import java.time.LocalDate;
 
 public class ComputerDTO {
 
@@ -89,6 +90,18 @@ public class ComputerDTO {
          */
         public ComputerDTOBuilder dateIntroduced(String dateIntroduced) {
             this.dateIntroduced = dateIntroduced;
+            return this;
+        }
+        
+        /**
+         * Add the optional date of introduction.
+         *
+         * @param dateIntroduced
+         *            .
+         * @return itself
+         */
+        public ComputerDTOBuilder dateIntroduced(LocalDate dateIntroduced) {
+            this.dateIntroduced = dateIntroduced.toString();
             return this;
         }
 

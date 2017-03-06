@@ -1,29 +1,32 @@
 package com.excilys.computerdatabase.computerdb.ui.web;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.model.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
 import com.excilys.computerdatabase.computerdb.model.Utils;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
+import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
 
 public class AddComputer extends HttpServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,7 +34,7 @@ public class AddComputer extends HttpServlet {
         List<CompanyDTO> list = getCompanyList();
         request.setAttribute("companylist", list);
 
-        this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);
 
     }
 
@@ -41,9 +44,16 @@ public class AddComputer extends HttpServlet {
         String name = request.getParameter("computerName");
         String dateIntro = request.getParameter("introduced");
         String dateFin = request.getParameter("discontinued");
-        String company = request.getParameter("companyId");
+        String company = request.getParameter("company");
+        System.out.println("Computer Demande Add : " + company);
+        LOGGER.info("Computer Demande Add : " + company);
 
-        addComputer(name, dateIntro, dateFin, company);
+        boolean add = addComputer(name, dateIntro, dateFin, company);
+
+        if (add) {
+            LOGGER.info("Computer Add OK");
+        }
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
 
     private List<CompanyDTO> getCompanyList() {
@@ -53,33 +63,37 @@ public class AddComputer extends HttpServlet {
 
         for (Pageable company : list) {
             Company c = (Company) company;
-            dtoList.add(new CompanyDTO.CompanyDTOBuilder().id(c.getId()).name(c.getName()).build());
+            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
         }
         return dtoList;
     }
 
-    private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String companyIdStr) {
+    private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String company) {
 
-        if (StringUtils.isBlank(name)) {
+        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
+        String companyId, companyName;
+        String[] companyInfo = company.split(":");
+        companyId = companyInfo[0];
+        companyName = companyInfo[1];
 
-        Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroStr);
-        Optional<LocalDate> dateFin = Utils.stringToDate(dateFinStr);
-
-        if (!ComputerValidator.compareDate(dateIntro, dateFin)) {
-            return false;
+        CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
+        CompanyDTO companyDTO;
+        if (ControllerComputer.checkCompanyId(companyId)) {
+            companyDTOBuilder = companyDTOBuilder
+                    .id(Utils.stringToId(companyId))
+                    .name(companyName);
         }
+        companyDTO = companyDTOBuilder.build();
 
-        Optional<Company> optionalCompany = Optional.empty();
-        if (!StringUtils.isBlank(companyIdStr)) {
-            long companyid = Utils.stringToId(companyIdStr);
-            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
-        }
+        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
+                .dateIntroduced(dateIntroStr)
+                .dateDiscontinued(dateFinStr)
+                .company(companyDTO)
+                .build();
 
-        Computer computer;
-        computer = new Computer.ComputerBuilder(name).dateIntroduced(dateIntro.orElse(null))
-                .dateDiscontinued(dateFin.orElse(null)).company(optionalCompany.orElse(null)).build();
+        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
 
         ComputerService.INSTANCE.ajoutComputer(computer);
         return true;

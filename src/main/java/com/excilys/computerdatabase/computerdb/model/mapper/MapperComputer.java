@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.model.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
+import com.excilys.computerdatabase.computerdb.model.Computer.ComputerBuilder;
 
 public class MapperComputer {
 

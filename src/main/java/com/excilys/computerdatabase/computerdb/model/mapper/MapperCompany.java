@@ -1,9 +1,10 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.model.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.Company.CompanyBuilder;
 
 public class MapperCompany {
 
