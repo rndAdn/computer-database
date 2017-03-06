@@ -53,6 +53,7 @@ public class AddComputer extends HttpServlet {
         if (add) {
             LOGGER.info("Computer Add OK");
         }
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
 
     private List<CompanyDTO> getCompanyList() {
