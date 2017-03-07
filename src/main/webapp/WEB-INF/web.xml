@@ -5,7 +5,7 @@
 
 	<servlet>
 		<servlet-name>Dashboard</servlet-name>
-		<servlet-class>com.excilys.computerdatabase.computerdb.ui.web.Dashboard</servlet-class>
+		<servlet-class>com.excilys.computerdatabase.computerdb.view.web.Dashboard</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Dashboard</servlet-name>
@@ -14,7 +14,7 @@
 
 	<servlet>
 		<servlet-name>EditComputer</servlet-name>
-		<servlet-class>com.excilys.computerdatabase.computerdb.ui.web.EditComputer</servlet-class>
+		<servlet-class>com.excilys.computerdatabase.computerdb.view.web.EditComputer</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>EditComputer</servlet-name>
@@ -23,7 +23,7 @@
 
 	<servlet>
 		<servlet-name>AddComputer</servlet-name>
-		<servlet-class>com.excilys.computerdatabase.computerdb.ui.web.AddComputer</servlet-class>
+		<servlet-class>com.excilys.computerdatabase.computerdb.view.web.AddComputer</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AddComputer</servlet-name>

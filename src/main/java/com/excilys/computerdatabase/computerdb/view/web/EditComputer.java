@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.web;
+package com.excilys.computerdatabase.computerdb.view.web;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTOMapper;
+import com.excilys.computerdatabase.computerdb.model.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.ui.controller.ControllerComputer;
+import com.excilys.computerdatabase.computerdb.controller.ControllerComputer;
 
 public class EditComputer extends HttpServlet {
 

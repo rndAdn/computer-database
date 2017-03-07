@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.controller;
+package com.excilys.computerdatabase.computerdb.controller;
 
 import java.time.LocalDate;
 import java.util.Optional;

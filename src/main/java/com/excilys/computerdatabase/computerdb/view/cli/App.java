@@ -1,6 +1,6 @@
-package com.excilys.computerdatabase.computerdb;
+package com.excilys.computerdatabase.computerdb.view.cli;
 
-import com.excilys.computerdatabase.computerdb.ui.cli.CliMenu;
+import com.excilys.computerdatabase.computerdb.view.cli.CliMenu;
 
 public class App {
 

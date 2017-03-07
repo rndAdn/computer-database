@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.model.dto;
+package com.excilys.computerdatabase.computerdb.model.mapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.Computer.ComputerBuilder;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 

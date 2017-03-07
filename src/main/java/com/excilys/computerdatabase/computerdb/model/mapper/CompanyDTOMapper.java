@@ -1,9 +1,10 @@
-package com.excilys.computerdatabase.computerdb.model.dto;
+package com.excilys.computerdatabase.computerdb.model.mapper;
 
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 
 public class CompanyDTOMapper {
 

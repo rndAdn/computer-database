@@ -8,7 +8,7 @@ import com.excilys.computerdatabase.computerdb.database.CompanyDao;
 import com.excilys.computerdatabase.computerdb.database.DaoException;
 import com.excilys.computerdatabase.computerdb.model.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTOMapper;
+import com.excilys.computerdatabase.computerdb.model.mapper.CompanyDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 

@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.ui.web;
+package com.excilys.computerdatabase.computerdb.view.web;
 
 import java.io.IOException;
 
