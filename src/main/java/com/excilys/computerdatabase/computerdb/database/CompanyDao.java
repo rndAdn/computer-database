@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.model.Computer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -35,6 +36,7 @@ public enum CompanyDao {
     private final String SELECT_ALL_COMPANY_WITH_LIMIT;
     private final String COUNT_COMPANY;
     private final String COUNT_COMPANY_BY_NAME;
+    private final String DELETE_COMPANY;
 
     CompanyDao() {
         try {
@@ -53,6 +55,7 @@ public enum CompanyDao {
         COUNT_COMPANY = "SELECT count(" + companyId + ") as " + countTotal + " FROM " + companyTable;
         COUNT_COMPANY_BY_NAME = "SELECT count(" + companyId + ") as " + countTotal + " FROM company WHERE UPPER("
                 + companyName + ") LIKE UPPER(?)";
+        DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE "+ companyId + "=?;";
 
     }
 
@@ -211,6 +214,37 @@ public enum CompanyDao {
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
+    }
+
+
+    /**
+     * Delete a Computer in database given a Computer.
+     *
+     * @param company Representation of the computer to delete
+     * @return true if computer is delete false otherwise
+     * @throws DaoException .
+     */
+    public boolean deleteCompany(Company company) throws DaoException { // TODO : À tester
+        int result = -1;
+        Connection connection = Database.INSTANCE.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
+
+            deleteStatment.setLong(1, company.getId());
+            result = deleteStatment.executeUpdate();
+            connection.commit();
+            deleteStatment.close();
+        } catch (SQLException e) {
+
+            LOGGER.error("deleteCompany : " + e.getMessage());
+            Database.INSTANCE.rollback(connection);
+            throw new DaoException(e.getMessage());
+        } finally {
+            Database.INSTANCE.closeConnection(connection);
+        }
+        LOGGER.info("deleteCompany : " + (result == 1));
+        return result == 1;
     }
 
 }

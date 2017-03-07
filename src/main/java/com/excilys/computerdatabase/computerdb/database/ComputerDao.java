@@ -29,6 +29,7 @@ public enum ComputerDao {
     private final String SELECT_COMPUTER_BY_NAME;
     private final String SELECT_ALL_COMPUTERS_WITH_LIMIT;
     private final String DELETE_COMPUTER;
+    private final String DELETE_COMPUTERS;
     private final String INSERT_COMPUTER;
     private final String UPDATE_COMPUTER;
     private final String COUNT_COMPUTERS;
@@ -80,6 +81,7 @@ public enum ComputerDao {
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " ORDER BY " + computerName + " LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
+        DELETE_COMPUTERS = "DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
         UPDATE_COMPUTER = "UPDATE " + computerTable + " SET " + computerName + "=?, " + computerDateIntro + "=?, "
