@@ -238,10 +238,10 @@ public enum CompanyDao {
         } catch (SQLException e) {
 
             LOGGER.error("deleteCompany : " + e.getMessage());
-            Database.INSTANCE.rollback(connection);
+            Database.INSTANCE.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("deleteCompany : " + (result == 1));
         return result == 1;

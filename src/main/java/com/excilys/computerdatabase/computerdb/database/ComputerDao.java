@@ -219,10 +219,10 @@ public enum ComputerDao {
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
-            Database.INSTANCE.rollback(connection);
+            Database.INSTANCE.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("deleteComputer : " + (result == 1));
         return result == 1;
@@ -272,10 +272,10 @@ public enum ComputerDao {
             updateStatment.close();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
-            Database.INSTANCE.rollback(connection);
+            Database.INSTANCE.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("updateComputer : " + (result == 1) + " " + result);
         return result == 1;
@@ -323,10 +323,10 @@ public enum ComputerDao {
             insertStatment.close();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
-            Database.INSTANCE.rollback(connection);
+            Database.INSTANCE.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("insertComputer : " + (result == 1));
         return result == 1;
@@ -340,8 +340,7 @@ public enum ComputerDao {
      */
     public long countComputers() throws DaoException {
         long number = 0;
-        Connection connection = Database.INSTANCE.getConnection();
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             Statement st = connection.createStatement();
 
             ResultSet rset;
@@ -355,7 +354,7 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("countComputers : " + number);
         return number;
@@ -379,7 +378,7 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            Database.INSTANCE.closeConnection(connection);
+            Database.INSTANCE.closeConnection();
         }
         LOGGER.info("countComputers : " + number);
         return number;
