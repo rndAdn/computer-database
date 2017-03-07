@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.computerdb.database;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -20,14 +19,15 @@ public enum Database {
     INSTANCE;
 
 
-    private String url;
     private String dbName;
-    private String driver;
+    private String poolSize;
     private String userName;
     private String password;
     private Logger LOGGER;
     private HikariDataSource ds;
     private String dataSourceClassName;
+    
+    ThreadLocal<Connection> connectionThreadLocal;
 
     /**
      * Database private Constructor.
@@ -42,6 +42,8 @@ public enum Database {
             dataSourceClassName = config.getString("dataSourceClassName");
             userName = config.getString("dataSource.user");
             password = config.getString("dataSource.password");
+            poolSize = config.getString("maximumPoolSize");
+            //LOGGER.info(poolSize);
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
         }
@@ -52,28 +54,14 @@ public enum Database {
         props.setProperty("dataSource.user", userName);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", dbName);
-        props.put("dataSource.logWriter", new PrintWriter(System.out));
+        //props.setProperty("maximumPoolSize", poolSize);
+        //props.put("dataSource.logWriter", new PrintWriter(System.out));
 
         HikariConfig config = new HikariConfig(props);
         ds = new HikariDataSource(config);
-
+        connectionThreadLocal = new ThreadLocal<>();
     }
 
-    /**
-     * private method to Create a new Connection.
-     *
-     * @return Connection to the database.
-     */
-    private Connection createConnection() {
-        LOGGER.info("connexion à la base de donnée ");
-        Connection connection = null;
-        try {
-            connection = ds.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }
 
     /**
      * return the Connection, create a new one If connection is null.
@@ -81,17 +69,28 @@ public enum Database {
      * @return A Connection
      */
     public Connection getConnection() {
-        return createConnection();
+        Connection connection;
+        try {
+            if (connectionThreadLocal.get() == null || connectionThreadLocal.get().isClosed()){
+                connection = ds.getConnection();
+                connectionThreadLocal.set(connection);
+            }
+        } catch (Exception e) {
+            LOGGER.debug("get exception "+e.getMessage());
+        }
+        
+        
+        return connectionThreadLocal.get();
     }
 
     /**
      * Close the Connection.
      */
-    public void closeConnection(Connection connection) {
+    public void closeConnection() {
         try {
-            connection.close();
-            connection = null;
-            LOGGER.info("Connection Fermée");
+            if (connectionThreadLocal != null && !connectionThreadLocal.get().isClosed()) {
+                connectionThreadLocal.get().close();
+            }
         } catch (SQLException e) {
             LOGGER.error("Connection non Fermée");
         }
@@ -100,10 +99,11 @@ public enum Database {
     /**
      * Undo database commit.
      */
-    public void rollback(Connection connection) {
+    public void rollback() {
         try {
-            connection.rollback();
-            LOGGER.info("Connection RollBack");
+            if (connectionThreadLocal != null && !connectionThreadLocal.get().isClosed()) {
+                connectionThreadLocal.get().rollback();
+            }
         } catch (SQLException e) {
             LOGGER.error("Connection RollBack");
         }
