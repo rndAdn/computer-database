@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.computerdb.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.computerdatabase.computerdb.model.mapper.MapperCompany;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,18 +16,15 @@ import com.excilys.computerdatabase.computerdb.model.Company;
 
 public class CompanyDaoTest {
     
-    private CompanyDao companyDao;
     private ResultSet resultSet;
     
     @Before
     public void executerAvantChaqueTest() {
-        companyDao = new CompanyDao();
         resultSet = Mockito.mock(ResultSet.class);
     }
 
     @After
     public void executerApresChaqueTest() {
-        companyDao = null;
         resultSet = null;
     }
 

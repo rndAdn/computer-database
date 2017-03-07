@@ -1,9 +1,10 @@
 package com.excilys.computerdatabase.computerdb.database;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -11,11 +12,13 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public enum Database {
 
     INSTANCE;
 
-    private Connection connection;
 
     private String url;
     private String dbName;
@@ -23,40 +26,37 @@ public enum Database {
     private String userName;
     private String password;
     private Logger LOGGER;
+    private HikariDataSource ds;
+    private String dataSourceClassName;
 
     /**
      * Database private Constructor.
      */
     Database() {
         LOGGER = LoggerFactory.getLogger(getClass());
-        Class driverClass;
         LOGGER.info("Database Constructor " + this);
 
         try {
             Configuration config = new PropertiesConfiguration("database.properties");
-            url = config.getString("url");
             dbName = config.getString("db_name");
-            driver = config.getString("driver");
-            userName = config.getString("username");
-            password = config.getString("password");
+            dataSourceClassName = config.getString("dataSourceClassName");
+            userName = config.getString("dataSource.user");
+            password = config.getString("dataSource.password");
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
         }
 
-        try {
-            driverClass = Class.forName(driver);
-            Driver driver = (Driver) driverClass.newInstance();
-            DriverManager.registerDriver(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        connection = createConnection();
+
+        Properties props = new Properties();
+        props.setProperty("dataSourceClassName", dataSourceClassName);
+        props.setProperty("dataSource.user", userName);
+        props.setProperty("dataSource.password", password);
+        props.setProperty("dataSource.databaseName", dbName);
+        props.put("dataSource.logWriter", new PrintWriter(System.out));
+
+        HikariConfig config = new HikariConfig(props);
+        ds = new HikariDataSource(config);
+
     }
 
     /**
@@ -68,7 +68,7 @@ public enum Database {
         LOGGER.info("connexion à la base de donnée ");
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, userName, password);
+            connection = ds.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,17 +81,13 @@ public enum Database {
      * @return A Connection
      */
     public Connection getConnection() {
-        if (connection == null) {
-            connection = createConnection();
-        }
-        return connection;
+        return createConnection();
     }
 
     /**
      * Close the Connection.
-     *
      */
-    public void closeConnection() {
+    public void closeConnection(Connection connection) {
         try {
             connection.close();
             connection = null;
@@ -104,7 +100,7 @@ public enum Database {
     /**
      * Undo database commit.
      */
-    public void rollback() {
+    public void rollback(Connection connection) {
         try {
             connection.rollback();
             LOGGER.info("Connection RollBack");
