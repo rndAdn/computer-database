@@ -20,9 +20,8 @@ public enum Database {
     INSTANCE;
 
 
-    private String url;
     private String dbName;
-    private String driver;
+    private String poolSize;
     private String userName;
     private String password;
     private Logger LOGGER;
@@ -42,6 +41,8 @@ public enum Database {
             dataSourceClassName = config.getString("dataSourceClassName");
             userName = config.getString("dataSource.user");
             password = config.getString("dataSource.password");
+            poolSize = config.getString("maximumPoolSize");
+            //LOGGER.info(poolSize);
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
         }
@@ -52,7 +53,8 @@ public enum Database {
         props.setProperty("dataSource.user", userName);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", dbName);
-        props.put("dataSource.logWriter", new PrintWriter(System.out));
+        //props.setProperty("maximumPoolSize", poolSize);
+        //props.put("dataSource.logWriter", new PrintWriter(System.out));
 
         HikariConfig config = new HikariConfig(props);
         ds = new HikariDataSource(config);
