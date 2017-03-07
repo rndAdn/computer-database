@@ -29,6 +29,7 @@ public enum ComputerDao {
     private final String SELECT_COMPUTER_BY_NAME;
     private final String SELECT_ALL_COMPUTERS_WITH_LIMIT;
     private final String DELETE_COMPUTER;
+    private final String DELETE_COMPUTERS;
     private final String INSERT_COMPUTER;
     private final String UPDATE_COMPUTER;
     private final String COUNT_COMPUTERS;
@@ -47,7 +48,7 @@ public enum ComputerDao {
     private String companyId;
     private String companyName;
 
-    private ComputerDao() {
+    ComputerDao() {
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             computerTable = config.getString("ComputerTable");
@@ -78,8 +79,9 @@ public enum ComputerDao {
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " ORDER BY " + computerName +" LIMIT ?, ? ";
+                + companyId + " ORDER BY " + computerName + " LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
+        DELETE_COMPUTERS = "DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
         UPDATE_COMPUTER = "UPDATE " + computerTable + " SET " + computerName + "=?, " + computerDateIntro + "=?, "
@@ -94,19 +96,16 @@ public enum ComputerDao {
     /**
      * Get a Computer from database by it's id.
      *
-     * @param id
-     *            Computer id in Database.
+     * @param id Computer id in Database.
      * @return A Optional Computer. empty if the Computer doesn't exist in the
-     *         database.
-     * @throws DaoException
-     *             .
+     * database.
+     * @throws DaoException .
      */
     public Optional<Computer> getComputerById(long id) throws DaoException {
         PreparedStatement selectStatement;
         Optional<Computer> optionalComputer = Optional.empty();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID);
 
             selectStatement.setLong(1, id);
@@ -121,8 +120,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputerById : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputerById : " + optionalComputer);
         return optionalComputer;
@@ -131,22 +128,17 @@ public enum ComputerDao {
     /**
      * Find all Computer from database by name.
      *
-     * @param name
-     *            Of Computer(s) to find
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param name       Of Computer(s) to find
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List Pageable
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getComputersByName(String name, long limitStart, long size) throws DaoException {
         PreparedStatement selectStatement;
         List<Pageable> result = new ArrayList<>();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME);
 
             selectStatement.setString(1, "%" + name + "%");
@@ -166,8 +158,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputersByName result size : " + result.size());
         return result;
@@ -176,21 +166,17 @@ public enum ComputerDao {
     /**
      * Get all Computer from database.
      *
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List Pageable
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getComputers(long limitStart, long size) throws DaoException {
 
         PreparedStatement selectStatement;
         List<Pageable> result = new ArrayList<>();
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT);
 
             selectStatement.setLong(1, limitStart);
@@ -207,8 +193,6 @@ public enum ComputerDao {
         } catch (SQLException e) {
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getComputers result size : " + result.size());
         return result;
@@ -217,11 +201,9 @@ public enum ComputerDao {
     /**
      * Delete a Computer in database given a Computer.
      *
-     * @param computer
-     *            Representation of the computer to delete
+     * @param computer Representation of the computer to delete
      * @return true if computer is delete false otherwise
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public boolean deleteComputer(Computer computer) throws DaoException {
         int result = -1;
@@ -231,7 +213,7 @@ public enum ComputerDao {
             PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 
             deleteStatment.setLong(1, computer.getId());
-            deleteStatment.executeUpdate();
+            result = deleteStatment.executeUpdate();
             connection.commit();
             deleteStatment.close();
         } catch (SQLException e) {
@@ -249,11 +231,9 @@ public enum ComputerDao {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computer1
-     *            Representation of the computer to update
+     * @param computer Representation of the computer to update
      * @return true if the computer is update in database
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public boolean updateComputer(Computer computer) throws DaoException {
         int result = -1;
@@ -304,11 +284,9 @@ public enum ComputerDao {
     /**
      * Insert a Computer in database given a Computer.
      *
-     * @param computer
-     *            Representation of the computer to create
+     * @param computer Representation of the computer to create
      * @return true if the computer is created in database
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public boolean insertComputer(Computer computer) throws DaoException {
         int result = -1;
@@ -358,8 +336,7 @@ public enum ComputerDao {
      * Get number of Computer in database.
      *
      * @return Total number of Computer in the database.
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public long countComputers() throws DaoException {
         long number = 0;
@@ -367,7 +344,7 @@ public enum ComputerDao {
         try {
             Statement st = connection.createStatement();
 
-            ResultSet rset = null;
+            ResultSet rset;
             rset = st.executeQuery(COUNT_COMPUTERS);
             if (rset.next()) {
                 number = rset.getLong(countTotal);

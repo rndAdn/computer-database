@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.model.Computer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -22,11 +23,7 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 public enum CompanyDao {
     INSTANCE;
 
-    
-    
-    
-    
-    
+
     private static final Logger LOGGER = LoggerFactory
             .getLogger("com.excilys.computerdatabase.computerdb.database.CompanyDao");
     private String companyTable;
@@ -39,7 +36,8 @@ public enum CompanyDao {
     private final String SELECT_ALL_COMPANY_WITH_LIMIT;
     private final String COUNT_COMPANY;
     private final String COUNT_COMPANY_BY_NAME;
-    
+    private final String DELETE_COMPANY;
+
     CompanyDao() {
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
@@ -57,25 +55,23 @@ public enum CompanyDao {
         COUNT_COMPANY = "SELECT count(" + companyId + ") as " + countTotal + " FROM " + companyTable;
         COUNT_COMPANY_BY_NAME = "SELECT count(" + companyId + ") as " + countTotal + " FROM company WHERE UPPER("
                 + companyName + ") LIKE UPPER(?)";
+        DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE "+ companyId + "=?;";
 
     }
 
     /**
      * Get a Company from database by it's id.
      *
-     * @param id
-     *            Company id in Database.
+     * @param id Company id in Database.
      * @return A Optional<Company>. empty if the Company doesn't exist in the
-     *         database.
-     * @throws DaoException
-     *             .
+     * database.
+     * @throws DaoException .
      */
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID);
 
             selectStatement.setLong(1, id);
@@ -91,8 +87,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyById result :" + optionalCompany);
         return optionalCompany;
@@ -102,22 +96,17 @@ public enum CompanyDao {
     /**
      * Find all Company from database by name.
      *
-     * @param name
-     *            Of Company(s) to find
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param name       Of Company(s) to find
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List<Pageable>
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME);
 
             selectStatement.setString(1, name);
@@ -134,8 +123,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanyByName result size : " + result.size());
         return result;
@@ -144,21 +131,17 @@ public enum CompanyDao {
     /**
      * Get all Company from database.
      *
-     * @param limitStart
-     *            Start of first result.
-     * @param size
-     *            Max list size
+     * @param limitStart Start of first result.
+     * @param size       Max list size
      * @return a List<Pageable>
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
         List<Pageable> result = new ArrayList<>();
         PreparedStatement selectStatement;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             connection.setAutoCommit(false);
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
 
@@ -176,8 +159,6 @@ public enum CompanyDao {
         } catch (SQLException e) {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getCompanys result size : " + result.size());
         return result;
@@ -187,14 +168,12 @@ public enum CompanyDao {
      * Get number of company in database.
      *
      * @return Total number of company in the database.
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             Statement st = connection.createStatement();
 
             ResultSet rset = null;
@@ -206,8 +185,6 @@ public enum CompanyDao {
             st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
@@ -217,14 +194,12 @@ public enum CompanyDao {
      * Get number of company in database.
      *
      * @return Total number of company in the database.
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public long getNumberOfCompanyByName(String name) throws DaoException {
         long number = 0;
-        Connection connection = Database.INSTANCE.getConnection();
 
-        try {
+        try (Connection connection = Database.INSTANCE.getConnection()) {
             PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME);
             st.setString(1, "%" + name + "%");
             ResultSet rset = null;
@@ -236,11 +211,40 @@ public enum CompanyDao {
             st.close();
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
-        } finally {
-            Database.INSTANCE.closeConnection(connection);
         }
         LOGGER.info("getNumberOfCompany result : " + number);
         return number;
+    }
+
+
+    /**
+     * Delete a Computer in database given a Computer.
+     *
+     * @param company Representation of the computer to delete
+     * @return true if computer is delete false otherwise
+     * @throws DaoException .
+     */
+    public boolean deleteCompany(Company company) throws DaoException { // TODO : À tester
+        int result = -1;
+        Connection connection = Database.INSTANCE.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
+
+            deleteStatment.setLong(1, company.getId());
+            result = deleteStatment.executeUpdate();
+            connection.commit();
+            deleteStatment.close();
+        } catch (SQLException e) {
+
+            LOGGER.error("deleteCompany : " + e.getMessage());
+            Database.INSTANCE.rollback(connection);
+            throw new DaoException(e.getMessage());
+        } finally {
+            Database.INSTANCE.closeConnection(connection);
+        }
+        LOGGER.info("deleteCompany : " + (result == 1));
+        return result == 1;
     }
 
 }

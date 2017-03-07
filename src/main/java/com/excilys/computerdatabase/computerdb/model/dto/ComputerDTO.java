@@ -13,15 +13,16 @@ public class ComputerDTO {
     /**
      * Constructor of a Computer DTO with a computer.
      * replace every data with a string and empty optional by "-" String
+     *
      * @param computer .
      */
     private ComputerDTO(ComputerDTOBuilder computer) {
-        
+
         this.id = computer.id;
         this.name = computer.name;
         this.dateIntroduced = computer.dateIntroduced;
         this.dateDiscontinued = computer.dateDiscontinued;
-        this.company =  computer.company;
+        this.company = computer.company;
         /*this.id = computer.getId();
         this.name = computer.getName();
         if (computer.getDateIntroduced().isPresent()) {
@@ -40,7 +41,7 @@ public class ComputerDTO {
         } else {
             company = new CompanyDTO.CompanyDTOBuilder().name("-").build();
         }*/
-        
+
     }
 
     public long getId() {
@@ -62,20 +63,19 @@ public class ComputerDTO {
     public CompanyDTO getCompany() {
         return company;
     }
-    
-    
+
+
     public static class ComputerDTOBuilder {
         private long id;
         private final String name;
-        private String dateIntroduced = "-";
-        private String dateDiscontinued = "-";
+        private String dateIntroduced = "";
+        private String dateDiscontinued = "";
         private CompanyDTO company;
 
         /**
          * Construct a ComputerBuilder with only the required value.
          *
-         * @param name
-         *            name of computer
+         * @param name name of computer
          */
         public ComputerDTOBuilder(String name) {
             this.name = name;
@@ -84,20 +84,18 @@ public class ComputerDTO {
         /**
          * Add the optional date of introduction.
          *
-         * @param dateIntroduced
-         *            .
+         * @param dateIntroduced .
          * @return itself
          */
         public ComputerDTOBuilder dateIntroduced(String dateIntroduced) {
             this.dateIntroduced = dateIntroduced;
             return this;
         }
-        
+
         /**
          * Add the optional date of introduction.
          *
-         * @param dateIntroduced
-         *            .
+         * @param dateIntroduced .
          * @return itself
          */
         public ComputerDTOBuilder dateIntroduced(LocalDate dateIntroduced) {
@@ -105,11 +103,11 @@ public class ComputerDTO {
             return this;
         }
 
-        /**ComputerBuilder
+        /**
+         * ComputerBuilder
          * Add the optional id of the computer.
          *
-         * @param id
-         *            .
+         * @param id .
          * @return itself
          */
         public ComputerDTOBuilder id(long id) {
@@ -120,8 +118,7 @@ public class ComputerDTO {
         /**
          * Add the optional end of service date of the computer.
          *
-         * @param dateDiscontinued
-         *            .
+         * @param dateDiscontinued .
          * @return itself
          */
         public ComputerDTOBuilder dateDiscontinued(String dateDiscontinued) {
@@ -132,8 +129,7 @@ public class ComputerDTO {
         /**
          * Add the optional company of the computer.
          *
-         * @param company
-         *            .
+         * @param company .
          * @return itself
          */
         public ComputerDTOBuilder company(CompanyDTO company) {

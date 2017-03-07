@@ -9,8 +9,7 @@ public class Page {
     /**
      * Page Constructor.
      *
-     * @param list
-     *            of Pageable
+     * @param list of Pageable
      */
     public Page(List<Pageable> list) {
         this.computerList = list;
@@ -19,7 +18,6 @@ public class Page {
 
     /**
      * Print content of page in console.
-     *
      */
     public void printContent() {
         System.out.println("\n----------------");
