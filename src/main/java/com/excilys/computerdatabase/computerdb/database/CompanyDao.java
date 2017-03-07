@@ -88,7 +88,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getCompanyById result :" + optionalCompany);
+        //LOGGER.info("getCompanyById result :" + optionalCompany);
         return optionalCompany;
 
     }
@@ -124,7 +124,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getCompanyByName result size : " + result.size());
+        //LOGGER.info("getCompanyByName result size : " + result.size());
         return result;
     }
 
@@ -160,7 +160,7 @@ public enum CompanyDao {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getCompanys result size : " + result.size());
+        //LOGGER.info("getCompanys result size : " + result.size());
         return result;
     }
 
@@ -186,7 +186,7 @@ public enum CompanyDao {
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         }
-        LOGGER.info("getNumberOfCompany result : " + number);
+        //LOGGER.info("getNumberOfCompany result : " + number);
         return number;
     }
 
@@ -212,7 +212,7 @@ public enum CompanyDao {
         } catch (SQLException e1) {
             throw new DaoException(e1.getMessage());
         }
-        LOGGER.info("getNumberOfCompany result : " + number);
+        //LOGGER.info("getNumberOfCompany result : " + number);
         return number;
     }
 
@@ -243,7 +243,7 @@ public enum CompanyDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("deleteCompany : " + (result == 1));
+        //LOGGER.info("deleteCompany : " + (result == 1));
         return result == 1;
     }
 

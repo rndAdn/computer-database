@@ -121,7 +121,7 @@ public enum ComputerDao {
             LOGGER.error("getComputerById : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getComputerById : " + optionalComputer);
+        //LOGGER.info("getComputerById : " + optionalComputer);
         return optionalComputer;
     }
 
@@ -145,7 +145,7 @@ public enum ComputerDao {
             selectStatement.setString(2, "%" + name + "%");
             selectStatement.setLong(3, limitStart);
             selectStatement.setLong(4, size);
-            LOGGER.error("getComputersByName : " + selectStatement);
+            //LOGGER.error("getComputersByName : " + selectStatement);
 
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
@@ -159,7 +159,7 @@ public enum ComputerDao {
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getComputersByName result size : " + result.size());
+        //LOGGER.info("getComputersByName result size : " + result.size());
         return result;
     }
 
@@ -181,7 +181,7 @@ public enum ComputerDao {
 
             selectStatement.setLong(1, limitStart);
             selectStatement.setLong(2, size);
-            LOGGER.error("getComputers : " + selectStatement);
+            //LOGGER.error("getComputers : " + selectStatement);
             ResultSet rset = null;
             rset = selectStatement.executeQuery();
 
@@ -194,7 +194,7 @@ public enum ComputerDao {
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        LOGGER.info("getComputers result size : " + result.size());
+        //LOGGER.info("getComputers result size : " + result.size());
         return result;
     }
 
@@ -356,7 +356,7 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("countComputers : " + number);
+        //LOGGER.info("countComputers : " + number);
         return number;
     }
 
@@ -380,7 +380,7 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("countComputers : " + number);
+        //LOGGER.info("countComputers : " + number);
         return number;
     }
 

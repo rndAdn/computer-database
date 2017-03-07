@@ -39,12 +39,19 @@ public class EditComputer extends HttpServlet {
 
         }
         Optional<Computer> computerOptional = ComputerService.INSTANCE.getComputerById(id);
-        Computer computer = computerOptional.get();
-        ComputerDTO computerDTO = ComputerDTOMapper.mapperComputerDTO(computer);
-        long cId = computerDTO.getCompany().getId();
-        request.setAttribute("computer", computerDTO);
-        request.setAttribute("companyId", cId);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
+        if (computerOptional.isPresent()) {
+
+            Computer computer = computerOptional.get();
+            ComputerDTO computerDTO = ComputerDTOMapper.mapperComputerDTO(computer);
+            long cId = computerDTO.getCompany().getId();
+            request.setAttribute("computer", computerDTO);
+            request.setAttribute("companyId", cId);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/editComputer.jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+        }
+        
+        
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -73,6 +80,9 @@ public class EditComputer extends HttpServlet {
             return false;
         }
         String companyId, companyName;
+        if (company == null) {
+            company = "0:--";
+        }
         String[] companyInfo = company.split(":");
         companyId = companyInfo[0];
         companyName = companyInfo[1];
