@@ -209,7 +209,7 @@ public enum ComputerDao {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER);
 
             deleteStatment.setLong(1, computer.getId());
@@ -239,7 +239,7 @@ public enum ComputerDao {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER);
             updateStatment.setString(1, computer.getName());
 
@@ -292,7 +292,7 @@ public enum ComputerDao {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER);
 
             insertStatment.setString(1, computer.getName());

@@ -61,10 +61,10 @@ public class EditComputer extends HttpServlet {
         String dateFin = request.getParameter("computerDiscontinued");
         String company = request.getParameter("company");
 
-        LOGGER.info("Computer Demande Edit : " + name);
+        /*LOGGER.info("Computer Demande Edit : " + name);
         LOGGER.info("Computer Demande Edit : " + dateIntro);
         LOGGER.info("Computer Demande Edit : " + dateFin);
-        LOGGER.info("Computer Demande Edit : " + company);
+        LOGGER.info("Computer Demande Edit : " + company);*/
 
         boolean update = updateComputer(name, dateIntro, dateFin, company);
 

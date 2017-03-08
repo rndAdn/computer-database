@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.model.Computer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -142,7 +141,7 @@ public enum CompanyDao {
         PreparedStatement selectStatement;
 
         try (Connection connection = Database.INSTANCE.getConnection()) {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT);
 
             selectStatement.setLong(1, limitStart);
@@ -228,7 +227,7 @@ public enum CompanyDao {
         int result = -1;
         Connection connection = Database.INSTANCE.getConnection();
         try {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
 
             deleteStatment.setLong(1, company.getId());

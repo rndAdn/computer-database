@@ -26,6 +26,7 @@ public enum Database {
     private Logger LOGGER;
     private HikariDataSource ds;
     private String dataSourceClassName;
+    private String autocommit;
     
     ThreadLocal<Connection> connectionThreadLocal;
 
@@ -43,6 +44,7 @@ public enum Database {
             userName = config.getString("dataSource.user");
             password = config.getString("dataSource.password");
             poolSize = config.getString("maximumPoolSize");
+            autocommit = config.getString("autocommit");
             //LOGGER.info(poolSize);
         } catch (ConfigurationException ce) {
             ce.printStackTrace();
@@ -54,10 +56,12 @@ public enum Database {
         props.setProperty("dataSource.user", userName);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", dbName);
-        //props.setProperty("maximumPoolSize", poolSize);
-        //props.put("dataSource.logWriter", new PrintWriter(System.out));
 
         HikariConfig config = new HikariConfig(props);
+        config.setMinimumIdle(5);
+        config.setMaximumPoolSize(Integer.parseInt(poolSize));
+        config.setConnectionTimeout(8000);
+        config.setAutoCommit(Boolean.parseBoolean(autocommit));
         ds = new HikariDataSource(config);
         connectionThreadLocal = new ThreadLocal<>();
     }

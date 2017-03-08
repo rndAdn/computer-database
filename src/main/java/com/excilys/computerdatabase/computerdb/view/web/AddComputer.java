@@ -35,8 +35,7 @@ public class AddComputer extends HttpServlet {
         String dateIntro = request.getParameter("introduced");
         String dateFin = request.getParameter("discontinued");
         String company = request.getParameter("company");
-        System.out.println("Computer Demande Add : " + company);
-        LOGGER.info("Computer Demande Add : " + company);
+        //LOGGER.info("Computer Demande Add : " + company);
 
         boolean add = addComputer(name, dateIntro, dateFin, company);
 
