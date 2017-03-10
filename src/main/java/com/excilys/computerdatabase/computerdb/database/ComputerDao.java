@@ -71,11 +71,16 @@ public enum ComputerDao {
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " WHERE " + computerId + " = ? ORDER BY " + computerName;
+        
+        
         SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
                 + ") LIKE UPPER(?) ORDER BY " + computerName + " LIMIT ?, ? ";
+        
+        
+        
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
@@ -115,6 +120,7 @@ public enum ComputerDao {
             if (rset.next()) {
                 optionalComputer = Optional.of(MapperComputer.mapComputer(rset));
             }
+            connection.commit();
             rset.close();
             selectStatement.close();
         } catch (SQLException e) {
@@ -153,6 +159,7 @@ public enum ComputerDao {
             while (rset.next()) {
                 result.add(MapperComputer.mapComputer(rset));
             }
+            connection.commit();
             rset.close();
             selectStatement.close();
         } catch (SQLException e) {
@@ -188,6 +195,7 @@ public enum ComputerDao {
             while (rset.next()) {
                 result.add(MapperComputer.mapComputer(rset));
             }
+            connection.commit();
             rset.close();
             selectStatement.close();
         } catch (SQLException e) {
@@ -207,6 +215,7 @@ public enum ComputerDao {
      */
     public boolean deleteComputer(Computer computer) throws DaoException {
         int result = -1;
+        long id = computer.getId();
         Connection connection = Database.INSTANCE.getConnection();
         try {
             //connection.setAutoCommit(false);
@@ -224,7 +233,12 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("deleteComputer : " + (result == 1));
+        
+        if (result != 1)
+            LOGGER.info("deleteComputer : " + (result == 1));
+        else {
+            //LOGGER.info("deleteComputer id : " + id);
+        }
         return result == 1;
     }
 
@@ -277,7 +291,9 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("updateComputer : " + (result == 1) + " " + result);
+        if (result != 1)
+            LOGGER.info("updateComputer : " + result);
+        //LOGGER.info("updateComputer : " + (result == 1) + " " + result);
         return result == 1;
     }
 
@@ -328,7 +344,9 @@ public enum ComputerDao {
         } finally {
             Database.INSTANCE.closeConnection();
         }
-        LOGGER.info("insertComputer : " + (result == 1));
+        if (result != 1)
+            LOGGER.info("insertComputer : " + (result == 1));
+        //LOGGER.info("insertComputer : " + (result == 1));
         return result == 1;
     }
 
@@ -348,6 +366,7 @@ public enum ComputerDao {
             if (rset.next()) {
                 number = rset.getLong(countTotal);
             }
+            connection.commit();
             rset.close();
             st.close();
         } catch (SQLException e) {
@@ -372,6 +391,7 @@ public enum ComputerDao {
             if (rset.next()) {
                 number = rset.getLong(countTotal);
             }
+            connection.commit();
             rset.close();
             st.close();
         } catch (SQLException e) {

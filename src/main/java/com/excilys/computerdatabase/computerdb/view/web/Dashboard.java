@@ -19,7 +19,6 @@ public class Dashboard extends HttpServlet {
     long pageSize = 10;
     long pageNumber = 1;
     long totalPageNumber = 1;
-    long nbItem = -1;
     String search;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,10 +27,11 @@ public class Dashboard extends HttpServlet {
         this.getJspAttribute(request, response);
         PageListComputerDTO dtolistComputer = ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber);
         totalPageNumber = dtolistComputer.getTotalPage();
-        nbItem = dtolistComputer.getTotalRow();
+        //nbItem = dtolistComputer.getTotalRow();
         this.setJspAttribute(request, response, dtolistComputer);
+        request.getSession().setAttribute("totalRowNumber", dtolistComputer.getTotalRow());
+        //String selected = request.getParameter("selection");
         this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
-        String selected = request.getParameter("selection");
     }
 
 
@@ -39,9 +39,14 @@ public class Dashboard extends HttpServlet {
             throws ServletException, IOException {
         String selected = request.getParameter("selection");
         String[] idsStr = selected.split(",");
+        if (idsStr.length > 1) {
+            LOGGER.info("rm computers length: " + idsStr.length);
+        }
         boolean result = ComputerService.INSTANCE.removeComputers(idsStr);
-        LOGGER.info("remove computers : " + result);
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        if (!result )
+            LOGGER.info("remove computers : " + result);
+        //response.sendRedirect(request.getContextPath() + "/dashboard");
+        doGet(request, response);
     }
 
 
@@ -59,10 +64,10 @@ public class Dashboard extends HttpServlet {
     }
 
     private void setJspAttribute(HttpServletRequest request, HttpServletResponse response, PageListComputerDTO dtolistComputer) {
-        request.getSession().setAttribute("totalRowNumber", nbItem);
+        //request.getSession().setAttribute("totalRowNumber", nbItem);
         request.getSession().setAttribute("computersList", dtolistComputer.getComputerDTOList());
         request.getSession().setAttribute("pageSize", pageSize);
-        request.getSession().setAttribute("pageNumber", pageNumber);
+        request.getSession().setAttribute("pageNumber", 1);
         request.getSession().setAttribute("totalPageNumber", totalPageNumber);
         request.getSession().setAttribute("search", search);
     }

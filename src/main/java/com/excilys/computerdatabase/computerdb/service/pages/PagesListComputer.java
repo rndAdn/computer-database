@@ -16,10 +16,13 @@ public class PagesListComputer extends Pages {
         try {
             if (StringUtils.isBlank(filter)) {
                 list = ComputerDao.INSTANCE.getComputers((pageNumber - 1) * rowByPages, rowByPages);
-                totalRow = ComputerDao.INSTANCE.countComputers();
+                setTotalNumberOfRow(ComputerDao.INSTANCE.countComputers());
+                setPageIndex(pageNumber);
             } else {
                 list = ComputerDao.INSTANCE.getComputersByName(filter, (pageNumber - 1) * rowByPages, rowByPages);
-                totalRow = ComputerDao.INSTANCE.countComputersWithName(filter);
+                
+                setTotalNumberOfRow(ComputerDao.INSTANCE.countComputersWithName(filter));
+                setPageIndex(pageNumber);
             }
         } catch (DaoException e) {
             e.printStackTrace();

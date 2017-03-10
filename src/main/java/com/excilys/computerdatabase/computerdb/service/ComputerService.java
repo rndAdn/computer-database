@@ -35,13 +35,7 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.insertComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la création");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("ajout Computer");
         }
         return result;
     }
@@ -84,13 +78,7 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.deleteComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la suppression");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("delete Computer");
         }
         return result;
 
@@ -109,12 +97,7 @@ public enum ComputerService {
         try {
             optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la supression");
-        } finally {
-            System.out.println();
+            LOGGER.error("getComputerById");
         }
         return optionalComputer;
     }
@@ -133,7 +116,7 @@ public enum ComputerService {
 
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
-            e.printStackTrace();
+            LOGGER.error("getComputerByName");
         }
 
         return pagesList;
@@ -151,13 +134,7 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.updateComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la mise à jour");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("updateComputer");
         }
         return result;
     }
@@ -187,7 +164,7 @@ public enum ComputerService {
             pagesListComputer.setFilter(search);
         }
         List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
-        PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), dtoList);
+        PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), pagesListComputer.getPageIndex(), dtoList);
         return listComputerDTO;
     }
 

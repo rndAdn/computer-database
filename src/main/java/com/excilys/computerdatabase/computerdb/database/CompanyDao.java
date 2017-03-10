@@ -49,11 +49,16 @@ public enum CompanyDao {
         }
 
         SELECT_COMPANY_BY_ID = "SELECT * FROM " + companyTable + " WHERE " + companyId + " = ?";
+        
         SELECT_COMPANY_BY_NAME = "SELECT * FROM " + companyTable + " WHERE " + companyName + " = ? LIMIT ?, ?";
+        
         SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM " + companyTable + " LIMIT ?, ?";
+        
         COUNT_COMPANY = "SELECT count(" + companyId + ") as " + countTotal + " FROM " + companyTable;
+        
         COUNT_COMPANY_BY_NAME = "SELECT count(" + companyId + ") as " + countTotal + " FROM company WHERE UPPER("
                 + companyName + ") LIKE UPPER(?)";
+        
         DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE "+ companyId + "=?;";
 
     }
@@ -79,6 +84,7 @@ public enum CompanyDao {
             if (rset.next()) {
                 optionalCompany = Optional.of(MapperCompany.mapCompany(rset));
             }
+            connection.commit();
 
             rset.close();
             selectStatement.close();
@@ -117,6 +123,7 @@ public enum CompanyDao {
             while (rset.next()) {
                 result.add(MapperCompany.mapCompany(rset));
             }
+            connection.commit();
             rset.close();
             selectStatement.close();
         } catch (SQLException e) {
@@ -180,6 +187,7 @@ public enum CompanyDao {
             if (rset.next()) {
                 number = rset.getLong(countTotal);
             }
+            connection.commit();
             rset.close();
             st.close();
         } catch (SQLException e1) {
@@ -206,6 +214,7 @@ public enum CompanyDao {
             if (rset.next()) {
                 number = rset.getLong(countTotal);
             }
+            connection.commit();
             rset.close();
             st.close();
         } catch (SQLException e1) {

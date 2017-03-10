@@ -38,10 +38,8 @@ public class AddComputer extends HttpServlet {
         //LOGGER.info("Computer Demande Add : " + company);
 
         boolean add = addComputer(name, dateIntro, dateFin, company);
-
-        if (add) {
-            LOGGER.info("Computer Add OK");
-        }
+        if (!add)
+            LOGGER.info("Computer Add " + add);
 
         response.sendRedirect(request.getContextPath() + "/dashboard");
         //this.getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
