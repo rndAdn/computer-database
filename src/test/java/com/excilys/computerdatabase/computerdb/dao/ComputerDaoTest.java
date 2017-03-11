@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.excilys.computerdatabase.computerdb.model.mapper.MapperComputer;
+import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 
 public class ComputerDaoTest {
     

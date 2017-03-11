@@ -1,9 +1,9 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public interface IComputerDAO {
@@ -21,7 +21,7 @@ public interface IComputerDAO {
      * Get a Computer from database by it's id.
      *
      * @param id
-     *            Computer id in Database.
+     *            Computer id in DatabaseManager.
      * @return A Optional<Computer>. empty if the Computer doesn't exist in the
      *         database.
      * @throws DaoException

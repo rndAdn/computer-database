@@ -1,9 +1,9 @@
-package com.excilys.computerdatabase.computerdb.model.mapper;
+package com.excilys.computerdatabase.computerdb.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 
 public class MapperCompany {
 

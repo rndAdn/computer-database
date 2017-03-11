@@ -1,9 +1,9 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public interface ICompanyDAO {
@@ -18,7 +18,7 @@ public interface ICompanyDAO {
      * Get a Company from database by it's id.
      *
      * @param id
-     *            Company id in Database.
+     *            Company id in DatabaseManager.
      * @return A Optional<Company>. empty if the Company doesn't exist in the
      *         database.
      * @throws DaoException

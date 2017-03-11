@@ -3,15 +3,19 @@ package com.excilys.computerdatabase.computerdb.model.dto;
 import java.util.List;
 
 public class PageListComputerDTO {
+    private final long pageSize;
+    private final String filter;
     private long totalPage;
     private long totalRow;
     private long pageNumber;
     private List<ComputerDTO> computerDTOList;
 
-    public PageListComputerDTO(long totalPage, long totalRow, long pageNumber, List<ComputerDTO> computerDTOList) {
+    public PageListComputerDTO(String filter, long totalPage, long totalRow, long pageNumber, long pageSize, List<ComputerDTO> computerDTOList) {
+        this.filter = filter;
         this.totalPage = totalPage;
         this.totalRow = totalRow;
         this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
         this.computerDTOList = computerDTOList;
     }
 
@@ -29,5 +33,13 @@ public class PageListComputerDTO {
 
     public List<ComputerDTO> getComputerDTOList() {
         return computerDTOList;
+    }
+
+    public long getPageSize() {
+        return pageSize;
+    }
+
+    public String getFilter() {
+        return filter;
     }
 }

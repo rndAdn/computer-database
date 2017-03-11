@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.excilys.computerdatabase.computerdb.database.CompanyDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
+import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
 
 public class PagesListCompany extends Pages {
 

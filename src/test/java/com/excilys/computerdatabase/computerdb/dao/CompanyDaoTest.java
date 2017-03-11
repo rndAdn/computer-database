@@ -1,9 +1,9 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.excilys.computerdatabase.computerdb.model.mapper.MapperCompany;
+import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 
 
 public class CompanyDaoTest {

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.database.CompanyDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.mapper.CompanyDTOMapper;
+import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
@@ -19,7 +19,7 @@ public enum CompanyService {
      * Get a Company from DAO by it's id.
      *
      * @param id
-     *            Company id in Database.
+     *            Company id in DatabaseManager.
      * @return A Optional Company. empty if the Company doesn't exist in the
      *         database.
      * @throws DaoException
@@ -62,7 +62,7 @@ public enum CompanyService {
 
         for (Pageable company : list) {
             Company c = (Company) company;
-            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
+            dtoList.add(CompanyDTOMapper.mapperCompanyToDTO(c));
         }
         return dtoList;
     }

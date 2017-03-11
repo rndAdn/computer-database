@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.model;
+package com.excilys.computerdatabase.computerdb.model.entities;
 
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
@@ -63,6 +63,14 @@ public class Company implements Pageable {
             return false;
         }
         return true;
+    }
+
+
+    public String toString2() {
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public static class CompanyBuilder {

@@ -3,8 +3,8 @@ package com.excilys.computerdatabase.computerdb.view.cli.action;
 import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
@@ -19,7 +19,7 @@ public class DeleteComputerAction implements ActionMenu {
         String idString = sc.nextLine();
         long id = Utils.stringToId(idString);
 
-        boolean checkedId = ComputerValidator.checkID(id);
+        boolean checkedId = ControllerComputer.CONTROLLER_COMPUTER.checkId(id);
 
         if (!checkedId) {
             System.out.println("L'id n'est pas valide");

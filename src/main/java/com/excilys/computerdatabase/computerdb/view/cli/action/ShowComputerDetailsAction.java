@@ -3,9 +3,9 @@ package com.excilys.computerdatabase.computerdb.view.cli.action;
 import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.computerdb.database.ComputerDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 
 public class ShowComputerDetailsAction implements ActionMenu {

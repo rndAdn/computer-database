@@ -3,18 +3,24 @@
 ---
 
 ## Style
-* [ ] Javadoc
-* [ ] PreparedStatment & ResultSet dans les try (with resources)
-* [ ] Sonar
-* [ ] Taille des fonctions
-* [ ] Formulaire => DTO
-* [ ] Service en enum
-* [ ] Mapper dans le package DAO
+* [ ] **Javadoc**
+* [X] ~~PreparedStatment & ResultSet dans les try (with resources)~~
+* [ ] *Sonar*
+* [ ] **Taille des fonctions**
+* [X] ~~Formulaire => DTO~~
+* [X] ~~Service en enum~~
+* [X] ~~Mapper dans le package DAO~~
 * [ ] pas de static (constructeur en private OU Abstract)
-* [ ] Plus de Sysout
-* [ ] Mettre les pages dans Entities et mettres les appels aux dao dans le services
+* [X] ~~Plus de Sysout~~
+* [X] ~~Mettre les pages dans Entities et mettres les appels aux dao dans le services~~
 * [ ] Une Validation par couche
-
+    * [ ] Jquery
+    * [ ] Servelets
+    * [ ] Services
+    * [X] ~~DAO~~
+    * [ ] Model
+        * [ ] Company
+        * [ ] Computer
 
 ## Debug
 * [ ] Log
@@ -44,8 +50,12 @@
 ## Tests
 * [ ] DbUnit
 * [ ] Selenium
-* [ ] Gatling
-* [ ] Suppr la class AppTest
+* [X] ~~Gatling~~
+* [X] ~~Suppr la class AppTest~~
+* [ ] JUnit
+    * [ ] Mapper
+    * [ ] DTO
+    * [ ] Entities
 
 
 ## MVN

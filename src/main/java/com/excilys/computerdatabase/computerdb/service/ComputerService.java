@@ -3,16 +3,16 @@ package com.excilys.computerdatabase.computerdb.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.database.ComputerDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
-import com.excilys.computerdatabase.computerdb.model.mapper.ComputerDTOMapper;
+import com.excilys.computerdatabase.computerdb.dao.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
-import com.excilys.computerdatabase.computerdb.controller.ControllerComputer;
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +41,13 @@ public enum ComputerService {
     }
 
     public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId, String companyName) {
-        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
+        if (!ControllerComputer.CONTROLLER_COMPUTER.checkComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
 
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
-        if (ControllerComputer.checkCompanyId(companyId)) {
+        if (ControllerComputer.CONTROLLER_COMPUTER.checkCompanyId(companyId)) {
             companyDTOBuilder = companyDTOBuilder
                     .id(Utils.stringToId(companyId))
                     .name(companyName);
@@ -60,7 +60,7 @@ public enum ComputerService {
                 .company(companyDTO)
                 .build();
 
-        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
+        Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
 
         return ajoutComputer(computer);
     }
@@ -87,7 +87,7 @@ public enum ComputerService {
     /**
      * Get a Computer from database by it's id.
      *
-     * @param id Computer id in Database.
+     * @param id Computer id in DatabaseManager.
      * @return A Optional Computer. empty if the Computer doesn't exist in the
      * database.
      * @throws DaoException .
@@ -103,9 +103,24 @@ public enum ComputerService {
     }
 
     /**
+     * Get a ComputerDTO from database by it's id.
+     *
+     * @param id Computer id in DatabaseManager.
+     * @return A Optional Computer. empty if the Computer doesn't exist in the
+     * database.
+     * @throws DaoException .
+     */
+    public ComputerDTO getComputerDTOById(long id) {
+        ComputerDTO computerDTO;
+        Optional<Computer> optionalComputer = getComputerById(id);
+        computerDTO = ComputerDTOMapper.mapperComputerToDTO(optionalComputer.get());
+        return computerDTO;
+    }
+
+    /**
      * Get a Computer from database by it's name.
      *
-     * @param name of computer in Database.
+     * @param name of computer in DatabaseManager.
      * @return PagesListComputer.
      * @throws DaoException .
      */
@@ -140,6 +155,18 @@ public enum ComputerService {
     }
 
     /**
+     * Update a Computer in database given a Computer.
+     *
+     * @param computerDTO Representation of the computer to update
+     * @return true if the computer is update in database
+     * @throws DaoException .
+     */
+    public boolean updateComputer(ComputerDTO computerDTO) {
+        Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
+        return updateComputer(computer);
+    }
+
+    /**
      * Get all Computer from database.
      *
      * @return a PagesListComputer
@@ -164,7 +191,13 @@ public enum ComputerService {
             pagesListComputer.setFilter(search);
         }
         List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
-        PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), pagesListComputer.getPageIndex(), dtoList);
+        PageListComputerDTO listComputerDTO = new PageListComputerDTO(
+                search,
+                pagesListComputer.getTotalNumberOfPage(),
+                pagesListComputer.getTotalRow(),
+                pagesListComputer.getPageIndex(),
+                pageSize,
+                dtoList);
         return listComputerDTO;
     }
 

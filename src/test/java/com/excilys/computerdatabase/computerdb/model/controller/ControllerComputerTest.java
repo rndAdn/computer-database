@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.model;
+package com.excilys.computerdatabase.computerdb.model.controller;
 
 import static org.junit.Assert.*;
 
@@ -6,99 +6,81 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import org.junit.Test;
 
-public class ComputerValidatorTest {
+public class ControllerComputerTest {
     
     @Test
     public void testCheckId_Negatif(){
         long id = -1;
-        assertFalse(ComputerValidator.checkID(id));
+        assertFalse(ControllerComputer.CONTROLLER_COMPUTER.checkId(id));
     }
     
     @Test
     public void testCheckId_Zero(){
         long id = 0;
-        assertFalse(ComputerValidator.checkID(id));
+        assertFalse(ControllerComputer.CONTROLLER_COMPUTER.checkId(id));
     }
     
     @Test
     public void testCheckId_MinLong(){
         long id = Long.MIN_VALUE;
-        assertFalse(ComputerValidator.checkID(id));
+        assertFalse(ControllerComputer.CONTROLLER_COMPUTER.checkId(id));
     }
     
     @Test
     public void testCheckId_MaxLong(){
         long id = Long.MAX_VALUE;
-        assertTrue(ComputerValidator.checkID(id));
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.checkId(id));
     }
     
     @Test
     public void testCheckId_42(){
         long id = 42;
-        assertTrue(ComputerValidator.checkID(id));
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.checkId(id));
     }
-    
-    @Test
-    public void testCheckCompany_Null(){
-        assertFalse(ComputerValidator.checkCompany(null));    
-    }
-    
-    @Test
-    public void testCheckCompany_Empty(){
-        Company company = new Company.CompanyBuilder("").build();
-        assertTrue(ComputerValidator.checkCompany(company));    
-    }
-    
-    @Test
-    public void testCheckCompany_Full(){
-        Company company = new Company.CompanyBuilder("FABLER BJÖRN")
-                .id(42)
-                .build();
-        
-        assertTrue(ComputerValidator.checkCompany(company));    
-    }
+
     
     @Test 
     public void testCompareDate_NullNull(){
         Optional<LocalDate> intro = Optional.empty();
         Optional<LocalDate> fin = Optional.empty();
-        assertTrue(ComputerValidator.compareDate(intro, fin));   
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     
     @Test 
     public void testCompareDate_DateNull(){
         Optional<LocalDate> intro = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         Optional<LocalDate> fin = Optional.empty();
-        assertTrue(ComputerValidator.compareDate(intro, fin));   
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     
     @Test 
     public void testCompareDate_NullDate(){
         Optional<LocalDate> intro = Optional.empty(); 
         Optional<LocalDate> fin = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        assertTrue(ComputerValidator.compareDate(intro, fin));   
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     
     @Test 
     public void testCompareDate_DateDate(){
         Optional<LocalDate> intro = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         Optional<LocalDate> fin = Optional.of(LocalDate.parse("16-02-1993", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        assertTrue(ComputerValidator.compareDate(intro, fin));   
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     
     @Test 
     public void testCompareDate_DateDateFalse(){
         Optional<LocalDate> intro = Optional.of(LocalDate.parse("16-02-1993", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         Optional<LocalDate> fin = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        assertFalse(ComputerValidator.compareDate(intro, fin));   
+        assertFalse(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     @Test 
     public void testCompareDate_DateEqualsDate(){
         Optional<LocalDate> intro = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         Optional<LocalDate> fin = Optional.of(LocalDate.parse("07-08-1990", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        assertFalse(ComputerValidator.compareDate(intro, fin));   
+        assertTrue(ControllerComputer.CONTROLLER_COMPUTER.compareDate(intro, fin));
     }
     
     

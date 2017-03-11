@@ -1,11 +1,11 @@
-package com.excilys.computerdatabase.computerdb.model.mapper;
+package com.excilys.computerdatabase.computerdb.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 
 public class MapperComputer {
 
@@ -27,8 +27,7 @@ public class MapperComputer {
             intro = rset.getObject("introduced", LocalDate.class);
             fin = rset.getObject("discontinued", LocalDate.class);
         } catch (NullPointerException e) {
-            // LOGGER.warn("mapComputer date null dans la bd id : " +
-            // computer.getDetail());
+            // TODO : catch vide
         }
         long companyId = rset.getLong("company_id");
         if (!rset.wasNull()) {

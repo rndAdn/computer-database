@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.model;
+package com.excilys.computerdatabase.computerdb.model.entities;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -54,11 +54,6 @@ public class Computer implements Pageable {
 
     public Long getCompanyId() {
         return ((company != null) ? company.getId() : null);
-    }
-
-    @Override
-    public String toString() {
-        return "" + id + "\t" + name;
     }
 
     /**
@@ -131,8 +126,18 @@ public class Computer implements Pageable {
         return true;
     }
 
+    public String toString2() {
+        return "Computer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dateIntroduced=" + dateIntroduced +
+                ", dateDiscontinued=" + dateDiscontinued +
+                ", company=" + company.toString2() +
+                '}';
+    }
+
     public static class ComputerBuilder {
-        private long id;
+        private long id = -1;
         private final String name;
         private LocalDate dateIntroduced;
         private LocalDate dateDiscontinued;

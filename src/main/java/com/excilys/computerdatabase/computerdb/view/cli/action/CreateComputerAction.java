@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 import org.apache.commons.lang.StringUtils;
 
-import com.excilys.computerdatabase.computerdb.model.Company;
-import com.excilys.computerdatabase.computerdb.model.Computer;
-import com.excilys.computerdatabase.computerdb.model.ComputerValidator;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
@@ -37,7 +37,7 @@ public class CreateComputerAction implements ActionMenu {
         Optional<LocalDate> dateIntro = Utils.stringToDate(dateIntroString);
         Optional<LocalDate> dateFin = Utils.stringToDate(dateFinServiceString);
 
-        boolean checkIntervalDate = ComputerValidator.compareDate(dateIntro, dateFin);
+        boolean checkIntervalDate = ControllerComputer.CONTROLLER_COMPUTER.compareDate(dateIntro, dateFin);
 
         if (!checkIntervalDate) {
             System.out.println("Les dates ne sont pas valides");

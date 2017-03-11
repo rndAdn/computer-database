@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 public class DaoException extends Exception {
 

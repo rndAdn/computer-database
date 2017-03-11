@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.database;
+package com.excilys.computerdatabase.computerdb.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public enum Database {
+public enum DatabaseManager {
 
     INSTANCE;
 
@@ -31,11 +31,11 @@ public enum Database {
     ThreadLocal<Connection> connectionThreadLocal;
 
     /**
-     * Database private Constructor.
+     * DatabaseManager private Constructor.
      */
-    Database() {
+    DatabaseManager() {
         LOGGER = LoggerFactory.getLogger(getClass());
-        LOGGER.info("Database Constructor " + this);
+        LOGGER.info("DatabaseManager Constructor " + this);
 
         try {
             Configuration config = new PropertiesConfiguration("database.properties");
