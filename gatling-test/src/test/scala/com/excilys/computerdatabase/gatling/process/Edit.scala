@@ -34,10 +34,4 @@ object Edit {
       .formParam(config.getString("application.urls.form.edit.introduced").get, "${addComputerIntroduced}")
       .formParam(config.getString("application.urls.form.edit.discontinued").get, "${addComputerDiscontinued}")
       .formParam(config.getString("application.urls.form.edit.companyId").get, "${addComputerCompany}"))
-println(edit)
-/*if (edit) {
-    println("${addComputerName}")
-    println("${computerURL}")
-    println("${computer_id}")
-}*/
 }
