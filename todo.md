@@ -18,10 +18,7 @@
     * [ ] Servelets
     * [ ] Services
     * [X] ~~DAO~~
-    * [ ] Model
-        * [ ] Company
-        * [ ] Computer
-
+    * [X] ~~Model~~
 ## Debug
 * [ ] Log
 * [ ] Message Exception
@@ -60,10 +57,10 @@
 
 ## MVN
 * [ ] Tomcat dans maven
-* [ ] Clean Pom
+* [X] ~~Clean Pom~~
 
 
 ## Pom
- * [ ] url
- * [ ] Scope Mokito test
- * [ ] Numero de Version
+ * [X] ~~url~~
+ * [X] ~~Scope Mokito test~~
+ * [X] ~~Numero de Version~~
