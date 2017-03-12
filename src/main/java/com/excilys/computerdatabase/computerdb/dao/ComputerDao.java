@@ -218,7 +218,7 @@ public enum ComputerDao {
     public boolean deleteComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
-            LOGGER.error("Computer non valide : " + computer);
+            LOGGER.error("Computer non valide Delete: " + computer);
             return false;
         }
         long id = computer.getId();
@@ -255,7 +255,7 @@ public enum ComputerDao {
     public boolean updateComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
-            LOGGER.error("Computer non valide : " + computer);
+            LOGGER.error("Computer non valide Update : " + computer.toString2());
             return false;
         }
         try (
@@ -312,8 +312,8 @@ public enum ComputerDao {
      */
     public boolean insertComputer(Computer computer) throws DaoException {
         int result = -1;
-        if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
-            LOGGER.error("Computer non valide : " + computer);
+        if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(computer.getName())) {
+            LOGGER.error("Computer non valide Insert: " + computer);
             return false;
         }
         try (
