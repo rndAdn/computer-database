@@ -63,12 +63,26 @@
 								class="fa fa-trash-o fa-lg"></i>
 						</a>
 					</span></th>
-					<th>Computer name</th>
-					<th>Introduced date</th>
+					<th>
+						<a href="dashboard?OrderBy=name" onclick="">
+                            Computer name
+                        </a>
+                    </th>
+					<th>
+                        <a href="dashboard?OrderBy=dateIntro" onclick="">
+                            Introduced date
+                        </a>
+                    </th>
 					<!-- Table header for Discontinued Date -->
-					<th>Discontinued date</th>
+					<th>
+                        <a href="editComputer?OrderBy=dateFin" onclick="">
+                            Discontinued date
+                        </a>
+                    </th>
 					<!-- Table header for Company -->
-					<th>Company</th>
+					<th href="dashboard?OrderBy=company">
+                        Company
+                    </th>
 
 				</tr>
 			</thead>
