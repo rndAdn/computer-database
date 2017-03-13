@@ -27,27 +27,27 @@
                 <h1>Edit Computer</h1>
 
                 <form action="editComputer" method="POST">
-                    <input type="hidden" value="${computer.id}" name="id" id="id"/>
+                    <input type="hidden" value="${computer.id}" name="computerId" id="id"/>
                     <!-- TODO: Change this value with the computer id -->
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
-                            <input type="text" class="form-control" id="computerName" value="${computer.name}"
+                            <input type="text" class="form-control" name="computerName" id="computerName" value="${computer.name}"
                                    placeholder="Computer name">
                         </div>
                         <div class="form-group">
                             <label for="introduced">Introduced date</label>
-                            <input type="date" class="form-control" id="introduced" value="${computer.dateIntroduced}"
+                            <input type="date" class="form-control" name="introduced" id="introduced" value="${computer.dateIntroduced}"
                                    placeholder="Introduced date">
                         </div>
                         <div class="form-group">
                             <label for="discontinued">Discontinued date</label>
-                            <input type="date" class="form-control" id="discontinued"
+                            <input type="date" class="form-control" name="discontinued" id="discontinued"
                                    value="${computer.dateDiscontinued}" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
                             <label for="companyId">Company</label>
-                            <select class="form-control" id="companyId">
+                            <select class="form-control" name="company" id="companyId">
                                 <option value="0">--</option>
                                 <c:forEach items="${companylist}" var="company">
                                     <c:choose>

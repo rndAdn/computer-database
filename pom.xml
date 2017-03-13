@@ -31,6 +31,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${maven-slf4j.version}</version>
@@ -181,13 +187,9 @@
 			</plugin>
 			<!--&ndash;&gt; -->
 
-			<!-- Ajout de la javadoc
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-			</plugin>
-			-->
+			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version> 
+				</plugin> -->
 		</plugins>
 	</reporting>
 
