@@ -13,4 +13,5 @@ ADD ./3-ENTRIES.sql /docker-entrypoint-initdb.d/3-ENTRIES.sql
 
 
 # RUN
+# docker build -t renaud/mysql:1.0 .
 # docker run -i --name test_mysql renaud/mysql:1.0
