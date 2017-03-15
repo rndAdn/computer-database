@@ -24,17 +24,17 @@ public enum DatabaseManager {
     private String userName;
     private String password;
     private Logger LOGGER;
-    private HikariDataSource ds;
+    private HikariDataSource ds = null;
     private String dataSourceClassName;
     private String autocommit;
-    
+
     ThreadLocal<Connection> connectionThreadLocal;
 
     /**
      * DatabaseManager private Constructor.
      */
     DatabaseManager() {
-        LOGGER = LoggerFactory.getLogger(getClass());
+        /*LOGGER = LoggerFactory.getLogger(getClass());
         LOGGER.info("DatabaseManager Constructor " + this);
 
         try {
@@ -62,8 +62,8 @@ public enum DatabaseManager {
         config.setMaximumPoolSize(Integer.parseInt(poolSize));
         config.setConnectionTimeout(8000);
         config.setAutoCommit(Boolean.parseBoolean(autocommit));
-        ds = new HikariDataSource(config);
-        connectionThreadLocal = new ThreadLocal<>();
+        //ds = new HikariDataSource(config);
+        connectionThreadLocal = new ThreadLocal<>();*/
     }
 
 
@@ -82,8 +82,8 @@ public enum DatabaseManager {
         } catch (Exception e) {
             LOGGER.debug("get exception "+e.getMessage());
         }
-        
-        
+
+
         return connectionThreadLocal.get();
     }
 
