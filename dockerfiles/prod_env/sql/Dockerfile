@@ -14,5 +14,5 @@ ADD ./3-ENTRIES.sql /docker-entrypoint-initdb.d/3-ENTRIES.sql
 
 
 # RUN
-# docker build -t renaud/mysql_prod:1.0 .
-# docker run --network=network_prod -i --name prod_mysql renaud/mysql_prod:1.0
+# docker build -t radequin/mysql_prod:1.0 .
+# docker run --network=network_prod -i --name prod_mysql radequin/mysql_prod:1.0

@@ -10,6 +10,6 @@ CMD mvn package
 
 
 
-# docker build -t renaud/maven_prod:1.0 .
+# docker build -t radequin/maven_prod:1.0 .
 # docker volume create --name CDB_Volume
-# docker run --network=network_prod --name prod_maven -v CDB_Volume:/usr/src/app renaud/maven_prod:1.0
+# docker run --network=network_prod --name prod_maven -v CDB_Volume:/usr/src/app radequin/maven_prod:1.0
