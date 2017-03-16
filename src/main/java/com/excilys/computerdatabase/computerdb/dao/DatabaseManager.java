@@ -20,6 +20,7 @@ public enum DatabaseManager {
 
 
     private String dbName;
+    private String serverName;
     private String poolSize;
     private String userName;
     private String password;
@@ -34,12 +35,13 @@ public enum DatabaseManager {
      * DatabaseManager private Constructor.
      */
     DatabaseManager() {
-        /*LOGGER = LoggerFactory.getLogger(getClass());
+        LOGGER = LoggerFactory.getLogger(getClass());
         LOGGER.info("DatabaseManager Constructor " + this);
 
         try {
             Configuration config = new PropertiesConfiguration("database.properties");
             dbName = config.getString("db_name");
+            serverName = config.getString("dataSource.serverName");
             dataSourceClassName = config.getString("dataSourceClassName");
             userName = config.getString("dataSource.user");
             password = config.getString("dataSource.password");
@@ -56,6 +58,7 @@ public enum DatabaseManager {
         props.setProperty("dataSource.user", userName);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", dbName);
+        props.setProperty("dataSource.serverName", serverName);
 
         HikariConfig config = new HikariConfig(props);
         config.setMinimumIdle(5);
