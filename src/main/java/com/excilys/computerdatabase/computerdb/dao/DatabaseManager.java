@@ -65,8 +65,8 @@ public enum DatabaseManager {
         config.setMaximumPoolSize(Integer.parseInt(poolSize));
         config.setConnectionTimeout(8000);
         config.setAutoCommit(Boolean.parseBoolean(autocommit));
-        //ds = new HikariDataSource(config);
-        connectionThreadLocal = new ThreadLocal<>();*/
+        ds = new HikariDataSource(config);
+        connectionThreadLocal = new ThreadLocal<>();
     }
 
 
