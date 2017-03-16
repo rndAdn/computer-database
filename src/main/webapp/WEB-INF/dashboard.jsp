@@ -25,7 +25,7 @@
 	<div class="container">
 		<h1 id="homeTitle">
 			${totalRowNumber}
-			Computers found
+			Computers found bla
 		</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
