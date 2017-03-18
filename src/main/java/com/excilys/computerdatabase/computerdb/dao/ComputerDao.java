@@ -153,24 +153,7 @@ public enum ComputerDao {
             LOGGER.error("Name non valide : " + name);
             return result;
         }
-        String col;
-
-        switch (orderby) {
-            case "name" :
-                col = computerName;
-                break;
-            case "dateIntro":
-                col = computerDateIntro;
-                break;
-            case "dateFin" :
-                col = computerDateFin;
-                break;
-            case "company":
-                col = computerCompanyName;
-                break;
-            default:
-                col = computerName;
-        }
+        String col = mapColumnOrderBy(orderby);
         String query =  String.format(SELECT_COMPUTER_BY_NAME, col);
         try (
 
@@ -208,24 +191,9 @@ public enum ComputerDao {
      */
     public List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
-        String col;
+        String col = mapColumnOrderBy(orderby);
 
-        switch (orderby) {
-            case "name" :
-                col = computerName;
-                break;
-            case "dateIntro":
-                col = computerDateIntro;
-                break;
-            case "dateFin" :
-                col = computerDateFin;
-                break;
-            case "company":
-                col = computerCompanyName;
-                break;
-            default:
-                col = computerName;
-        }
+
         String query =  String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
         try (
                 Connection connection = DatabaseManager.INSTANCE.getConnection();
@@ -458,4 +426,19 @@ public enum ComputerDao {
         return number;
     }
 
+    public String mapColumnOrderBy(String orderBy){
+        switch (orderBy) {
+            case "name" :
+                return computerName;
+            case "dateIntro":
+                return computerDateIntro;
+            case "dateFin" :
+                return computerDateFin;
+            case "company":
+                return computerCompanyName;
+            default:
+                return computerName;
+        }
+    }
 }
+
