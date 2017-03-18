@@ -20,7 +20,7 @@ public class PagesListComputer extends Pages {
                 if ((pageNumber - 1) * rowByPages > nbComputer) {
                     pageNumber = 1;
                 }
-                list = ComputerDao.INSTANCE.getComputers((pageNumber - 1) * rowByPages, rowByPages);
+                list = ComputerDao.INSTANCE.getComputers((pageNumber - 1) * rowByPages, rowByPages, orderBy);
                 setPageIndex(pageNumber);
             } else {
                 long nbComputer = ComputerDao.INSTANCE.countComputersWithName(filter);
@@ -28,7 +28,7 @@ public class PagesListComputer extends Pages {
                 if ((pageNumber - 1) * rowByPages > nbComputer) {
                     pageNumber = 1;
                 }
-                list = ComputerDao.INSTANCE.getComputersByName(filter, (pageNumber - 1) * rowByPages, rowByPages);
+                list = ComputerDao.INSTANCE.getComputersByName(filter, (pageNumber - 1) * rowByPages, rowByPages, orderBy);
                 setPageIndex(pageNumber);
             }
         } catch (DaoException e) {

@@ -183,10 +183,11 @@ public enum ComputerService {
         return pagesList;
     }
 
-    public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber) {
+    public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber, String orderBy) {
         PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
         pagesListComputer.setRowByPages(pageSize);
         pagesListComputer.setPageIndex(pageNumber);
+        pagesListComputer.setOrderBy(orderBy);
         if (!StringUtils.isBlank(search)) {
             pagesListComputer.setFilter(search);
         }
@@ -197,7 +198,7 @@ public enum ComputerService {
                 pagesListComputer.getTotalRow(),
                 pagesListComputer.getPageIndex(),
                 pageSize,
-                dtoList);
+                dtoList, pagesListComputer.getOrderBy());
         return listComputerDTO;
     }
 

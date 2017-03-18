@@ -9,13 +9,15 @@ public class PageListComputerDTO {
     private long totalRow;
     private long pageNumber;
     private List<ComputerDTO> computerDTOList;
+    private String orderBy;
 
-    public PageListComputerDTO(String filter, long totalPage, long totalRow, long pageNumber, long pageSize, List<ComputerDTO> computerDTOList) {
+    public PageListComputerDTO(String filter, long totalPage, long totalRow, long pageNumber, long pageSize, List<ComputerDTO> computerDTOList, String orderBy) {
         this.filter = filter;
         this.totalPage = totalPage;
         this.totalRow = totalRow;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
+        this.orderBy = orderBy;
         this.computerDTOList = computerDTOList;
     }
 
@@ -41,5 +43,9 @@ public class PageListComputerDTO {
 
     public String getFilter() {
         return filter;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
     }
 }
