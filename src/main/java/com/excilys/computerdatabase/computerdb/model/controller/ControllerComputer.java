@@ -23,7 +23,6 @@ public enum ControllerComputer {
      * @return true if dateIntro is before dateFin.
      */
     public boolean compareDate(Optional<LocalDate> dateIntro, Optional<LocalDate> dateFin) {
-        //LOGGER.info("compareDate " + (!(dateIntro.isPresent() && dateFin.isPresent() && !dateIntro.get().isBefore(dateFin.get()))));
         return !(dateIntro.isPresent() && dateFin.isPresent() && !(dateIntro.get().isBefore(dateFin.get()) || dateIntro.get().isEqual(dateFin.get())));
     }
 
@@ -37,11 +36,11 @@ public enum ControllerComputer {
         return (id > 0);
     }
 
-    public boolean isValideComputerWithId(String id, String name, String dateIntro, String dateFin, String idCompany) {
-        return checkId(Utils.stringToId(id)) && checkComputer(name, dateIntro, dateFin) && checkCompanyId(idCompany);
+    public boolean isValideComputer(String id, String name, String dateIntro, String dateFin, String idCompany) {
+        return checkId(Utils.stringToId(id)) && isValideComputer(name, dateIntro, dateFin) && ControllerCompany.CONTROLLER_COMPANY.checkId(Utils.stringToId(idCompany));
     }
 
-    public boolean checkComputer(String name, String dateIntroStr, String dateFinStr) {
+    public boolean isValideComputer(String name, String dateIntroStr, String dateFinStr) {
         if (StringUtils.isBlank(name)) {
             LOGGER.info("BlankName " + name);
             return false;
@@ -54,9 +53,6 @@ public enum ControllerComputer {
     }
 
 
-    public boolean checkCompanyId(String idCompany) {
-        long id = Utils.stringToId(idCompany);
-        return ControllerCompany.CONTROLLER_COMPANY.checkId(id);
-    }
+
 
 }

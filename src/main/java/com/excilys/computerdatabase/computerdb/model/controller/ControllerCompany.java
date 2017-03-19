@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.computerdb.model.controller;
 
+import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import org.apache.commons.lang.StringUtils;
 
