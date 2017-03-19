@@ -441,7 +441,7 @@ public enum ComputerDao {
         }
     }
 
-    public boolean deleteComputersCompany(long companyId) throws DaoException {
+    public long deleteComputersCompany(long companyId) throws DaoException {
         int result = -1;
 
         try (
@@ -464,7 +464,7 @@ public enum ComputerDao {
         if (result == 0) {
             LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
         }
-        return result > 0;
+        return result;
     }
 }
 

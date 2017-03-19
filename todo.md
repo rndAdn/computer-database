@@ -31,7 +31,7 @@
 
 
 ## Feature
-* [ ] Delete Company
+* [X] ~~Delete Company Cli~~
 
 
 # Code

@@ -68,12 +68,17 @@ public enum CompanyService {
         return dtoList;
     }
 
-    public boolean removeCompany(Company company){
+    public long removeCompany(Company company){
+        long nbSuppr = ComputerService.INSTANCE.removeComputersCompany(company.getId());
         try {
-            return CompanyDao.INSTANCE.deleteCompany(company);
+
+            boolean result = CompanyDao.INSTANCE.deleteCompany(company);
+            if (!result) {
+                return -1;
+            }
         } catch (DaoException e) {
             e.printStackTrace();
         }
-        return false;
+        return nbSuppr;
     }
 }
