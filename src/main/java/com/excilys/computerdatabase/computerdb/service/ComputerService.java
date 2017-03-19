@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
@@ -41,13 +42,13 @@ public enum ComputerService {
     }
 
     public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId, String companyName) {
-        if (!ControllerComputer.CONTROLLER_COMPUTER.checkComputer(name, dateIntroStr, dateFinStr)) {
+        if (!ControllerComputer.CONTROLLER_COMPUTER.isValideComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
 
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
-        if (ControllerComputer.CONTROLLER_COMPUTER.checkCompanyId(companyId)) {
+        if (ControllerCompany.CONTROLLER_COMPANY.checkId(Utils.stringToId(companyId))) {
             companyDTOBuilder = companyDTOBuilder
                     .id(Utils.stringToId(companyId))
                     .name(companyName);
