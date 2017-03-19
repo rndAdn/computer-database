@@ -440,5 +440,31 @@ public enum ComputerDao {
                 return computerName;
         }
     }
+
+    public boolean deleteComputersCompany(long companyId) throws DaoException {
+        int result = -1;
+
+        try (
+                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
+        ) {
+            deleteStatment.setLong(1, companyId);
+            result = deleteStatment.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+
+            LOGGER.error("deleteComputer : " + e.getMessage());
+            DatabaseManager.INSTANCE.rollback();
+            throw new DaoException(e.getMessage());
+        } finally {
+            DatabaseManager.INSTANCE.closeConnection();
+        }
+
+        if (result == 0) {
+            LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
+        }
+        return result > 0;
+    }
 }
 

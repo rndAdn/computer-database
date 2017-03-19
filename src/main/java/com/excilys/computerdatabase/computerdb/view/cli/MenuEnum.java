@@ -11,10 +11,13 @@ import com.excilys.computerdatabase.computerdb.view.cli.action.UpdateComputerAct
 
 public enum MenuEnum {
 
-    LISTCOMPUTER('A', "List Computer", new ListComputerAction()), LISTCOMPANY('Z', "List Company",
-            new ListCompanyAction()), SHOW('S', "Show", new ShowComputerDetailsAction()), CREATE('C', "Create",
-                    new CreateComputerAction()), UPDATE('U', "Update", new UpdateComputerAction()), DELETE('D',
-                            "Delete", new DeleteComputerAction()), EXIT('E', "Exit", new ExitAction());
+    LISTCOMPUTER('A', "List Computer", new ListComputerAction()),
+    LISTCOMPANY('Z', "List Company", new ListCompanyAction()),
+    SHOW('S', "Show", new ShowComputerDetailsAction()),
+    CREATE('C', "Create", new CreateComputerAction()),
+    UPDATE('U', "Update", new UpdateComputerAction()),
+    DELETE('D', "Delete", new DeleteComputerAction()),
+    EXIT('E', "Exit", new ExitAction());
 
     private char commandeChar;
     private String commandeString;

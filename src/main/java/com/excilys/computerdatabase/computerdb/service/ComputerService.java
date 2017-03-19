@@ -221,5 +221,14 @@ public enum ComputerService {
         return true;
     }
 
+    public boolean removeComputersCompany(long companyId) { // TODO : create function in DAO to use rollBack if delete error
+        boolean result = false;
+        try {
+            result = ComputerDao.INSTANCE.deleteComputersCompany(companyId);
+        } catch (DaoException e) {
+            LOGGER.error("delete Computers");
+        }
+        return result;
+    }
 
 }
