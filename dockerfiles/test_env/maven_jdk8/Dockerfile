@@ -8,8 +8,6 @@ CMD mvn test
 
 
 
-# docker build -t renaud/maven_test:1.0 .
+# docker build -t radequin/maven_test:1.0 .
 # docker volume create --name CDB_Volume
-# docker run --network=test_network --name test_maven -v CDB_Volume:/usr/src/app renaud/maven_test:1.0
-
-# docker run --rm --name test_maven -v CDB_Volume:/usr/src/app renaud/maven:1.0
+# docker run --network=test_network --name test_maven -v CDB_Volume:/usr/src/app radequin/maven_test:1.0

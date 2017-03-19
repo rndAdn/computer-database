@@ -9,6 +9,8 @@ import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 
 public class MapperComputer {
 
+
+
     /**
      * Get a Computer from a ResultSet.
      *

@@ -49,8 +49,9 @@ public class Dashboard extends HttpServlet {
         long pageNumber = 1;
         String pageSizeString = request.getParameter("pageSize");
         String pageNumberString = request.getParameter("pageNumber");
+        String orderBy = request.getParameter("orderBy");
         String search = request.getParameter("search");
-
+        orderBy = (orderBy != null)?orderBy:"name";
         try {
             pageSize = Long.parseLong(pageSizeString);
             pageNumber = Long.parseLong(pageNumberString);
@@ -58,7 +59,7 @@ public class Dashboard extends HttpServlet {
             //LOGGER.error("error page parse size :" + pageSizeString + " number :" + pageNumberString    );
         }
 
-        return ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber);
+        return ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber, orderBy);
     }
 
     private void setJspAttribute(HttpSession session, PageListComputerDTO dtolistComputer) {
@@ -68,6 +69,7 @@ public class Dashboard extends HttpServlet {
         session.setAttribute("totalPageNumber", dtolistComputer.getTotalPage());
         session.setAttribute("search", dtolistComputer.getFilter());
         session.setAttribute("totalRowNumber", dtolistComputer.getTotalRow());
+        session.setAttribute("orderBy", dtolistComputer.getOrderBy());
     }
 
     private boolean deleteSelection(String selected){

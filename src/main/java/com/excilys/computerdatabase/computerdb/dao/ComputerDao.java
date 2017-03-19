@@ -83,13 +83,13 @@ public enum ComputerDao {
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
-                + ") LIKE UPPER(?) ORDER BY " + computerName + " LIMIT ?, ? ";
+                + ") LIKE UPPER(?) ORDER BY %s LIMIT ?, ? ";
 
 
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " ORDER BY " + computerName + " LIMIT ?, ? ";
+                + companyId + " ORDER BY %s LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
         DELETE_COMPUTERS = "DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
@@ -147,16 +147,20 @@ public enum ComputerDao {
      * @return a List Pageable
      * @throws DaoException .
      */
-    public List<Pageable> getComputersByName(String name, long limitStart, long size) throws DaoException {
+    public List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
             LOGGER.error("Name non valide : " + name);
             return result;
         }
+        String col = mapColumnOrderBy(orderby);
+        String query =  String.format(SELECT_COMPUTER_BY_NAME, col);
         try (
+
                 Connection connection = DatabaseManager.INSTANCE.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_NAME)
+                PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
+
             selectStatement.setString(1, name + "%");
             selectStatement.setString(2, name + "%");
             selectStatement.setLong(3, limitStart);
@@ -185,15 +189,21 @@ public enum ComputerDao {
      * @return a List Pageable
      * @throws DaoException .
      */
-    public List<Pageable> getComputers(long limitStart, long size) throws DaoException {
+    public List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
+        String col = mapColumnOrderBy(orderby);
+
+
+        String query =  String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
         try (
                 Connection connection = DatabaseManager.INSTANCE.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPUTERS_WITH_LIMIT)
+                PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
+
             selectStatement.setLong(1, limitStart);
             selectStatement.setLong(2, size);
             ResultSet rset;
+            LOGGER.info(selectStatement.toString());
             rset = selectStatement.executeQuery();
 
             while (rset.next()) {
@@ -416,4 +426,45 @@ public enum ComputerDao {
         return number;
     }
 
+    public String mapColumnOrderBy(String orderBy){
+        switch (orderBy) {
+            case "name" :
+                return computerName;
+            case "dateIntro":
+                return computerDateIntro;
+            case "dateFin" :
+                return computerDateFin;
+            case "company":
+                return computerCompanyName;
+            default:
+                return computerName;
+        }
+    }
+
+    public boolean deleteComputersCompany(long companyId) throws DaoException {
+        int result = -1;
+
+        try (
+                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
+        ) {
+            deleteStatment.setLong(1, companyId);
+            result = deleteStatment.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+
+            LOGGER.error("deleteComputer : " + e.getMessage());
+            DatabaseManager.INSTANCE.rollback();
+            throw new DaoException(e.getMessage());
+        } finally {
+            DatabaseManager.INSTANCE.closeConnection();
+        }
+
+        if (result == 0) {
+            LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
+        }
+        return result > 0;
+    }
 }
+

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.dao.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
@@ -67,4 +68,12 @@ public enum CompanyService {
         return dtoList;
     }
 
+    public boolean removeCompany(Company company){
+        try {
+            return CompanyDao.INSTANCE.deleteCompany(company);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

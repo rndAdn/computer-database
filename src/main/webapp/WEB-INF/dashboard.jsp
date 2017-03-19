@@ -25,7 +25,7 @@
 	<div class="container">
 		<h1 id="homeTitle">
 			${totalRowNumber}
-			Computers found
+			Computers found bla
 		</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
@@ -80,8 +80,10 @@
 					</a>
 				</th>
 				<!-- Table header for Company -->
-				<th href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=company" onclick="">
-					Company
+				<th >
+					<a href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=company" onclick="">
+					    Company
+					</a>
 				</th>
 
 			</tr>
@@ -117,12 +119,12 @@
 				end="${(pageNumber + 3 < totalPageNumber) ? (pageNumber + 3) : totalPageNumber}"
 				step="1">
 				<li><a
-					href="?pageSize=${pageSize}&pageNumber=${i}&search=${search}"><c:out
+					href="?pageSize=${pageSize}&pageNumber=${i}&search=${search}&orderBy=${orderBy}"><c:out
 							value="${i}" /></a></li>
 			</c:forEach>
 
 			<li><a
-				href="?pageSize=${pageSize}&pageNumber=${pageNumber + 1}&search=${search}"
+				href="?pageSize=${pageSize}&pageNumber=${pageNumber + 1}&search=${search}&orderBy=${orderBy}"
 				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>

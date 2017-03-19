@@ -26,6 +26,7 @@
 
 ## User Interface
 * [ ] Validation JQuery
+* [X] ~~OrderBy~~
 * [ ] Remonter les erreurs au client
 
 
@@ -56,7 +57,7 @@
 
 
 ## MVN
-* [ ] Tomcat dans maven
+* [X] ~~Tomcat dans maven~~
 * [X] ~~Clean Pom~~
 
 

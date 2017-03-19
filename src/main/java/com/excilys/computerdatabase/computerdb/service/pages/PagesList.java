@@ -9,6 +9,7 @@ public abstract class PagesList {
     protected long totalNumberOfpages;
     protected long totalRow;
 
+
     /**
      * Get item List of current page.
      *
