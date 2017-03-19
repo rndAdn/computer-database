@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.computerdb.model.dto;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class ComputerDTO {
 

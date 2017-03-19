@@ -202,7 +202,7 @@ public enum ComputerService {
         return listComputerDTO;
     }
 
-    public boolean removeComputers(String[] idsStr){ // TODO : create function in DAO to use rollBack if delete error
+    public boolean removeComputers(String[] idsStr) { // TODO : create function in DAO to use rollBack if delete error
         for (String idStr : idsStr) {
             long id = Long.parseLong(idStr);
             Optional<Computer> computerOptional = getComputerById(id);

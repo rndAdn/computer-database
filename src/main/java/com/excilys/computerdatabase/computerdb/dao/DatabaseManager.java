@@ -78,12 +78,12 @@ public enum DatabaseManager {
     public Connection getConnection() {
         Connection connection;
         try {
-            if (connectionThreadLocal.get() == null || connectionThreadLocal.get().isClosed()){
+            if (connectionThreadLocal.get() == null || connectionThreadLocal.get().isClosed()) {
                 connection = ds.getConnection();
                 connectionThreadLocal.set(connection);
             }
         } catch (Exception e) {
-            LOGGER.debug("get exception "+e.getMessage());
+            LOGGER.debug("get exception " + e.getMessage());
         }
 
 

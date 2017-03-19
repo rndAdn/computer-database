@@ -28,7 +28,7 @@ public class PageListComputerDTO {
     public long getTotalRow() {
         return totalRow;
     }
-    
+
     public long getPageNumber() {
         return pageNumber;
     }

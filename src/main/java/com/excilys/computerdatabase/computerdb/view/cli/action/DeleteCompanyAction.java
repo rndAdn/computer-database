@@ -2,12 +2,8 @@ package com.excilys.computerdatabase.computerdb.view.cli.action;
 
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
-import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
-import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
-import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.view.cli.action.ActionMenu;
 
 import java.util.Optional;
 import java.util.Scanner;
