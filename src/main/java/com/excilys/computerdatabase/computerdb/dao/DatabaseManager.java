@@ -58,7 +58,7 @@ public enum DatabaseManager {
         props.setProperty("dataSource.user", userName);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", dbName);
-        props.setProperty("dataSource.serverName", serverName);
+        //props.setProperty("dataSource.serverName", serverName);
 
         HikariConfig config = new HikariConfig(props);
         config.setMinimumIdle(5);
