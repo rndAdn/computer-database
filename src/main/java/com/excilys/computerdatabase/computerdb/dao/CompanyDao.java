@@ -15,6 +15,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
@@ -26,6 +27,9 @@ public enum CompanyDao implements ICompanyDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
     
+
+    @Autowired
+    DatabaseManager databaseManager;
     private String companyTable;
     private String companyId;
     private String companyName;
@@ -72,7 +76,7 @@ public enum CompanyDao implements ICompanyDAO {
             return optionalCompany;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)
         ) {
             selectStatement.setLong(1, id);
@@ -102,7 +106,7 @@ public enum CompanyDao implements ICompanyDAO {
         }
 
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME)
         ) {
             selectStatement.setString(1, name + "%");
@@ -128,7 +132,7 @@ public enum CompanyDao implements ICompanyDAO {
 
         List<Pageable> result = new ArrayList<>();
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT)
         ) {
             selectStatement.setLong(1, limitStart);
@@ -152,7 +156,7 @@ public enum CompanyDao implements ICompanyDAO {
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
 
@@ -178,7 +182,7 @@ public enum CompanyDao implements ICompanyDAO {
         }
 
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -204,7 +208,7 @@ public enum CompanyDao implements ICompanyDAO {
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
         ) {
             deleteStatment.setLong(1, company.getId());
@@ -213,10 +217,10 @@ public enum CompanyDao implements ICompanyDAO {
         } catch (SQLException e) {
 
             LOGGER.error("deleteCompany : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return result == 1;
     }

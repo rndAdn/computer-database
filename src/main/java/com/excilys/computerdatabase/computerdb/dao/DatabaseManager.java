@@ -10,14 +10,16 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public enum DatabaseManager {
-
-    INSTANCE;
-
+@Repository
+@Scope("singleton")
+public class DatabaseManager {
 
     private String dbName;
     private String serverName;
@@ -28,7 +30,7 @@ public enum DatabaseManager {
     private HikariDataSource ds = null;
     private String dataSourceClassName;
     private String autocommit;
-
+    
     ThreadLocal<Connection> connectionThreadLocal;
 
     /**

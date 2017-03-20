@@ -17,6 +17,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
@@ -25,6 +26,9 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 public enum ComputerDao implements IComputerDAO{
 
     INSTANCE;
+    
+    @Autowired
+    DatabaseManager databaseManager;
 
     private final Logger LOGGER = LoggerFactory
             .getLogger(ComputerDao.class);
@@ -111,7 +115,7 @@ public enum ComputerDao implements IComputerDAO{
             return optionalComputer;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID)
         ) {
 
@@ -142,7 +146,7 @@ public enum ComputerDao implements IComputerDAO{
         String query = String.format(SELECT_COMPUTER_BY_NAME, col);
         try (
 
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
 
@@ -174,7 +178,7 @@ public enum ComputerDao implements IComputerDAO{
 
         String query = String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
 
@@ -205,7 +209,7 @@ public enum ComputerDao implements IComputerDAO{
         }
         long id = computer.getId();
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)
         ) {
             deleteStatment.setLong(1, id);
@@ -215,10 +219,10 @@ public enum ComputerDao implements IComputerDAO{
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
 
         if (result != 1) {
@@ -235,7 +239,7 @@ public enum ComputerDao implements IComputerDAO{
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER)
         ) {
             updateStatment.setString(1, computer.getName());
@@ -268,10 +272,10 @@ public enum ComputerDao implements IComputerDAO{
             connection.commit();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         if (result != 1) {
             LOGGER.info("updateComputer False id : " + computer.getId() + " result : " + result);
@@ -287,7 +291,7 @@ public enum ComputerDao implements IComputerDAO{
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER)
         ) {
             insertStatment.setString(1, computer.getName());
@@ -318,10 +322,10 @@ public enum ComputerDao implements IComputerDAO{
             connection.commit();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         if (result != 1) {
             LOGGER.info("insertComputer False id : " + computer.getId() + " result : " + result);
@@ -333,7 +337,7 @@ public enum ComputerDao implements IComputerDAO{
     public long countComputers() throws DaoException {
         long number = 0;
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
             ResultSet rset;
@@ -347,7 +351,7 @@ public enum ComputerDao implements IComputerDAO{
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return number;
     }
@@ -360,7 +364,7 @@ public enum ComputerDao implements IComputerDAO{
             return 0;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -376,7 +380,7 @@ public enum ComputerDao implements IComputerDAO{
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return number;
     }
@@ -386,7 +390,7 @@ public enum ComputerDao implements IComputerDAO{
         int result = -1;
 
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
         ) {
             deleteStatment.setLong(1, companyId);
@@ -396,10 +400,10 @@ public enum ComputerDao implements IComputerDAO{
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
 
         if (result == 0) {
