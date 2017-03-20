@@ -4,7 +4,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdb</artifactId>
 	<packaging>war</packaging>
-	<version>2.0.0</version>
+	<version>4.0.0</version>
 	<name>computerdb Maven Webapp</name>
 	<url>https://github.com/rndAdn/computer-database</url>
 	<properties>
@@ -178,7 +178,7 @@
 				</reportSets>
 			</plugin>
 
-			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le 
+			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le
 				rapport -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -187,8 +187,8 @@
 			</plugin>
 			<!--&ndash;&gt; -->
 
-			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version> 
+			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
 				</plugin> -->
 		</plugins>
 	</reporting>
