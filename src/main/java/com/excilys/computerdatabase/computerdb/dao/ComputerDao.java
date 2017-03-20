@@ -22,7 +22,7 @@ import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum ComputerDao {
+public enum ComputerDao implements IComputerDAO{
 
     INSTANCE;
 
@@ -103,14 +103,7 @@ public enum ComputerDao {
 
     }
 
-    /**
-     * Get a Computer from database by it's id.
-     *
-     * @param id Computer id in DatabaseManager.
-     * @return A Optional Computer. empty if the Computer doesn't exist in the
-     * database.
-     * @throws DaoException .
-     */
+    @Override
     public Optional<Computer> getComputerById(long id) throws DaoException {
         Optional<Computer> optionalComputer = Optional.empty();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.checkId(id)) {
@@ -138,16 +131,7 @@ public enum ComputerDao {
         return optionalComputer;
     }
 
-    /**
-     * Find all Computer from database by name.
-     *
-     * @param name       Of Computer(s) to find
-     * @param limitStart Start of first result.
-     * @param orderby sort list on column
-     * @param size       Max list size
-     * @return a List Pageable
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
@@ -182,15 +166,7 @@ public enum ComputerDao {
         return result;
     }
 
-    /**
-     * Get all Computer from database.
-     *
-     * @param limitStart Start of first result.
-     * @param size       Max list size.
-     * @param orderby sort list on column
-     * @return a List Pageable
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         String col = mapColumnOrderBy(orderby);
@@ -220,13 +196,7 @@ public enum ComputerDao {
         return result;
     }
 
-    /**
-     * Delete a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to delete
-     * @return true if computer is delete false otherwise
-     * @throws DaoException .
-     */
+    @Override
     public boolean deleteComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
@@ -257,13 +227,7 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Update a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to update
-     * @return true if the computer is update in database
-     * @throws DaoException .
-     */
+    @Override
     public boolean updateComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
@@ -315,13 +279,7 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Insert a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to create
-     * @return true if the computer is created in database
-     * @throws DaoException .
-     */
+    @Override
     public boolean insertComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(computer.getName())) {
@@ -371,12 +329,7 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Get number of Computer in database.
-     *
-     * @return Total number of Computer in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long countComputers() throws DaoException {
         long number = 0;
         try (
@@ -399,7 +352,7 @@ public enum ComputerDao {
         return number;
     }
 
-
+    @Override
     public long countComputersWithName(String name) throws DaoException {
         long number = 0;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
@@ -428,21 +381,7 @@ public enum ComputerDao {
         return number;
     }
 
-    private String mapColumnOrderBy(String orderBy) {
-        switch (orderBy) {
-            case "name":
-                return computerName;
-            case "dateIntro":
-                return computerDateIntro;
-            case "dateFin":
-                return computerDateFin;
-            case "company":
-                return computerCompanyName;
-            default:
-                return computerName;
-        }
-    }
-
+    @Override
     public long deleteComputersCompany(long companyId) throws DaoException {
         int result = -1;
 
@@ -467,6 +406,21 @@ public enum ComputerDao {
             LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
         }
         return result;
+    }
+    
+    private String mapColumnOrderBy(String orderBy) {
+        switch (orderBy) {
+            case "name":
+                return computerName;
+            case "dateIntro":
+                return computerDateIntro;
+            case "dateFin":
+                return computerDateFin;
+            case "company":
+                return computerCompanyName;
+            default:
+                return computerName;
+        }
     }
 }
 

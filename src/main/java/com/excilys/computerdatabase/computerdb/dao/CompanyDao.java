@@ -20,12 +20,12 @@ import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum CompanyDao {
+public enum CompanyDao implements ICompanyDAO {
     INSTANCE;
 
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(CompanyDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
+    
     private String companyTable;
     private String companyId;
     private String companyName;
@@ -64,14 +64,7 @@ public enum CompanyDao {
 
     }
 
-    /**
-     * Get a Company from database by it's id.
-     *
-     * @param id Company id in DatabaseManager.
-     * @return A Optional<Company>. empty if the Company doesn't exist in the
-     * database.
-     * @throws DaoException .
-     */
+    @Override
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.checkId(id)) {
@@ -99,15 +92,7 @@ public enum CompanyDao {
 
     }
 
-    /**
-     * Find all Company from database by name.
-     *
-     * @param name       Of Company(s) to find
-     * @param limitStart Start of first result.
-     * @param size       Max list size
-     * @return a List<Pageable>
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
 
@@ -138,14 +123,7 @@ public enum CompanyDao {
         return result;
     }
 
-    /**
-     * Get all Company from database.
-     *
-     * @param limitStart Start of first result.
-     * @param size       Max list size
-     * @return a List<Pageable>
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
         List<Pageable> result = new ArrayList<>();
@@ -170,12 +148,7 @@ public enum CompanyDao {
         return result;
     }
 
-    /**
-     * Get number of company in database.
-     *
-     * @return Total number of company in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
         try (
@@ -196,12 +169,7 @@ public enum CompanyDao {
         return number;
     }
 
-    /**
-     * Get number of company in database.
-     * @param name .
-     * @return Total number of company in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long getNumberOfCompany(String name) throws DaoException {
         long number = 0;
         if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValideName(name)) {
@@ -228,14 +196,8 @@ public enum CompanyDao {
     }
 
 
-    /**
-     * Delete a Computer in database given a Computer.
-     *
-     * @param company Representation of the computer to delete
-     * @return true if computer is delete false otherwise
-     * @throws DaoException .
-     */
-    public boolean deleteCompany(Company company) throws DaoException { // TODO : À tester
+    @Override
+    public boolean deleteCompany(Company company) throws DaoException {
         int result;
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
             LOGGER.error("Company non valide : '" + company + "'");

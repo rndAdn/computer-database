@@ -3,6 +3,9 @@
 ---
 
 ## Style
+* [ ] package
+* [ ] Mettre les fonctionnalitées dans les tag de release
+* [ ] Code Mort
 * [ ] **Javadoc**
 * [X] ~~PreparedStatment & ResultSet dans les try (with resources)~~
 * [ ] *Sonar*
@@ -35,6 +38,10 @@
 
 
 # Code
+* [ ] Interface DAO
+* [ ] Interface Service
+* [ ] Mettre des long dans les dto
+* [ ] clean commentaires inutiles (ex : pom)
 * [ ] Controller
 * [ ] ! Catch vide
 * [ ] Taglib
@@ -47,7 +54,7 @@
 
 ## Tests
 * [ ] DbUnit
-* [ ] Selenium
+* [ ] **Selenium**
 * [X] ~~Gatling~~
 * [X] ~~Suppr la class AppTest~~
 * [ ] JUnit
