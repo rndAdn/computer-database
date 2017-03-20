@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.computerdb.dao.controller;
 
-
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import org.apache.commons.lang.StringUtils;
 

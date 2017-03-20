@@ -38,8 +38,9 @@ public class Dashboard extends HttpServlet {
         boolean result = deleteSelection(selected);
 
 
-        if (!result )
+        if (!result) {
             LOGGER.info("remove computers : " + result);
+        }
         doGet(request, response);
     }
 
@@ -51,7 +52,7 @@ public class Dashboard extends HttpServlet {
         String pageNumberString = request.getParameter("pageNumber");
         String orderBy = request.getParameter("orderBy");
         String search = request.getParameter("search");
-        orderBy = (orderBy != null)?orderBy:"name";
+        orderBy = (orderBy != null) ? orderBy : "name";
         try {
             pageSize = Long.parseLong(pageSizeString);
             pageNumber = Long.parseLong(pageNumberString);
@@ -72,7 +73,7 @@ public class Dashboard extends HttpServlet {
         session.setAttribute("orderBy", dtolistComputer.getOrderBy());
     }
 
-    private boolean deleteSelection(String selected){
+    private boolean deleteSelection(String selected) {
         String[] idsStr = selected.split(",");
         /*if (idsStr.length > 1) {
             LOGGER.info("rm computers length: " + idsStr.length);

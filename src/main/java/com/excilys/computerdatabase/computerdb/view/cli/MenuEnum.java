@@ -1,13 +1,6 @@
 package com.excilys.computerdatabase.computerdb.view.cli;
 
-import com.excilys.computerdatabase.computerdb.view.cli.action.ActionMenu;
-import com.excilys.computerdatabase.computerdb.view.cli.action.CreateComputerAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.DeleteComputerAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.ExitAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.ListCompanyAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.ListComputerAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.ShowComputerDetailsAction;
-import com.excilys.computerdatabase.computerdb.view.cli.action.UpdateComputerAction;
+import com.excilys.computerdatabase.computerdb.view.cli.action.*;
 
 public enum MenuEnum {
 
@@ -17,6 +10,7 @@ public enum MenuEnum {
     CREATE('C', "Create", new CreateComputerAction()),
     UPDATE('U', "Update", new UpdateComputerAction()),
     DELETE('D', "Delete", new DeleteComputerAction()),
+    DELETE_COMPANY('R', "Remove Company", new DeleteCompanyAction()),
     EXIT('E', "Exit", new ExitAction());
 
     private char commandeChar;

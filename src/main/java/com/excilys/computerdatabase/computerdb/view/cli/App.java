@@ -1,7 +1,5 @@
 package com.excilys.computerdatabase.computerdb.view.cli;
 
-import com.excilys.computerdatabase.computerdb.view.cli.CliMenu;
-
 public class App {
 
     /**

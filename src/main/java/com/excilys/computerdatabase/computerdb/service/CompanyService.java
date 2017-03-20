@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
-import com.excilys.computerdatabase.computerdb.dao.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
@@ -16,15 +15,14 @@ import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 public enum CompanyService {
 
     INSTANCE;
+
     /**
      * Get a Company from DAO by it's id.
      *
-     * @param id
-     *            Company id in DatabaseManager.
+     * @param id Company id in DatabaseManager.
      * @return A Optional Company. empty if the Company doesn't exist in the
-     *         database.
-     * @throws DaoException
-     *             .
+     * database.
+     * @throws DaoException .
      */
     public Optional<Company> getCompanyByid(long id) {
         try {
@@ -39,8 +37,7 @@ public enum CompanyService {
      * Get all Company from database.
      *
      * @return a PagesList
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
@@ -68,12 +65,17 @@ public enum CompanyService {
         return dtoList;
     }
 
-    public boolean removeCompany(Company company){
+    public long removeCompany(Company company) {
+        long nbSuppr = ComputerService.INSTANCE.removeComputersCompany(company.getId());
         try {
-            return CompanyDao.INSTANCE.deleteCompany(company);
+
+            boolean result = CompanyDao.INSTANCE.deleteCompany(company);
+            if (!result) {
+                return -1;
+            }
         } catch (DaoException e) {
             e.printStackTrace();
         }
-        return false;
+        return nbSuppr;
     }
 }

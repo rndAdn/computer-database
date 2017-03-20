@@ -143,6 +143,7 @@ public enum ComputerDao {
      *
      * @param name       Of Computer(s) to find
      * @param limitStart Start of first result.
+     * @param orderby sort list on column
      * @param size       Max list size
      * @return a List Pageable
      * @throws DaoException .
@@ -154,7 +155,7 @@ public enum ComputerDao {
             return result;
         }
         String col = mapColumnOrderBy(orderby);
-        String query =  String.format(SELECT_COMPUTER_BY_NAME, col);
+        String query = String.format(SELECT_COMPUTER_BY_NAME, col);
         try (
 
                 Connection connection = DatabaseManager.INSTANCE.getConnection();
@@ -185,7 +186,8 @@ public enum ComputerDao {
      * Get all Computer from database.
      *
      * @param limitStart Start of first result.
-     * @param size       Max list size
+     * @param size       Max list size.
+     * @param orderby sort list on column
      * @return a List Pageable
      * @throws DaoException .
      */
@@ -194,7 +196,7 @@ public enum ComputerDao {
         String col = mapColumnOrderBy(orderby);
 
 
-        String query =  String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
+        String query = String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
         try (
                 Connection connection = DatabaseManager.INSTANCE.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(query)
@@ -426,13 +428,13 @@ public enum ComputerDao {
         return number;
     }
 
-    public String mapColumnOrderBy(String orderBy){
+    private String mapColumnOrderBy(String orderBy) {
         switch (orderBy) {
-            case "name" :
+            case "name":
                 return computerName;
             case "dateIntro":
                 return computerDateIntro;
-            case "dateFin" :
+            case "dateFin":
                 return computerDateFin;
             case "company":
                 return computerCompanyName;
@@ -441,7 +443,7 @@ public enum ComputerDao {
         }
     }
 
-    public boolean deleteComputersCompany(long companyId) throws DaoException {
+    public long deleteComputersCompany(long companyId) throws DaoException {
         int result = -1;
 
         try (
@@ -464,7 +466,7 @@ public enum ComputerDao {
         if (result == 0) {
             LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
         }
-        return result > 0;
+        return result;
     }
 }
 

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import org.slf4j.Logger;
@@ -76,7 +77,7 @@ public class EditComputer extends HttpServlet {
         } catch (NumberFormatException e) {
             LOGGER.error("Edit Comp web doGet IdError " + idStr);
         }
-        if (!ControllerComputer.CONTROLLER_COMPUTER.checkComputer(name, dateIntroStr, dateFinStr)) {
+        if (!ControllerComputer.CONTROLLER_COMPUTER.isValideComputer(name, dateIntroStr, dateFinStr)) {
             LOGGER.info("Web update computer Check False : ");
             return false;
         }
@@ -89,7 +90,7 @@ public class EditComputer extends HttpServlet {
         companyName = companyInfo[1];
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
-        if (ControllerComputer.CONTROLLER_COMPUTER.checkCompanyId(companyId)) {
+        if (ControllerCompany.CONTROLLER_COMPANY.checkId(Utils.stringToId(companyId))) {
             companyDTOBuilder = companyDTOBuilder
                     .id(Utils.stringToId(companyId))
                     .name(companyName);

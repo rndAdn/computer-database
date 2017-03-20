@@ -237,8 +237,8 @@ public enum CompanyDao {
      */
     public boolean deleteCompany(Company company) throws DaoException { // TODO : À tester
         int result;
-        if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
-            LOGGER.error("Company non valinde : '" + company + "'");
+        if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
+            LOGGER.error("Company non valide : '" + company + "'");
             return false;
         }
         try (
