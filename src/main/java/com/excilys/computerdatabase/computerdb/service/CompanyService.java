@@ -4,26 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.database.CompanyDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.model.Company;
+import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
-import com.excilys.computerdatabase.computerdb.model.mapper.CompanyDTOMapper;
+import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
 public enum CompanyService {
 
     INSTANCE;
+
     /**
      * Get a Company from DAO by it's id.
      *
-     * @param id
-     *            Company id in Database.
+     * @param id Company id in DatabaseManager.
      * @return A Optional Company. empty if the Company doesn't exist in the
-     *         database.
-     * @throws DaoException
-     *             .
+     * database.
+     * @throws DaoException .
      */
     public Optional<Company> getCompanyByid(long id) {
         try {
@@ -38,8 +37,7 @@ public enum CompanyService {
      * Get all Company from database.
      *
      * @return a PagesList
-     * @throws DaoException
-     *             .
+     * @throws DaoException .
      */
     public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
@@ -62,9 +60,22 @@ public enum CompanyService {
 
         for (Pageable company : list) {
             Company c = (Company) company;
-            dtoList.add(CompanyDTOMapper.mapperCompanyDTO(c));
+            dtoList.add(CompanyDTOMapper.mapperCompanyToDTO(c));
         }
         return dtoList;
     }
 
+    public long removeCompany(Company company) {
+        long nbSuppr = ComputerService.INSTANCE.removeComputersCompany(company.getId());
+        try {
+
+            boolean result = CompanyDao.INSTANCE.deleteCompany(company);
+            if (!result) {
+                return -1;
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return nbSuppr;
+    }
 }

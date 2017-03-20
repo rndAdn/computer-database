@@ -8,6 +8,7 @@ public abstract class Pages {
     protected long pageNumber = 1;
     protected long totalRow;
     protected String filter;
+    protected String orderBy;
 
     /**
      * Get item List of current page.
@@ -110,4 +111,11 @@ public abstract class Pages {
         this.totalRow = nbRow;
     }
 
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 }

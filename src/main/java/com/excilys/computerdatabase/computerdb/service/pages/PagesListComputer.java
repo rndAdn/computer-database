@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.excilys.computerdatabase.computerdb.database.ComputerDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
+import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
 
 public class PagesListComputer extends Pages {
 
@@ -15,11 +15,21 @@ public class PagesListComputer extends Pages {
         List<Pageable> list = new ArrayList<>();
         try {
             if (StringUtils.isBlank(filter)) {
-                list = ComputerDao.INSTANCE.getComputers((pageNumber - 1) * rowByPages, rowByPages);
-                totalRow = ComputerDao.INSTANCE.countComputers();
+                long nbComputer = ComputerDao.INSTANCE.countComputers();
+                setTotalNumberOfRow(nbComputer);
+                if ((pageNumber - 1) * rowByPages > nbComputer) {
+                    pageNumber = 1;
+                }
+                list = ComputerDao.INSTANCE.getComputers((pageNumber - 1) * rowByPages, rowByPages, orderBy);
+                setPageIndex(pageNumber);
             } else {
-                list = ComputerDao.INSTANCE.getComputersByName(filter, (pageNumber - 1) * rowByPages, rowByPages);
-                totalRow = ComputerDao.INSTANCE.countComputersWithName(filter);
+                long nbComputer = ComputerDao.INSTANCE.countComputersWithName(filter);
+                setTotalNumberOfRow(nbComputer);
+                if ((pageNumber - 1) * rowByPages > nbComputer) {
+                    pageNumber = 1;
+                }
+                list = ComputerDao.INSTANCE.getComputersByName(filter, (pageNumber - 1) * rowByPages, rowByPages, orderBy);
+                setPageIndex(pageNumber);
             }
         } catch (DaoException e) {
             e.printStackTrace();

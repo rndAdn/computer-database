@@ -42,8 +42,17 @@ public class CompanyDTO {
         return name;
     }
 
+
+    @Override
+    public String toString() {
+        return "CompanyDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public static class CompanyDTOBuilder {
-        private long id = 0;
+        private long id = -1;
         private String name = "";
 
 

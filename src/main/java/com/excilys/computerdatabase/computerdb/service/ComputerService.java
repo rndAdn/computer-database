@@ -3,16 +3,17 @@ package com.excilys.computerdatabase.computerdb.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.database.ComputerDao;
-import com.excilys.computerdatabase.computerdb.database.DaoException;
-import com.excilys.computerdatabase.computerdb.model.Computer;
+import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
+import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
-import com.excilys.computerdatabase.computerdb.model.mapper.ComputerDTOMapper;
+import com.excilys.computerdatabase.computerdb.dao.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
-import com.excilys.computerdatabase.computerdb.controller.ControllerComputer;
+import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,25 +36,19 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.insertComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la création");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("ajout Computer");
         }
         return result;
     }
 
     public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId, String companyName) {
-        if (!ControllerComputer.checkComputer(name, dateIntroStr, dateFinStr)) {
+        if (!ControllerComputer.CONTROLLER_COMPUTER.isValideComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
 
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
-        if (ControllerComputer.checkCompanyId(companyId)) {
+        if (ControllerCompany.CONTROLLER_COMPANY.checkId(Utils.stringToId(companyId))) {
             companyDTOBuilder = companyDTOBuilder
                     .id(Utils.stringToId(companyId))
                     .name(companyName);
@@ -66,7 +61,7 @@ public enum ComputerService {
                 .company(companyDTO)
                 .build();
 
-        Computer computer = ComputerDTOMapper.mapperComputerDTO(computerDTO);
+        Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
 
         return ajoutComputer(computer);
     }
@@ -84,13 +79,7 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.deleteComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la suppression");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("delete Computer");
         }
         return result;
 
@@ -99,7 +88,7 @@ public enum ComputerService {
     /**
      * Get a Computer from database by it's id.
      *
-     * @param id Computer id in Database.
+     * @param id Computer id in DatabaseManager.
      * @return A Optional Computer. empty if the Computer doesn't exist in the
      * database.
      * @throws DaoException .
@@ -109,20 +98,30 @@ public enum ComputerService {
         try {
             optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la supression");
-        } finally {
-            System.out.println();
+            LOGGER.error("getComputerById");
         }
         return optionalComputer;
     }
 
     /**
+     * Get a ComputerDTO from database by it's id.
+     *
+     * @param id Computer id in DatabaseManager.
+     * @return A Optional Computer. empty if the Computer doesn't exist in the
+     * database.
+     * @throws DaoException .
+     */
+    public ComputerDTO getComputerDTOById(long id) {
+        ComputerDTO computerDTO;
+        Optional<Computer> optionalComputer = getComputerById(id);
+        computerDTO = ComputerDTOMapper.mapperComputerToDTO(optionalComputer.get());
+        return computerDTO;
+    }
+
+    /**
      * Get a Computer from database by it's name.
      *
-     * @param name of computer in Database.
+     * @param name of computer in DatabaseManager.
      * @return PagesListComputer.
      * @throws DaoException .
      */
@@ -133,7 +132,7 @@ public enum ComputerService {
 
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
-            e.printStackTrace();
+            LOGGER.error("getComputerByName");
         }
 
         return pagesList;
@@ -151,15 +150,21 @@ public enum ComputerService {
         try {
             result = ComputerDao.INSTANCE.updateComputer(computer);
         } catch (DaoException e) {
-            System.out.println();
-            System.out.println();
-            System.out.print(e.getMessage());
-            System.out.println(" Abandon de la mise à jour");
-        } finally {
-            System.out.println();
-
+            LOGGER.error("updateComputer");
         }
         return result;
+    }
+
+    /**
+     * Update a Computer in database given a Computer.
+     *
+     * @param computerDTO Representation of the computer to update
+     * @return true if the computer is update in database
+     * @throws DaoException .
+     */
+    public boolean updateComputer(ComputerDTO computerDTO) {
+        Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
+        return updateComputer(computer);
     }
 
     /**
@@ -179,19 +184,26 @@ public enum ComputerService {
         return pagesList;
     }
 
-    public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber) {
+    public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber, String orderBy) {
         PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
         pagesListComputer.setRowByPages(pageSize);
         pagesListComputer.setPageIndex(pageNumber);
+        pagesListComputer.setOrderBy(orderBy);
         if (!StringUtils.isBlank(search)) {
             pagesListComputer.setFilter(search);
         }
         List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
-        PageListComputerDTO listComputerDTO = new PageListComputerDTO(pagesListComputer.getTotalNumberOfPage(), pagesListComputer.getTotalRow(), dtoList);
+        PageListComputerDTO listComputerDTO = new PageListComputerDTO(
+                search,
+                pagesListComputer.getTotalNumberOfPage(),
+                pagesListComputer.getTotalRow(),
+                pagesListComputer.getPageIndex(),
+                pageSize,
+                dtoList, pagesListComputer.getOrderBy());
         return listComputerDTO;
     }
 
-    public boolean removeComputers(String[] idsStr){ // TODO : create function in DAO to use rollBack if delete error
+    public boolean removeComputers(String[] idsStr) { // TODO : create function in DAO to use rollBack if delete error
         for (String idStr : idsStr) {
             long id = Long.parseLong(idStr);
             Optional<Computer> computerOptional = getComputerById(id);
@@ -210,5 +222,14 @@ public enum ComputerService {
         return true;
     }
 
+    public long removeComputersCompany(long companyId) { // TODO : create function in DAO to use rollBack if delete error
+        long result = -1;
+        try {
+            result = ComputerDao.INSTANCE.deleteComputersCompany(companyId);
+        } catch (DaoException e) {
+            LOGGER.error("delete Computers");
+        }
+        return result;
+    }
 
 }

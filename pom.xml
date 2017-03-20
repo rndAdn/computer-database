@@ -4,9 +4,9 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdb</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.0</version>
+	<version>4.0.0</version>
 	<name>computerdb Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/rndAdn/computer-database</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -20,20 +20,32 @@
 		<maven-slf4j.version>1.7.16</maven-slf4j.version>
 		<maven-logback.version>1.2.1</maven-logback.version>
 		<maven-apache.commons.version>3.0</maven-apache.commons.version>
+		<maven-mysql.version>5.1.39</maven-mysql.version>
+		<commons-lang.version>2.6</commons-lang.version>
+		<junit.version>4.12</junit.version>
+		<commons-configuration>1.10</commons-configuration>
+		<org.mockito>2.7.12</org.mockito>
+		<javax.servlet>3.0.1</javax.servlet>
+		<hikariCP>2.5.1</hikariCP>
+		<tomcat7-maven-plugin>2.2</tomcat7-maven-plugin>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${maven-slf4j.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${maven-logback.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
@@ -42,39 +54,43 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.39</version>
+			<version>${maven-mysql.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
+			<version>${commons-lang.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>1.10</version>
+			<version>${commons-configuration}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>2.7.12</version>
+			<version>${org.mockito}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>${javax.servlet}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>2.5.1</version>
+			<version>${hikariCP}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -94,7 +110,7 @@
 					<path>/${project.artifactId}</path>
 					<update>true</update>
 				</configuration>
-				<version>2.0</version>
+				<version>${tomcat7-maven-plugin}</version>
 			</plugin>
 			<!-- Compilateur JDK Java -->
 			<plugin>
@@ -162,7 +178,7 @@
 				</reportSets>
 			</plugin>
 
-			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le 
+			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le
 				rapport -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -171,13 +187,9 @@
 			</plugin>
 			<!--&ndash;&gt; -->
 
-			<!-- Ajout de la javadoc
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-			</plugin>
-			-->
+			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
+				</plugin> -->
 		</plugins>
 	</reporting>
 

@@ -64,6 +64,16 @@ public class ComputerDTO {
         return company;
     }
 
+    @Override
+    public String toString() {
+        return "ComputerDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dateIntroduced='" + dateIntroduced + '\'' +
+                ", dateDiscontinued='" + dateDiscontinued + '\'' +
+                ", company=" + company +
+                '}';
+    }
 
     public static class ComputerDTOBuilder {
         private long id;
@@ -99,6 +109,7 @@ public class ComputerDTO {
          * @return itself
          */
         public ComputerDTOBuilder dateIntroduced(LocalDate dateIntroduced) {
+
             this.dateIntroduced = dateIntroduced.toString();
             return this;
         }
