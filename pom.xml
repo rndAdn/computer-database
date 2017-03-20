@@ -4,7 +4,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdb</artifactId>
 	<packaging>war</packaging>
-	<version>2.0.0</version>
+	<version>4.0.0</version>
 	<name>computerdb Maven Webapp</name>
 	<url>https://github.com/rndAdn/computer-database</url>
 	<properties>
@@ -28,6 +28,7 @@
 		<javax.servlet>3.0.1</javax.servlet>
 		<hikariCP>2.5.1</hikariCP>
 		<tomcat7-maven-plugin>2.2</tomcat7-maven-plugin>
+		<spring.version>4.3.7.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -92,6 +93,11 @@
 			<artifactId>HikariCP</artifactId>
 			<version>${hikariCP}</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -178,14 +184,12 @@
 				</reportSets>
 			</plugin>
 
-			<!--&lt;!&ndash; Permet d'ajouter des liens vers le code source dans le 
-				rapport -->
+			<!--Permet d'ajouter des liens vers le code source dans le rapport -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>${maven-jxr-plugin.version}</version>
 			</plugin>
-			<!--&ndash;&gt; -->
 
 			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId> 
 				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version> 

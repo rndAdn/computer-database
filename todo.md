@@ -7,21 +7,21 @@
 * [ ] Mettre les fonctionnalitées dans les tag de release
 * [ ] Code Mort
 * [ ] **Javadoc**
-* [X] ~~PreparedStatment & ResultSet dans les try (with resources)~~
+* [x] ~~PreparedStatment & ResultSet dans les try (with resources)~~
 * [ ] *Sonar*
 * [ ] **Taille des fonctions**
-* [X] ~~Formulaire => DTO~~
-* [X] ~~Service en enum~~
-* [X] ~~Mapper dans le package DAO~~
-* [ ] pas de static (constructeur en private OU Abstract)
-* [X] ~~Plus de Sysout~~
-* [X] ~~Mettre les pages dans Entities et mettres les appels aux dao dans le services~~
+* [x] ~~Formulaire => DTO~~
+* [x] ~~Service en enum~~
+* [x] ~~Mapper dans le package DAO~~
+* [x] ~~pas de static (constructeur en private OU Abstract)~~
+* [x] ~~Plus de Sysout~~
+* [x] ~~Mettre les pages dans Entities et mettres les appels aux dao dans le services~~
 * [ ] Une Validation par couche
     * [ ] Jquery
     * [ ] Servelets
     * [ ] Services
-    * [X] ~~DAO~~
-    * [X] ~~Model~~
+    * [x] ~~DAO~~
+    * [x] ~~Model~~
 ## Debug
 * [ ] Log
 * [ ] Message Exception
@@ -29,16 +29,16 @@
 
 ## User Interface
 * [ ] Validation JQuery
-* [X] ~~OrderBy~~
+* [x] ~~OrderBy~~
 * [ ] Remonter les erreurs au client
 
 
 ## Feature
-* [X] ~~Delete Company Cli~~
+* [x] ~~Delete Company Cli~~
 
 
 # Code
-* [ ] Interface DAO
+* [x] ~~Interface DAO~~
 * [ ] Interface Service
 * [ ] Mettre des long dans les dto
 * [ ] clean commentaires inutiles (ex : pom)
@@ -55,8 +55,8 @@
 ## Tests
 * [ ] DbUnit
 * [ ] **Selenium**
-* [X] ~~Gatling~~
-* [X] ~~Suppr la class AppTest~~
+* [x] ~~Gatling~~
+* [x] ~~Suppr la class AppTest~~
 * [ ] JUnit
     * [ ] Mapper
     * [ ] DTO
@@ -64,11 +64,11 @@
 
 
 ## MVN
-* [X] ~~Tomcat dans maven~~
-* [X] ~~Clean Pom~~
+* [x] ~~Tomcat dans maven~~
+* [x] ~~Clean Pom~~
 
 
 ## Pom
- * [X] ~~url~~
- * [X] ~~Scope Mokito test~~
- * [X] ~~Numero de Version~~
+ * [x] ~~url~~
+ * [x] ~~Scope Mokito test~~
+ * [x] ~~Numero de Version~~
