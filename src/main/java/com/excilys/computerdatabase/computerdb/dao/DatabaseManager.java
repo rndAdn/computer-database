@@ -18,7 +18,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
-@Scope("singleton")
 public class DatabaseManager {
 
     private String dbName;

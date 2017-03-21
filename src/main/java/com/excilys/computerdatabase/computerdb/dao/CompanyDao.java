@@ -16,20 +16,25 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum CompanyDao implements ICompanyDAO {
-    INSTANCE;
+public class CompanyDao implements ICompanyDAO {
+    
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
     
 
-    @Autowired
-    DatabaseManager databaseManager;
+    //@Autowired
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
+    
     private String companyTable;
     private String companyId;
     private String companyName;
@@ -42,7 +47,7 @@ public enum CompanyDao implements ICompanyDAO {
     private final String COUNT_COMPANY_BY_NAME;
     private final String DELETE_COMPANY;
 
-    CompanyDao() {
+    public CompanyDao() {
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             companyTable = config.getString("CompanyTable");

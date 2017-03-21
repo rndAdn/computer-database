@@ -18,17 +18,22 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum ComputerDao implements IComputerDAO{
 
-    INSTANCE;
+public class ComputerDao implements IComputerDAO{
+
+
     
-    @Autowired
-    DatabaseManager databaseManager;
+    //@Autowired
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
 
     private final Logger LOGGER = LoggerFactory
             .getLogger(ComputerDao.class);
@@ -58,7 +63,8 @@ public enum ComputerDao implements IComputerDAO{
     /**
      *
      */
-    ComputerDao() {
+    public ComputerDao() {
+        
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             computerTable = config.getString("ComputerTable");
