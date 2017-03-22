@@ -15,17 +15,26 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum CompanyDao {
-    INSTANCE;
+public class CompanyDao implements ICompanyDAO {
+    
 
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(CompanyDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
+    
+
+    //@Autowired
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
+    
     private String companyTable;
     private String companyId;
     private String companyName;
@@ -38,7 +47,7 @@ public enum CompanyDao {
     private final String COUNT_COMPANY_BY_NAME;
     private final String DELETE_COMPANY;
 
-    CompanyDao() {
+    public CompanyDao() {
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             companyTable = config.getString("CompanyTable");
@@ -64,14 +73,7 @@ public enum CompanyDao {
 
     }
 
-    /**
-     * Get a Company from database by it's id.
-     *
-     * @param id Company id in DatabaseManager.
-     * @return A Optional<Company>. empty if the Company doesn't exist in the
-     * database.
-     * @throws DaoException .
-     */
+    @Override
     public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.checkId(id)) {
@@ -79,7 +81,7 @@ public enum CompanyDao {
             return optionalCompany;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)
         ) {
             selectStatement.setLong(1, id);
@@ -99,15 +101,7 @@ public enum CompanyDao {
 
     }
 
-    /**
-     * Find all Company from database by name.
-     *
-     * @param name       Of Company(s) to find
-     * @param limitStart Start of first result.
-     * @param size       Max list size
-     * @return a List<Pageable>
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
         List<Pageable> result = new ArrayList<>();
 
@@ -117,7 +111,7 @@ public enum CompanyDao {
         }
 
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME)
         ) {
             selectStatement.setString(1, name + "%");
@@ -138,19 +132,12 @@ public enum CompanyDao {
         return result;
     }
 
-    /**
-     * Get all Company from database.
-     *
-     * @param limitStart Start of first result.
-     * @param size       Max list size
-     * @return a List<Pageable>
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
 
         List<Pageable> result = new ArrayList<>();
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT)
         ) {
             selectStatement.setLong(1, limitStart);
@@ -170,16 +157,11 @@ public enum CompanyDao {
         return result;
     }
 
-    /**
-     * Get number of company in database.
-     *
-     * @return Total number of company in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long getNumberOfCompany() throws DaoException {
         long number = 0;
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
 
@@ -196,12 +178,7 @@ public enum CompanyDao {
         return number;
     }
 
-    /**
-     * Get number of company in database.
-     * @param name .
-     * @return Total number of company in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long getNumberOfCompany(String name) throws DaoException {
         long number = 0;
         if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValideName(name)) {
@@ -210,7 +187,7 @@ public enum CompanyDao {
         }
 
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -228,21 +205,15 @@ public enum CompanyDao {
     }
 
 
-    /**
-     * Delete a Computer in database given a Computer.
-     *
-     * @param company Representation of the computer to delete
-     * @return true if computer is delete false otherwise
-     * @throws DaoException .
-     */
-    public boolean deleteCompany(Company company) throws DaoException { // TODO : À tester
+    @Override
+    public boolean deleteCompany(Company company) throws DaoException {
         int result;
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
             LOGGER.error("Company non valide : '" + company + "'");
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
         ) {
             deleteStatment.setLong(1, company.getId());
@@ -251,10 +222,10 @@ public enum CompanyDao {
         } catch (SQLException e) {
 
             LOGGER.error("deleteCompany : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return result == 1;
     }

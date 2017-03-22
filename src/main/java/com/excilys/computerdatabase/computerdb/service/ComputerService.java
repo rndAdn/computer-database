@@ -17,12 +17,21 @@ import com.excilys.computerdatabase.computerdb.model.controller.ControllerComput
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
 
 public enum ComputerService {
 
     INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
+    
+    
+    ComputerDao computerDao;
+    ComputerService() {
+        computerDao = new ComputerDao();
+    }
 
     /**
      * Insert a Computer in database given a Computer.
@@ -34,7 +43,7 @@ public enum ComputerService {
     public boolean ajoutComputer(Computer computer) {
         boolean result = false;
         try {
-            result = ComputerDao.INSTANCE.insertComputer(computer);
+            result = computerDao.insertComputer(computer);
         } catch (DaoException e) {
             LOGGER.error("ajout Computer");
         }
@@ -77,7 +86,7 @@ public enum ComputerService {
     public boolean deleteComputer(Computer computer) {
         boolean result = false;
         try {
-            result = ComputerDao.INSTANCE.deleteComputer(computer);
+            result = computerDao.deleteComputer(computer);
         } catch (DaoException e) {
             LOGGER.error("delete Computer");
         }
@@ -96,7 +105,7 @@ public enum ComputerService {
     public Optional<Computer> getComputerById(long id) {
         Optional<Computer> optionalComputer = Optional.empty();
         try {
-            optionalComputer = ComputerDao.INSTANCE.getComputerById(id);
+            optionalComputer = computerDao.getComputerById(id);
         } catch (DaoException e) {
             LOGGER.error("getComputerById");
         }
@@ -128,7 +137,7 @@ public enum ComputerService {
     public PagesListComputer getComputerByName(String name) {
         PagesListComputer pagesList = new PagesListComputer();
         try {
-            long nbComputer = ComputerDao.INSTANCE.countComputers();
+            long nbComputer = computerDao.countComputers();
 
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
@@ -148,7 +157,7 @@ public enum ComputerService {
     public boolean updateComputer(Computer computer) {
         boolean result = false;
         try {
-            result = ComputerDao.INSTANCE.updateComputer(computer);
+            result = computerDao.updateComputer(computer);
         } catch (DaoException e) {
             LOGGER.error("updateComputer");
         }
@@ -176,7 +185,7 @@ public enum ComputerService {
     public PagesListComputer getComputers() {
         PagesListComputer pagesList = new PagesListComputer();
         try {
-            long nbComputer = ComputerDao.INSTANCE.countComputers();
+            long nbComputer = computerDao.countComputers();
             pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();
@@ -225,7 +234,7 @@ public enum ComputerService {
     public long removeComputersCompany(long companyId) { // TODO : create function in DAO to use rollBack if delete error
         long result = -1;
         try {
-            result = ComputerDao.INSTANCE.deleteComputersCompany(companyId);
+            result = computerDao.deleteComputersCompany(companyId);
         } catch (DaoException e) {
             LOGGER.error("delete Computers");
         }
