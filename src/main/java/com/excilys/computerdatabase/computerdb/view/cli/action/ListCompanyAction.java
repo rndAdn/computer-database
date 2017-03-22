@@ -1,13 +1,17 @@
 package com.excilys.computerdatabase.computerdb.view.cli.action;
 
-import com.excilys.computerdatabase.computerdb.service.CompanyService;
-import com.excilys.computerdatabase.computerdb.service.pages.Page;
-import com.excilys.computerdatabase.computerdb.service.pages.Pages;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.service.CompanyService;
 
 public class ListCompanyAction implements ActionMenu {
 
@@ -15,19 +19,24 @@ public class ListCompanyAction implements ActionMenu {
 
     @Override
     public void executeAction() {
-        Pages pages;
-        pages = CompanyService.INSTANCE.getCompanys();
+        Optional<Page> page;
+        page = CompanyService.INSTANCE.getCompanys();
 
-        Page page = pages.getCurrentPage();
+        List<Pageable> list = new ArrayList<>();
+        
+        if(page.isPresent()) {
+            list = page.get().getListe();
+            do {
+                //page.printContent();
+                for (Pageable p : list) {
+                    System.out.println(p);
+                }
+                printFooter(page.get());
 
-        page.printContent();
+            } while (readAction(page.get()));
+        }
 
-        do {
-            page.printContent();
-
-            printFooter(pages);
-
-        } while (readAction(pages));
+        
     }
 
     /**
@@ -36,8 +45,8 @@ public class ListCompanyAction implements ActionMenu {
      * @param pagesList
      *            .
      */
-    public void printFooter(Pages pagesList) {
-        System.out.print("page " + pagesList.getPageIndex() + "/" + pagesList.getTotalNumberOfPage()
+    public void printFooter(Page pagesList) {
+        System.out.print("page " + pagesList.getPageNumber() + "/" + pagesList.getTotalNumberOfPage()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
@@ -48,12 +57,12 @@ public class ListCompanyAction implements ActionMenu {
      *            .
      * @return true if input is correct
      */
-    private boolean readAction(Pages pagesList) {
+    private boolean readAction(Page pagesList) {
         Scanner sc = new Scanner(System.in);
 
         String action = sc.nextLine();
 
-        if (action.equalsIgnoreCase("next") || action.equalsIgnoreCase("n")) {
+        /*if (action.equalsIgnoreCase("next") || action.equalsIgnoreCase("n")) {
             pagesList.nextPage();
         } else if (action.equalsIgnoreCase("previous") || action.equalsIgnoreCase("p")) {
             pagesList.previousPage();
@@ -64,7 +73,8 @@ public class ListCompanyAction implements ActionMenu {
         } else {
             return false;
         }
-        return true;
+        return true;*/
+        return false;
 
     }
 

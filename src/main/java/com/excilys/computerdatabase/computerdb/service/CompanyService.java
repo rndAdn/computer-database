@@ -11,10 +11,10 @@ import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
 
 public enum CompanyService {
@@ -50,24 +50,25 @@ public enum CompanyService {
      * @return a PagesList
      * @throws DaoException .
      */
-    public PagesListCompany getCompanys() {
-        PagesListCompany pagesList = new PagesListCompany();
+    public Optional<Page> getCompanys() {
+        Optional<Page> page = Optional.empty();
         try {
-            long nbCompany = companyDao.getNumberOfCompany();
-
-            pagesList.setTotalNumberOfRow(nbCompany);
+            page = companyDao.getCompanys();
         } catch (DaoException e) {
             e.printStackTrace();
         }
 
-        return pagesList;
+        return page;
     }
 
 
     public List<CompanyDTO> getCompanyDTOList() {
         List<CompanyDTO> dtoList = new ArrayList<>();
-        PagesListCompany pagesListCompany = getCompanys();
-        List<Pageable> list = pagesListCompany.getCurrentPage().getList();
+        Optional<Page> page = getCompanys();
+        List<Pageable> list = new ArrayList<>();
+        if(page.isPresent()) {
+            list = page.get().getListe();
+        }
 
         for (Pageable company : list) {
             Company c = (Company) company;

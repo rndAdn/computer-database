@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class Dashboard extends HttpServlet {
@@ -59,7 +59,7 @@ public class Dashboard extends HttpServlet {
         } catch (NumberFormatException e) {
             //LOGGER.error("error page parse size :" + pageSizeString + " number :" + pageNumberString    );
         }
-
+        LOGGER.debug("getComputerDTOList search:" + search + " pageSize:" + pageSize + " pageNumber:" + pageNumber + " orderBy:" + orderBy);
         return ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber, orderBy);
     }
 

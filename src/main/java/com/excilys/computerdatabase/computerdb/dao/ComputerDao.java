@@ -23,8 +23,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 
 public class ComputerDao implements IComputerDAO{
@@ -142,11 +144,14 @@ public class ComputerDao implements IComputerDAO{
     }
 
     @Override
-    public List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
+    public Optional<Page> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
+        Optional<Page> optionalPage = Optional.empty();
+        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
+        BuilderPage builderPage = new Page.BuilderPage(name, orderby, limitStart, size);
         List<Pageable> result = new ArrayList<>();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
             LOGGER.error("Name non valide : " + name);
-            return result;
+            return optionalPage;
         }
         String col = mapColumnOrderBy(orderby);
         String query = String.format(SELECT_COMPUTER_BY_NAME, col);
@@ -158,7 +163,7 @@ public class ComputerDao implements IComputerDAO{
 
             selectStatement.setString(1, name + "%");
             selectStatement.setString(2, name + "%");
-            selectStatement.setLong(3, limitStart);
+            selectStatement.setLong(3, (limitStart-1)*size);
             selectStatement.setLong(4, size);
 
             ResultSet rset;
@@ -173,11 +178,17 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("getComputersByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        return result;
+        builderPage.list(result);
+        builderPage.totalRow(countComputersWithName(name));
+        optionalPage = Optional.of(builderPage.build());
+        return optionalPage;
     }
 
     @Override
-    public List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException {
+    public Optional<Page> getComputers(long limitStart, long size, String orderby) throws DaoException {
+        Optional<Page> optionalPage = Optional.empty();
+        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
+        BuilderPage builderPage = new Page.BuilderPage("", orderby, limitStart, size);
         List<Pageable> result = new ArrayList<>();
         String col = mapColumnOrderBy(orderby);
 
@@ -188,8 +199,9 @@ public class ComputerDao implements IComputerDAO{
                 PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
 
-            selectStatement.setLong(1, limitStart);
+            selectStatement.setLong(1, (limitStart-1)*size);
             selectStatement.setLong(2, size);
+            LOGGER.error("selectStatement : " + selectStatement.toString());
             ResultSet rset;
             LOGGER.info(selectStatement.toString());
             rset = selectStatement.executeQuery();
@@ -203,7 +215,10 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("getComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        return result;
+        builderPage.list(result);
+        builderPage.totalRow(countComputers());
+        optionalPage = Optional.of(builderPage.build());
+        return optionalPage;
     }
 
     @Override

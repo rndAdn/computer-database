@@ -3,8 +3,6 @@ package com.excilys.computerdatabase.computerdb.model.entities;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-
 /**
  * @author renaud
  *

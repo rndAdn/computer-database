@@ -15,14 +15,14 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class CompanyDao implements ICompanyDAO {
     
@@ -43,6 +43,7 @@ public class CompanyDao implements ICompanyDAO {
     private final String SELECT_COMPANY_BY_ID;
     private final String SELECT_COMPANY_BY_NAME;
     private final String SELECT_ALL_COMPANY_WITH_LIMIT;
+    private final String SELECT_ALL_COMPANY;
     private final String COUNT_COMPANY;
     private final String COUNT_COMPANY_BY_NAME;
     private final String DELETE_COMPANY;
@@ -63,6 +64,8 @@ public class CompanyDao implements ICompanyDAO {
         SELECT_COMPANY_BY_NAME = "SELECT * FROM " + companyTable + " WHERE " + companyName + " = ? LIMIT ?, ?";
 
         SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM " + companyTable + " LIMIT ?, ?";
+        
+        SELECT_ALL_COMPANY = "SELECT * FROM " + companyTable;
 
         COUNT_COMPANY = "SELECT count(" + companyId + ") as " + countTotal + " FROM " + companyTable;
 
@@ -102,12 +105,15 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException {
+    public Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException {
+        Optional<Page> optionalPage = Optional.empty();
+        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
+        BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
         List<Pageable> result = new ArrayList<>();
 
         if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValideName(name)) {
             LOGGER.error("Name non valide : '" + name + "'");
-            return result;
+            return optionalPage;
         }
 
         try (
@@ -129,12 +135,17 @@ public class CompanyDao implements ICompanyDAO {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        return result;
+        builderPage.list(result);
+        builderPage.totalRow(getNumberOfCompany(name));
+        optionalPage = Optional.of(builderPage.build());
+        return optionalPage;
     }
 
     @Override
-    public List<Pageable> getCompanys(long limitStart, long size) throws DaoException {
-
+    public Optional<Page> getCompanys(long limitStart, long size) throws DaoException {
+        Optional<Page> optionalPage = Optional.empty();
+        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
+        BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
         List<Pageable> result = new ArrayList<>();
         try (
                 Connection connection = databaseManager.getConnection();
@@ -154,7 +165,37 @@ public class CompanyDao implements ICompanyDAO {
             LOGGER.error("getCompanys : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
-        return result;
+        builderPage.list(result);
+        builderPage.totalRow(getNumberOfCompany());
+        optionalPage = Optional.of(builderPage.build());
+        return optionalPage;
+    }
+    
+
+    public Optional<Page> getCompanys() throws DaoException {
+        Optional<Page> optionalPage = Optional.empty();
+        BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
+        List<Pageable> result = new ArrayList<>();
+        try (
+                Connection connection = databaseManager.getConnection();
+                PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY)
+        ) {
+
+            ResultSet rset = selectStatement.executeQuery();
+
+            while (rset.next()) {
+                result.add(MapperCompany.mapCompany(rset));
+            }
+            connection.commit();
+            rset.close();
+        } catch (SQLException e) {
+            LOGGER.error("getCompanys : " + e.getMessage());
+            throw new DaoException(e.getMessage());
+        }
+        builderPage.list(result);
+        builderPage.totalRow(getNumberOfCompany());
+        optionalPage = Optional.of(builderPage.build());
+        return optionalPage;
     }
 
     @Override

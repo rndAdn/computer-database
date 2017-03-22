@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 
 public interface IComputerDAO {
 
@@ -34,7 +35,7 @@ public interface IComputerDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException;
+    Optional<Page> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException;
 
     /**
      * Get all Computer from database.
@@ -47,7 +48,7 @@ public interface IComputerDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException;
+    Optional<Page> getComputers(long limitStart, long size, String orderby) throws DaoException;
 
     /**
      * Delete a Computer in database given a Computer.

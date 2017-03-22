@@ -7,12 +7,12 @@ import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
 import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.ComputerDTOMapper;
 import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
 import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -20,15 +20,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-
 public enum ComputerService {
 
     INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
-    
-    
+
     ComputerDao computerDao;
+
     ComputerService() {
         computerDao = new ComputerDao();
     }
@@ -36,9 +35,11 @@ public enum ComputerService {
     /**
      * Insert a Computer in database given a Computer.
      *
-     * @param computer Representation of the computer to create
+     * @param computer
+     *            Representation of the computer to create
      * @return true if the computer is created in database
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
     public boolean ajoutComputer(Computer computer) {
         boolean result = false;
@@ -50,7 +51,8 @@ public enum ComputerService {
         return result;
     }
 
-    public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId, String companyName) {
+    public boolean ajoutComputer(String name, String dateIntroStr, String dateFinStr, String companyId,
+            String companyName) {
         if (!ControllerComputer.CONTROLLER_COMPUTER.isValideComputer(name, dateIntroStr, dateFinStr)) {
             return false;
         }
@@ -58,30 +60,26 @@ public enum ComputerService {
         CompanyDTO.CompanyDTOBuilder companyDTOBuilder = new CompanyDTO.CompanyDTOBuilder();
         CompanyDTO companyDTO;
         if (ControllerCompany.CONTROLLER_COMPANY.checkId(Utils.stringToId(companyId))) {
-            companyDTOBuilder = companyDTOBuilder
-                    .id(Utils.stringToId(companyId))
-                    .name(companyName);
+            companyDTOBuilder = companyDTOBuilder.id(Utils.stringToId(companyId)).name(companyName);
         }
         companyDTO = companyDTOBuilder.build();
 
-        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name)
-                .dateIntroduced(dateIntroStr)
-                .dateDiscontinued(dateFinStr)
-                .company(companyDTO)
-                .build();
+        ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name).dateIntroduced(dateIntroStr)
+                .dateDiscontinued(dateFinStr).company(companyDTO).build();
 
         Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
 
         return ajoutComputer(computer);
     }
 
-
     /**
      * Delete a Computer in database given a Computer.
      *
-     * @param computer Representation of the computer to delete
+     * @param computer
+     *            Representation of the computer to delete
      * @return true if computer is delete false otherwise
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
     public boolean deleteComputer(Computer computer) {
         boolean result = false;
@@ -97,10 +95,12 @@ public enum ComputerService {
     /**
      * Get a Computer from database by it's id.
      *
-     * @param id Computer id in DatabaseManager.
+     * @param id
+     *            Computer id in DatabaseManager.
      * @return A Optional Computer. empty if the Computer doesn't exist in the
-     * database.
-     * @throws DaoException .
+     *         database.
+     * @throws DaoException
+     *             .
      */
     public Optional<Computer> getComputerById(long id) {
         Optional<Computer> optionalComputer = Optional.empty();
@@ -115,10 +115,12 @@ public enum ComputerService {
     /**
      * Get a ComputerDTO from database by it's id.
      *
-     * @param id Computer id in DatabaseManager.
+     * @param id
+     *            Computer id in DatabaseManager.
      * @return A Optional Computer. empty if the Computer doesn't exist in the
-     * database.
-     * @throws DaoException .
+     *         database.
+     * @throws DaoException
+     *             .
      */
     public ComputerDTO getComputerDTOById(long id) {
         ComputerDTO computerDTO;
@@ -130,16 +132,18 @@ public enum ComputerService {
     /**
      * Get a Computer from database by it's name.
      *
-     * @param name of computer in DatabaseManager.
+     * @param name
+     *            of computer in DatabaseManager.
      * @return PagesListComputer.
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
-    public PagesListComputer getComputerByName(String name) {
-        PagesListComputer pagesList = new PagesListComputer();
+    public Optional<Page> getComputerByName(String search, long pageSize, long pageNumber, String orderBy) {
+        Optional<Page> pagesList = Optional.empty();
         try {
-            long nbComputer = computerDao.countComputers();
-
-            pagesList.setTotalNumberOfRow(nbComputer);
+            // long nbComputer = computerDao.countComputers();
+            pagesList = computerDao.getComputersByName(search, pageNumber, pageSize, orderBy);
+            // pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             LOGGER.error("getComputerByName");
         }
@@ -150,9 +154,11 @@ public enum ComputerService {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computer Representation of the computer to update
+     * @param computer
+     *            Representation of the computer to update
      * @return true if the computer is update in database
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
     public boolean updateComputer(Computer computer) {
         boolean result = false;
@@ -167,9 +173,11 @@ public enum ComputerService {
     /**
      * Update a Computer in database given a Computer.
      *
-     * @param computerDTO Representation of the computer to update
+     * @param computerDTO
+     *            Representation of the computer to update
      * @return true if the computer is update in database
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
     public boolean updateComputer(ComputerDTO computerDTO) {
         Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
@@ -180,13 +188,20 @@ public enum ComputerService {
      * Get all Computer from database.
      *
      * @return a PagesListComputer
-     * @throws DaoException .
+     * @throws DaoException
+     *             .
      */
-    public PagesListComputer getComputers() {
-        PagesListComputer pagesList = new PagesListComputer();
+    public Optional<Page> getComputers(String search, long pageSize, long pageNumber, String orderBy) {
+        Optional<Page> pagesList = Optional.empty();
         try {
-            long nbComputer = computerDao.countComputers();
-            pagesList.setTotalNumberOfRow(nbComputer);
+            // long nbComputer = computerDao.countComputers();
+            LOGGER.debug("getComputers  pageSize:" + pageSize + " pageNumber:" + pageNumber + " orderBy:" + orderBy);
+            if (StringUtils.isBlank(search)) {
+                pagesList = computerDao.getComputers(pageNumber, pageSize, orderBy);
+            } else {
+                pagesList = computerDao.getComputersByName(search, pageNumber, pageSize, orderBy);
+            }
+            // pagesList.setTotalNumberOfRow(nbComputer);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -194,25 +209,19 @@ public enum ComputerService {
     }
 
     public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber, String orderBy) {
-        PagesListComputer pagesListComputer = ComputerService.INSTANCE.getComputers();
-        pagesListComputer.setRowByPages(pageSize);
-        pagesListComputer.setPageIndex(pageNumber);
-        pagesListComputer.setOrderBy(orderBy);
-        if (!StringUtils.isBlank(search)) {
-            pagesListComputer.setFilter(search);
-        }
-        List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(pagesListComputer);
-        PageListComputerDTO listComputerDTO = new PageListComputerDTO(
-                search,
-                pagesListComputer.getTotalNumberOfPage(),
-                pagesListComputer.getTotalRow(),
-                pagesListComputer.getPageIndex(),
-                pageSize,
-                dtoList, pagesListComputer.getOrderBy());
+        LOGGER.debug("getComputers search:" + search + " pageSize:" + pageSize + " pageNumber:" + pageNumber
+                + " orderBy:" + orderBy);
+        Optional<Page> pagesListComputer = ComputerService.INSTANCE.getComputers(search, pageSize, pageNumber, orderBy);
+        Page page = pagesListComputer.get();
+        List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(page);
+        PageListComputerDTO listComputerDTO = new PageListComputerDTO(search, page.getTotalNumberOfPage(),
+                page.getTotalRow(), page.getPageNumber(), pageSize, dtoList, page.getOrderBy());
         return listComputerDTO;
     }
 
-    public boolean removeComputers(String[] idsStr) { // TODO : create function in DAO to use rollBack if delete error
+    public boolean removeComputers(String[] idsStr) { // TODO : create function
+                                                      // in DAO to use rollBack
+                                                      // if delete error
         for (String idStr : idsStr) {
             long id = Long.parseLong(idStr);
             Optional<Computer> computerOptional = getComputerById(id);
@@ -231,7 +240,10 @@ public enum ComputerService {
         return true;
     }
 
-    public long removeComputersCompany(long companyId) { // TODO : create function in DAO to use rollBack if delete error
+    public long removeComputersCompany(long companyId) { // TODO : create
+                                                         // function in DAO to
+                                                         // use rollBack if
+                                                         // delete error
         long result = -1;
         try {
             result = computerDao.deleteComputersCompany(companyId);
