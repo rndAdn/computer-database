@@ -10,9 +10,10 @@ import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer.ComputerBuilder;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-import com.excilys.computerdatabase.computerdb.service.pages.PagesListComputer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +59,8 @@ public class ComputerDTOMapper {
         return computerBuilder.build();
     }
 
-    public static List<ComputerDTO> mapperPagelistComputerToDTO(PagesListComputer pagesListComputer) {
-        List<Pageable> list = pagesListComputer.getCurrentPage().getList();
+    public static List<ComputerDTO> mapperPagelistComputerToDTO(Page pagesListComputer) {
+        List<Pageable> list = pagesListComputer.getListe();
         List<ComputerDTO> dtoList = new ArrayList<>();
         for (Pageable computer : list) {
             Computer c = (Computer) computer;

@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public class ListCompanyAction implements ActionMenu {
 

@@ -3,8 +3,6 @@ package com.excilys.computerdatabase.computerdb.model.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-
 public class Page {
     
     private long rowByPages;

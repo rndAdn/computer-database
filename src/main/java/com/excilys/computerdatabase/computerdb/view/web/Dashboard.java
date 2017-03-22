@@ -59,7 +59,7 @@ public class Dashboard extends HttpServlet {
         } catch (NumberFormatException e) {
             //LOGGER.error("error page parse size :" + pageSizeString + " number :" + pageNumberString    );
         }
-
+        LOGGER.debug("getComputerDTOList search:" + search + " pageSize:" + pageSize + " pageNumber:" + pageNumber + " orderBy:" + orderBy);
         return ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber, orderBy);
     }
 

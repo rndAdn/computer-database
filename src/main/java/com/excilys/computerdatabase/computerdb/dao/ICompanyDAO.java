@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 
 public interface ICompanyDAO {
 

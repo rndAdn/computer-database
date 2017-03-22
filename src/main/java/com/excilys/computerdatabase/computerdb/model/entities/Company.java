@@ -1,7 +1,5 @@
 package com.excilys.computerdatabase.computerdb.model.entities;
 
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
-
 public class Company implements Pageable {
 
     private final long id;
