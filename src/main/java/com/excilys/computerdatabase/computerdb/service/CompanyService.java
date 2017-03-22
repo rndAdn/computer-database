@@ -24,11 +24,10 @@ import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 @Repository
 public class CompanyService {
 
-    
-    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    //DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
     @Autowired
-    CompanyDao companyDao;// = context.getBean(CompanyDao.class);
+    CompanyDao companyDao;
+    @Autowired
+    ComputerService computerService;
     
 
     /**
@@ -82,7 +81,7 @@ public class CompanyService {
     }
 
     public long removeCompany(Company company) {
-        long nbSuppr = ComputerService.INSTANCE.removeComputersCompany(company.getId());
+        long nbSuppr = computerService.removeComputersCompany(company.getId());
         try {
 
             boolean result = companyDao.deleteCompany(company);

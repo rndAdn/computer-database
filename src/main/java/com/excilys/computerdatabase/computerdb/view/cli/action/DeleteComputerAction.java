@@ -26,7 +26,7 @@ public class DeleteComputerAction implements ActionMenu {
             return;
         }
 
-        Optional<Computer> optionalComputer = ComputerService.INSTANCE.getComputerById(id);
+        Optional<Computer> optionalComputer = computerService.getComputerById(id);
         if (!optionalComputer.isPresent()) {
             System.out.println("Ordinateur introuvable dans la base de donnée");
             return;
@@ -45,7 +45,7 @@ public class DeleteComputerAction implements ActionMenu {
             return;
         }
 
-        ComputerService.INSTANCE.deleteComputer(computer);
+        computerService.deleteComputer(computer);
         System.out.println("Ordinateur supprimé");
     }
 

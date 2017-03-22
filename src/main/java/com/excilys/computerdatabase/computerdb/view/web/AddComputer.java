@@ -20,10 +20,11 @@ import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
-public class AddComputer extends HttpServlet {
+public class AddComputer extends Servlet {
     
     ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     CompanyService companyService = context.getBean(CompanyService.class);
+    ComputerService computerService = context.getBean(ComputerService.class);
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
 
@@ -62,7 +63,7 @@ public class AddComputer extends HttpServlet {
         String[] companyInfo = company.split(":");
         companyId = companyInfo[0];
         companyName = companyInfo[1];
-        ComputerService.INSTANCE.ajoutComputer(name, dateIntroStr, dateFinStr, companyId, companyName);
+        computerService.ajoutComputer(name, dateIntroStr, dateFinStr, companyId, companyName);
         return true;
     }
 

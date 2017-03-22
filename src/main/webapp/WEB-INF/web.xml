@@ -29,5 +29,9 @@
 		<servlet-name>AddComputer</servlet-name>
 		<url-pattern>/addComputer</url-pattern>
 	</servlet-mapping>
-
+	<listener>
+    <listener-class>
+        org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+</listener>
 </web-app>

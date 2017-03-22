@@ -23,12 +23,13 @@ import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 import com.excilys.computerdatabase.computerdb.model.controller.ControllerComputer;
 
-public class EditComputer extends HttpServlet {
+public class EditComputer extends Servlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditComputer.class);
     
     ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     CompanyService companyService = context.getBean(CompanyService.class);
+    ComputerService computerService = context.getBean(ComputerService.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,7 +47,7 @@ public class EditComputer extends HttpServlet {
             LOGGER.error("Edit Comp web doGet IdError " + idStr);
         }
 
-        ComputerDTO computerDTO = ComputerService.INSTANCE.getComputerDTOById(id);
+        ComputerDTO computerDTO = computerService.getComputerDTOById(id);
         if (ControllerComputer.CONTROLLER_COMPUTER.checkId(computerDTO.getId())) {
             long cId = computerDTO.getCompany().getId();
             session.setAttribute("computer", computerDTO);
@@ -109,6 +110,6 @@ public class EditComputer extends HttpServlet {
                 .company(companyDTO)
                 .build();
 
-        return ComputerService.INSTANCE.updateComputer(computerDTO);
+        return computerService.updateComputer(computerDTO);
     }
 }

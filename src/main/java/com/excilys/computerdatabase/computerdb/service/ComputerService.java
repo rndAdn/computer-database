@@ -22,16 +22,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
 
-public enum ComputerService {
+@Repository
+public class ComputerService {
 
-    INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
     
-    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    //DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
-    ComputerDao computerDao = context.getBean(ComputerDao.class);
+    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    @Autowired
+    ComputerDao computerDao;// = context.getBean(ComputerDao.class);
     
 
 
@@ -214,7 +215,7 @@ public enum ComputerService {
     public PageListComputerDTO getComputerDTOList(String search, long pageSize, long pageNumber, String orderBy) {
         LOGGER.debug("getComputers search:" + search + " pageSize:" + pageSize + " pageNumber:" + pageNumber
                 + " orderBy:" + orderBy);
-        Optional<Page> pagesListComputer = ComputerService.INSTANCE.getComputers(search, pageSize, pageNumber, orderBy);
+        Optional<Page> pagesListComputer = getComputers(search, pageSize, pageNumber, orderBy);
         Page page = pagesListComputer.get();
         List<ComputerDTO> dtoList = ComputerDTOMapper.mapperPagelistComputerToDTO(page);
         PageListComputerDTO listComputerDTO = new PageListComputerDTO(search, page.getTotalNumberOfPage(),

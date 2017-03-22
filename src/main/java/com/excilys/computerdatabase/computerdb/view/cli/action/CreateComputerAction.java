@@ -68,7 +68,7 @@ public class CreateComputerAction implements ActionMenu {
             System.out.print("Ordinateur non ajouté");
             return;
         }
-        ComputerService.INSTANCE.ajoutComputer(computer);
+        computerService.ajoutComputer(computer);
         System.out.println("Ordinateur ajouté");
 
     }

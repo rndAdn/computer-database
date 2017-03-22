@@ -10,13 +10,21 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.dto.PageListComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
-public class Dashboard extends HttpServlet {
+public class Dashboard extends Servlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
+    
+    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    @Autowired
+    ComputerService computerService;// = context.getBean(ComputerService.class);
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +68,7 @@ public class Dashboard extends HttpServlet {
             //LOGGER.error("error page parse size :" + pageSizeString + " number :" + pageNumberString    );
         }
         LOGGER.debug("getComputerDTOList search:" + search + " pageSize:" + pageSize + " pageNumber:" + pageNumber + " orderBy:" + orderBy);
-        return ComputerService.INSTANCE.getComputerDTOList(search, pageSize, pageNumber, orderBy);
+        return computerService.getComputerDTOList(search, pageSize, pageNumber, orderBy);
     }
 
     private void setJspAttribute(HttpSession session, PageListComputerDTO dtolistComputer) {
@@ -79,7 +87,7 @@ public class Dashboard extends HttpServlet {
             LOGGER.info("rm computers length: " + idsStr.length);
         }*/
 
-        boolean result = ComputerService.INSTANCE.removeComputers(idsStr);
+        boolean result = computerService.removeComputers(idsStr);
 
         return result;
     }

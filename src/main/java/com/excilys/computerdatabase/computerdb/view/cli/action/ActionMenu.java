@@ -5,11 +5,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
+import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public interface ActionMenu {
     
     ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     CompanyService companyService = context.getBean(CompanyService.class);
+    ComputerService computerService = context.getBean(ComputerService.class);
 
     /**
      * Execute a Cli action (create computer, update, ... ).
