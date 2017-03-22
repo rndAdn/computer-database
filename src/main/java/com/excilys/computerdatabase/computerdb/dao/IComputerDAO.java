@@ -8,14 +8,6 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public interface IComputerDAO {
 
-    String SELECT_COMPUTER_BY_ID = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE c.id = ?";
-    String SELECT_COMPUTER_BY_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id WHERE UPPER(c.name) LIKE UPPER(?) LIMIT ?, ?";
-    String SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, comp.name as company_name FROM computer AS c LEFT JOIN company as comp ON c.company_id = comp.id LIMIT ?, ?";
-    String DELETE_COMPUTER = "DELETE FROM computer WHERE id=?;";
-    String INSERT_COMPUTER = "INSERT into computer (name,introduced,discontinued,company_id) values (?,?,?,?);";
-    String UPDATE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
-    String COUNT_TOTAL_COLUMN_NAME = "total";
-    String COUNT_COMPUTERS = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM computer";
 
     /**
      * Get a Computer from database by it's id.
@@ -42,7 +34,7 @@ public interface IComputerDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getComputersByName(String name, long limitStart, long size) throws DaoException;
+    List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException;
 
     /**
      * Get all Computer from database.
@@ -55,7 +47,7 @@ public interface IComputerDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getComputers(long limitStart, long size) throws DaoException;
+    List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException;
 
     /**
      * Delete a Computer in database given a Computer.
@@ -98,5 +90,9 @@ public interface IComputerDAO {
      *             .
      */
     long countComputers() throws DaoException;
+    
+    long countComputersWithName(String name) throws DaoException;
+    
+    long deleteComputersCompany(long companyId) throws DaoException;
 
 }

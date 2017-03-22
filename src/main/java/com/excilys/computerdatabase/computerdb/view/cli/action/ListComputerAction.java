@@ -16,6 +16,7 @@ public class ListComputerAction implements ActionMenu {
         Page page;
 
         do {
+            pagesList.setOrderBy("name");
             page = pagesList.getCurrentPage();
             page.printContent();
 

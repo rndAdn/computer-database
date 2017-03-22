@@ -17,14 +17,23 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
-public enum ComputerDao {
 
-    INSTANCE;
+public class ComputerDao implements IComputerDAO{
+
+
+    
+    //@Autowired
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
 
     private final Logger LOGGER = LoggerFactory
             .getLogger(ComputerDao.class);
@@ -54,7 +63,8 @@ public enum ComputerDao {
     /**
      *
      */
-    ComputerDao() {
+    public ComputerDao() {
+        
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             computerTable = config.getString("ComputerTable");
@@ -103,14 +113,7 @@ public enum ComputerDao {
 
     }
 
-    /**
-     * Get a Computer from database by it's id.
-     *
-     * @param id Computer id in DatabaseManager.
-     * @return A Optional Computer. empty if the Computer doesn't exist in the
-     * database.
-     * @throws DaoException .
-     */
+    @Override
     public Optional<Computer> getComputerById(long id) throws DaoException {
         Optional<Computer> optionalComputer = Optional.empty();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.checkId(id)) {
@@ -118,7 +121,7 @@ public enum ComputerDao {
             return optionalComputer;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID)
         ) {
 
@@ -138,16 +141,7 @@ public enum ComputerDao {
         return optionalComputer;
     }
 
-    /**
-     * Find all Computer from database by name.
-     *
-     * @param name       Of Computer(s) to find
-     * @param limitStart Start of first result.
-     * @param orderby sort list on column
-     * @param size       Max list size
-     * @return a List Pageable
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
@@ -158,7 +152,7 @@ public enum ComputerDao {
         String query = String.format(SELECT_COMPUTER_BY_NAME, col);
         try (
 
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
 
@@ -182,15 +176,7 @@ public enum ComputerDao {
         return result;
     }
 
-    /**
-     * Get all Computer from database.
-     *
-     * @param limitStart Start of first result.
-     * @param size       Max list size.
-     * @param orderby sort list on column
-     * @return a List Pageable
-     * @throws DaoException .
-     */
+    @Override
     public List<Pageable> getComputers(long limitStart, long size, String orderby) throws DaoException {
         List<Pageable> result = new ArrayList<>();
         String col = mapColumnOrderBy(orderby);
@@ -198,7 +184,7 @@ public enum ComputerDao {
 
         String query = String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(query)
         ) {
 
@@ -220,13 +206,7 @@ public enum ComputerDao {
         return result;
     }
 
-    /**
-     * Delete a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to delete
-     * @return true if computer is delete false otherwise
-     * @throws DaoException .
-     */
+    @Override
     public boolean deleteComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
@@ -235,7 +215,7 @@ public enum ComputerDao {
         }
         long id = computer.getId();
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)
         ) {
             deleteStatment.setLong(1, id);
@@ -245,10 +225,10 @@ public enum ComputerDao {
         } catch (SQLException e) {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
 
         if (result != 1) {
@@ -257,13 +237,7 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Update a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to update
-     * @return true if the computer is update in database
-     * @throws DaoException .
-     */
+    @Override
     public boolean updateComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
@@ -271,7 +245,7 @@ public enum ComputerDao {
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER)
         ) {
             updateStatment.setString(1, computer.getName());
@@ -304,10 +278,10 @@ public enum ComputerDao {
             connection.commit();
         } catch (SQLException e) {
             LOGGER.error("updateComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         if (result != 1) {
             LOGGER.info("updateComputer False id : " + computer.getId() + " result : " + result);
@@ -315,13 +289,7 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Insert a Computer in database given a Computer.
-     *
-     * @param computer Representation of the computer to create
-     * @return true if the computer is created in database
-     * @throws DaoException .
-     */
+    @Override
     public boolean insertComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(computer.getName())) {
@@ -329,7 +297,7 @@ public enum ComputerDao {
             return false;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER)
         ) {
             insertStatment.setString(1, computer.getName());
@@ -360,10 +328,10 @@ public enum ComputerDao {
             connection.commit();
         } catch (SQLException e) {
             LOGGER.error("insertComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
+            databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         if (result != 1) {
             LOGGER.info("insertComputer False id : " + computer.getId() + " result : " + result);
@@ -371,16 +339,11 @@ public enum ComputerDao {
         return result == 1;
     }
 
-    /**
-     * Get number of Computer in database.
-     *
-     * @return Total number of Computer in the database.
-     * @throws DaoException .
-     */
+    @Override
     public long countComputers() throws DaoException {
         long number = 0;
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
             ResultSet rset;
@@ -394,12 +357,12 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return number;
     }
 
-
+    @Override
     public long countComputersWithName(String name) throws DaoException {
         long number = 0;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
@@ -407,7 +370,7 @@ public enum ComputerDao {
             return 0;
         }
         try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
+                Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -423,11 +386,38 @@ public enum ComputerDao {
             LOGGER.error("countComputers : " + e.getMessage());
             throw new DaoException(e.getMessage());
         } finally {
-            DatabaseManager.INSTANCE.closeConnection();
+            databaseManager.closeConnection();
         }
         return number;
     }
 
+    @Override
+    public long deleteComputersCompany(long companyId) throws DaoException {
+        int result = -1;
+
+        try (
+                Connection connection = databaseManager.getConnection();
+                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
+        ) {
+            deleteStatment.setLong(1, companyId);
+            result = deleteStatment.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+
+            LOGGER.error("deleteComputer : " + e.getMessage());
+            databaseManager.rollback();
+            throw new DaoException(e.getMessage());
+        } finally {
+            databaseManager.closeConnection();
+        }
+
+        if (result == 0) {
+            LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
+        }
+        return result;
+    }
+    
     private String mapColumnOrderBy(String orderBy) {
         switch (orderBy) {
             case "name":
@@ -441,32 +431,6 @@ public enum ComputerDao {
             default:
                 return computerName;
         }
-    }
-
-    public long deleteComputersCompany(long companyId) throws DaoException {
-        int result = -1;
-
-        try (
-                Connection connection = DatabaseManager.INSTANCE.getConnection();
-                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
-        ) {
-            deleteStatment.setLong(1, companyId);
-            result = deleteStatment.executeUpdate();
-
-            connection.commit();
-        } catch (SQLException e) {
-
-            LOGGER.error("deleteComputer : " + e.getMessage());
-            DatabaseManager.INSTANCE.rollback();
-            throw new DaoException(e.getMessage());
-        } finally {
-            DatabaseManager.INSTANCE.closeConnection();
-        }
-
-        if (result == 0) {
-            LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
-        }
-        return result;
     }
 }
 

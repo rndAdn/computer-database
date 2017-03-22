@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
+import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
@@ -12,9 +16,16 @@ import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 import com.excilys.computerdatabase.computerdb.service.pages.PagesListCompany;
 
+
 public enum CompanyService {
 
     INSTANCE;
+    
+    CompanyDao companyDao;
+    
+    CompanyService() {
+        companyDao = new CompanyDao();
+    }
 
     /**
      * Get a Company from DAO by it's id.
@@ -26,7 +37,7 @@ public enum CompanyService {
      */
     public Optional<Company> getCompanyByid(long id) {
         try {
-            return CompanyDao.INSTANCE.getCompanyById(id);
+            return companyDao.getCompanyById(id);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -42,7 +53,7 @@ public enum CompanyService {
     public PagesListCompany getCompanys() {
         PagesListCompany pagesList = new PagesListCompany();
         try {
-            long nbCompany = CompanyDao.INSTANCE.getNumberOfCompany();
+            long nbCompany = companyDao.getNumberOfCompany();
 
             pagesList.setTotalNumberOfRow(nbCompany);
         } catch (DaoException e) {
@@ -69,7 +80,7 @@ public enum CompanyService {
         long nbSuppr = ComputerService.INSTANCE.removeComputersCompany(company.getId());
         try {
 
-            boolean result = CompanyDao.INSTANCE.deleteCompany(company);
+            boolean result = companyDao.deleteCompany(company);
             if (!result) {
                 return -1;
             }

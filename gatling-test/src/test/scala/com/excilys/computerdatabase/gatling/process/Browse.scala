@@ -24,7 +24,7 @@ object Browse {
     .feed(feederPageSize)
     .feed(feederPage)
     .repeat(numberPage) {
-      exec(http("Browse: Browse page: ${page},  pageSize: ${pageSize}, column: ${column}, order: ${order}")
+      exec(http("Browse: Browse page: ")
         .get(config.getString("application.urls.dashboardPage"))
         .queryParam(config.getString("application.urls.param.page").toString(), "${page}")
         .queryParam(config.getString("application.urls.param.pageSize").toString(), "${pageSize}")

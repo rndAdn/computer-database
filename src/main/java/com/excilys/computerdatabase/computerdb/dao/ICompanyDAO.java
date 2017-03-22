@@ -8,12 +8,6 @@ import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
 
 public interface ICompanyDAO {
 
-    String SELECT_COMPANY_BY_ID = "SELECT * FROM company WHERE id = ?";
-    String SELECT_COMPANY_BY_NAME = "SELECT * FROM company WHERE name = ? LIMIT ?, ?";
-    String SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM company LIMIT ?, ?";
-    String COUNT_TOTAL_COLUMN_NAME = "total";
-    String COUNT_COMPANY = "SELECT count(id) as " + COUNT_TOTAL_COLUMN_NAME + " FROM company";
-
     /**
      * Get a Company from database by it's id.
      *
@@ -62,5 +56,22 @@ public interface ICompanyDAO {
      *             .
      */
     long getNumberOfCompany() throws DaoException;
+    
+    /**
+     * Get number of company in database.
+     * @param name .
+     * @return Total number of company in the database.
+     * @throws DaoException .
+     */
+    long getNumberOfCompany(String name) throws DaoException;
+    
+    /**
+     * Delete a Computer in database given a Computer.
+     *
+     * @param company Representation of the computer to delete
+     * @return true if computer is delete false otherwise
+     * @throws DaoException .
+     */
+    boolean deleteCompany(Company company) throws DaoException;
 
 }
