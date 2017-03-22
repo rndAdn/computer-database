@@ -71,7 +71,7 @@ public class UpdateComputerAction implements ActionMenu {
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdString)) {
             long companyid = Utils.stringToId(companyIdString);
-            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
+            optionalCompany = companyService.getCompanyByid(companyid);
         }
 
         computer = new Computer.ComputerBuilder(name).id(id).dateIntroduced(dateIntro.orElse(null))

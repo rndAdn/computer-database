@@ -15,8 +15,11 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
@@ -24,6 +27,7 @@ import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 
+@Repository
 public class CompanyDao implements ICompanyDAO {
     
 
@@ -31,9 +35,9 @@ public class CompanyDao implements ICompanyDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
     
 
-    //@Autowired
-    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
+    @Autowired
+    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
     
     private String companyTable;
     private String companyId;

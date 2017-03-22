@@ -20,7 +20,7 @@ public class ListCompanyAction implements ActionMenu {
     @Override
     public void executeAction() {
         Optional<Page> page;
-        page = CompanyService.INSTANCE.getCompanys();
+        page = companyService.getCompanys();
 
         List<Pageable> list = new ArrayList<>();
         

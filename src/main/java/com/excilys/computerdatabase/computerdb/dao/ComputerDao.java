@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
@@ -28,14 +29,14 @@ import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 
-
+@Repository
 public class ComputerDao implements IComputerDAO{
 
 
     
-    //@Autowired
-    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
+    @Autowired
+    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    DatabaseManager databaseManager ;//= context.getBean(DatabaseManager.class);
 
     private final Logger LOGGER = LoggerFactory
             .getLogger(ComputerDao.class);

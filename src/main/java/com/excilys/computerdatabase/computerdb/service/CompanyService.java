@@ -4,28 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.dao.DatabaseManager;
+import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 
+@Repository
+public class CompanyService {
 
-public enum CompanyService {
-
-    INSTANCE;
     
-    CompanyDao companyDao;
+    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    //DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
+    @Autowired
+    CompanyDao companyDao;// = context.getBean(CompanyDao.class);
     
-    CompanyService() {
-        companyDao = new CompanyDao();
-    }
 
     /**
      * Get a Company from DAO by it's id.

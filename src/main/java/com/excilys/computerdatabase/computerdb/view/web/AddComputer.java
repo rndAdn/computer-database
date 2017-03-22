@@ -10,18 +10,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
+import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class AddComputer extends HttpServlet {
+    
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    CompanyService companyService = context.getBean(CompanyService.class);
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<CompanyDTO> list = CompanyService.INSTANCE.getCompanyDTOList();
+        List<CompanyDTO> list = companyService.getCompanyDTOList();
         request.setAttribute("companylist", list);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request, response);

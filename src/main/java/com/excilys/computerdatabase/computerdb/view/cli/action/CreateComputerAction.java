@@ -14,6 +14,7 @@ import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
 public class CreateComputerAction implements ActionMenu {
+    
 
     @Override
     public void executeAction() {
@@ -50,7 +51,7 @@ public class CreateComputerAction implements ActionMenu {
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdString)) {
             long companyid = Utils.stringToId(companyIdString);
-            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
+            optionalCompany = companyService.getCompanyByid(companyid);
         }
 
         Computer computer;

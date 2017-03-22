@@ -14,7 +14,10 @@ import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
@@ -23,6 +26,9 @@ import com.excilys.computerdatabase.computerdb.model.controller.ControllerComput
 public class EditComputer extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditComputer.class);
+    
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    CompanyService companyService = context.getBean(CompanyService.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,7 +36,7 @@ public class EditComputer extends HttpServlet {
         HttpSession session = request.getSession();
         String idStr = request.getParameter("computerId");
 
-        List<CompanyDTO> list = CompanyService.INSTANCE.getCompanyDTOList();
+        List<CompanyDTO> list = companyService.getCompanyDTOList();
         session.setAttribute("companylist", list);
         session.setAttribute("computerId", idStr);
         long id = -1;

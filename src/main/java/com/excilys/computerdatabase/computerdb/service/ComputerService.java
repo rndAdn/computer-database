@@ -3,8 +3,10 @@ package com.excilys.computerdatabase.computerdb.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
+import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.controller.ControllerCompany;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
@@ -17,20 +19,21 @@ import com.excilys.computerdatabase.computerdb.model.controller.ControllerComput
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public enum ComputerService {
 
     INSTANCE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
+    
+    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    //DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
+    ComputerDao computerDao = context.getBean(ComputerDao.class);
+    
 
-    ComputerDao computerDao;
-
-    ComputerService() {
-        computerDao = new ComputerDao();
-    }
 
     /**
      * Insert a Computer in database given a Computer.
