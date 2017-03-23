@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.excilys.computerdatabase.computerdb")
-public class DashboardConfiguration extends WebMvcConfigurerAdapter{
+public class SpringConfiguration extends WebMvcConfigurerAdapter{
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -25,6 +25,6 @@ public class DashboardConfiguration extends WebMvcConfigurerAdapter{
     }
     
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("resources/");
     }
 }

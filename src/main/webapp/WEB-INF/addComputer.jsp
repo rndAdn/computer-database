@@ -5,9 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="./css/main.css" rel="stylesheet" media="screen">
+<link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -49,13 +49,13 @@
 					<div class="actions pull-right">
 						<input type="submit" value="Add" class="btn btn-primary">
 						or 
-						<a href="dashboard" class="btn btn-default">Cancel</a>
+						<a href="" class="btn btn-default">Cancel</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	</section>
-	<script src="./js/validation.js"></script>
+	<script src="resources/js/validation.js"></script>
 </body>
 </html>
