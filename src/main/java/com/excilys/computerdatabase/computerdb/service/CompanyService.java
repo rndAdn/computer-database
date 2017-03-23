@@ -1,20 +1,17 @@
 package com.excilys.computerdatabase.computerdb.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
-import com.excilys.computerdatabase.computerdb.dao.ComputerDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
 import com.excilys.computerdatabase.computerdb.dao.DatabaseManager;
-import com.excilys.computerdatabase.computerdb.dao.SpringConfig;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
@@ -29,6 +26,9 @@ public class CompanyService {
     @Autowired
     ComputerService computerService;
     
+    @Autowired
+    DatabaseManager databaseManager;
+    
 
     /**
      * Get a Company from DAO by it's id.
@@ -39,10 +39,16 @@ public class CompanyService {
      * @throws DaoException .
      */
     public Optional<Company> getCompanyByid(long id) {
-        try {
-            return companyDao.getCompanyById(id);
+        try (Connection connection = databaseManager.getConnection()) {
+            Optional<Company> company =  companyDao.getCompanyById(connection, id);
+            connection.commit();
+            
+            return company;
         } catch (DaoException e) {
             e.printStackTrace();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
         return Optional.empty();
     }
@@ -55,10 +61,15 @@ public class CompanyService {
      */
     public Optional<Page> getCompanys() {
         Optional<Page> page = Optional.empty();
-        try {
-            page = companyDao.getCompanys();
+        try (Connection connection = databaseManager.getConnection()) {
+            page = companyDao.getCompanys(connection);
+            
+            connection.commit();
         } catch (DaoException e) {
             e.printStackTrace();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
 
         return page;
@@ -82,14 +93,18 @@ public class CompanyService {
 
     public long removeCompany(Company company) {
         long nbSuppr = computerService.removeComputersCompany(company.getId());
-        try {
+        try (Connection connection = databaseManager.getConnection()) {
 
-            boolean result = companyDao.deleteCompany(company);
+            boolean result = companyDao.deleteCompany(connection, company);
+            connection.commit();
             if (!result) {
                 return -1;
             }
         } catch (DaoException e) {
             e.printStackTrace();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
         return nbSuppr;
     }

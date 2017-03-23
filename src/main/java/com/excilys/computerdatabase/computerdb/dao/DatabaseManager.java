@@ -75,8 +75,9 @@ public class DatabaseManager {
      * return the Connection, create a new one If connection is null.
      *
      * @return A Connection
+     * @throws DaoException 
      */
-    public Connection getConnection() {
+    public Connection getConnection() throws DaoException {
         Connection connection;
         try {
             if (connectionThreadLocal.get() == null || connectionThreadLocal.get().isClosed()) {
@@ -86,6 +87,7 @@ public class DatabaseManager {
             }
         } catch (Exception e) {
             LOGGER.debug("get exception " + e.getMessage());
+            throw new DaoException(e.getMessage());
         }
 
            

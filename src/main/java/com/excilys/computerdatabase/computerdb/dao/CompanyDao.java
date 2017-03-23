@@ -35,9 +35,7 @@ public class CompanyDao implements ICompanyDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
     
 
-    @Autowired
-    //ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    DatabaseManager databaseManager;// = context.getBean(DatabaseManager.class);
+    
     
     private String companyTable;
     private String companyId;
@@ -81,14 +79,14 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public Optional<Company> getCompanyById(long id) throws DaoException {
+    public Optional<Company> getCompanyById(Connection connection, long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.checkId(id)) {
             LOGGER.error("Id non valide : " + id);
             return optionalCompany;
         }
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)
         ) {
             selectStatement.setLong(1, id);
@@ -98,7 +96,7 @@ public class CompanyDao implements ICompanyDAO {
                 optionalCompany = Optional.of(MapperCompany.mapCompany(rset));
             }
 
-            connection.commit();
+            
             rset.close();
         } catch (SQLException e) {
             LOGGER.error("getCompanyById : " + e.getMessage());
@@ -109,7 +107,7 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException {
+    public Optional<Page> getCompanyByName(Connection connection, String name, long limitStart, long size) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
         //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
         BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
@@ -121,7 +119,7 @@ public class CompanyDao implements ICompanyDAO {
         }
 
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME)
         ) {
             selectStatement.setString(1, name + "%");
@@ -133,26 +131,25 @@ public class CompanyDao implements ICompanyDAO {
             while (rset.next()) {
                 result.add(MapperCompany.mapCompany(rset));
             }
-            connection.commit();
             rset.close();
         } catch (SQLException e) {
             LOGGER.error("getCompanyByName : " + e.getMessage());
             throw new DaoException(e.getMessage());
         }
         builderPage.list(result);
-        builderPage.totalRow(getNumberOfCompany(name));
+        builderPage.totalRow(getNumberOfCompany(connection, name));
         optionalPage = Optional.of(builderPage.build());
         return optionalPage;
     }
 
     @Override
-    public Optional<Page> getCompanys(long limitStart, long size) throws DaoException {
+    public Optional<Page> getCompanys(Connection connection, long limitStart, long size) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
         //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
         BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
         List<Pageable> result = new ArrayList<>();
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT)
         ) {
             selectStatement.setLong(1, limitStart);
@@ -170,18 +167,18 @@ public class CompanyDao implements ICompanyDAO {
             throw new DaoException(e.getMessage());
         }
         builderPage.list(result);
-        builderPage.totalRow(getNumberOfCompany());
+        builderPage.totalRow(getNumberOfCompany(connection));
         optionalPage = Optional.of(builderPage.build());
         return optionalPage;
     }
     
-
-    public Optional<Page> getCompanys() throws DaoException {
+    @Override
+    public Optional<Page> getCompanys(Connection connection) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
         List<Pageable> result = new ArrayList<>();
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY)
         ) {
 
@@ -197,16 +194,16 @@ public class CompanyDao implements ICompanyDAO {
             throw new DaoException(e.getMessage());
         }
         builderPage.list(result);
-        builderPage.totalRow(getNumberOfCompany());
+        builderPage.totalRow(getNumberOfCompany(connection));
         optionalPage = Optional.of(builderPage.build());
         return optionalPage;
     }
 
     @Override
-    public long getNumberOfCompany() throws DaoException {
+    public long getNumberOfCompany(Connection connection) throws DaoException {
         long number = 0;
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
 
@@ -224,7 +221,7 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public long getNumberOfCompany(String name) throws DaoException {
+    public long getNumberOfCompany(Connection connection, String name) throws DaoException {
         long number = 0;
         if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValideName(name)) {
             LOGGER.error("Name non valide : '" + name + "'");
@@ -232,7 +229,7 @@ public class CompanyDao implements ICompanyDAO {
         }
 
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -251,14 +248,14 @@ public class CompanyDao implements ICompanyDAO {
 
 
     @Override
-    public boolean deleteCompany(Company company) throws DaoException {
+    public boolean deleteCompany(Connection connection, Company company) throws DaoException {
         int result;
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
             LOGGER.error("Company non valide : '" + company + "'");
             return false;
         }
         try (
-                Connection connection = databaseManager.getConnection();
+                //Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
         ) {
             deleteStatment.setLong(1, company.getId());
@@ -267,10 +264,10 @@ public class CompanyDao implements ICompanyDAO {
         } catch (SQLException e) {
 
             LOGGER.error("deleteCompany : " + e.getMessage());
-            databaseManager.rollback();
+            //databaseManager.rollback();
             throw new DaoException(e.getMessage());
         } finally {
-            databaseManager.closeConnection();
+            //databaseManager.closeConnection();
         }
         return result == 1;
     }

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
-import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import java.sql.Connection;
 
 public interface ICompanyDAO {
 
@@ -19,7 +19,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    Optional<Company> getCompanyById(long id) throws DaoException;
+    Optional<Company> getCompanyById(Connection connection, long id) throws DaoException;
 
     /**
      * Find all Company from database by name.
@@ -34,7 +34,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException;
+    Optional<Page> getCompanyByName(Connection connection, String name, long limitStart, long size) throws DaoException;
 
     /**
      * Get all Company from database.
@@ -47,7 +47,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    Optional<Page> getCompanys(long limitStart, long size) throws DaoException;
+    Optional<Page> getCompanys(Connection connection, long limitStart, long size) throws DaoException;
 
     /**
      * Get number of company in database.
@@ -56,7 +56,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    long getNumberOfCompany() throws DaoException;
+    long getNumberOfCompany(Connection connection) throws DaoException;
     
     /**
      * Get number of company in database.
@@ -64,7 +64,7 @@ public interface ICompanyDAO {
      * @return Total number of company in the database.
      * @throws DaoException .
      */
-    long getNumberOfCompany(String name) throws DaoException;
+    long getNumberOfCompany(Connection connection, String name) throws DaoException;
     
     /**
      * Delete a Computer in database given a Computer.
@@ -73,6 +73,8 @@ public interface ICompanyDAO {
      * @return true if computer is delete false otherwise
      * @throws DaoException .
      */
-    boolean deleteCompany(Company company) throws DaoException;
+    boolean deleteCompany(Connection connection, Company company) throws DaoException;
+
+    Optional<Page> getCompanys(Connection connection) throws DaoException;
 
 }
