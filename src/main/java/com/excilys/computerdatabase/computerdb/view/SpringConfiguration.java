@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.view.web;
+package com.excilys.computerdatabase.computerdb.view;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

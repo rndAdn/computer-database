@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import com.excilys.computerdatabase.computerdb.dao.controller.ControllerDAOCompany;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -16,14 +18,14 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.sun.tracing.dtrace.Attributes;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 
@@ -50,7 +52,12 @@ public class CompanyDao implements ICompanyDAO {
     private final String COUNT_COMPANY_BY_NAME;
     private final String DELETE_COMPANY;
 
+    @Autowired
+    DatabaseManager databaseManager;
+    
     public CompanyDao() {
+        
+        
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             companyTable = config.getString("CompanyTable");
@@ -79,15 +86,17 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public Optional<Company> getCompanyById(Connection connection, long id) throws DaoException {
+    public Optional<Company> getCompanyById(long id) throws DaoException {
         Optional<Company> optionalCompany = Optional.empty();
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.checkId(id)) {
             LOGGER.error("Id non valide : " + id);
             return optionalCompany;
         }
+        //Company company = (Company) jdbcTemplate.queryForObject(SELECT_COMPANY_BY_ID, new Object[] { id }, new BeanPropertyRowMapper(Company.class));
+        //optionalCompany = Optional.ofNullable(company);
         try (
-                //Connection connection = databaseManager.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)
+                
+                PreparedStatement selectStatement = databaseManager.getConnection().prepareStatement(SELECT_COMPANY_BY_ID)
         ) {
             selectStatement.setLong(1, id);
 
@@ -98,6 +107,8 @@ public class CompanyDao implements ICompanyDAO {
 
             
             rset.close();
+            
+            
         } catch (SQLException e) {
             LOGGER.error("getCompanyById : " + e.getMessage());
             throw new DaoException(e.getMessage());

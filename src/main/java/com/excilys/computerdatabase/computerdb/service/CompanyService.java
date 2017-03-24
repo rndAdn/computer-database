@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
@@ -19,6 +20,7 @@ import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 
 @Repository
+@Transactional
 public class CompanyService {
 
     @Autowired
@@ -30,6 +32,7 @@ public class CompanyService {
     DatabaseManager databaseManager;
     
 
+    
     /**
      * Get a Company from DAO by it's id.
      *
@@ -38,17 +41,15 @@ public class CompanyService {
      * database.
      * @throws DaoException .
      */
+    @Transactional(readOnly=true)
     public Optional<Company> getCompanyByid(long id) {
-        try (Connection connection = databaseManager.getConnection()) {
-            Optional<Company> company =  companyDao.getCompanyById(connection, id);
-            connection.commit();
+        try /*(Connection connection = databaseManager.getConnection())*/ {
+            Optional<Company> company =  companyDao.getCompanyById(id);
+            //connection.commit();
             
             return company;
         } catch (DaoException e) {
             e.printStackTrace();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
         }
         return Optional.empty();
     }

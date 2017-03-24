@@ -12,19 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DatabaseManager {
 
-    private String dbName;
-    private String serverName;
-    private String poolSize;
-    private String userName;
-    private String password;
     private Logger  LOGGER = LoggerFactory.getLogger(DatabaseManager.class);
     //private HikariDataSource ds = null;
     
     @Autowired
-    private DataSource ds;
-    
-    private String dataSourceClassName;
-    private String autocommit;
+    private MyDataSource ds;
     
     ThreadLocal<Connection> connectionThreadLocal;
 
@@ -33,7 +25,8 @@ public class DatabaseManager {
      */
     DatabaseManager() {
         LOGGER = LoggerFactory.getLogger(getClass());
-        LOGGER.info("DatabaseManager Constructor " + this);
+        LOGGER.info("DatabaseManager Constructor " +
+        this);
         connectionThreadLocal = new ThreadLocal<>();
         
     }
@@ -118,5 +111,10 @@ public class DatabaseManager {
         } catch (SQLException e) {
             LOGGER.error("Connection RollBack");
         }
+    }
+
+
+    public MyDataSource getDataSource() {
+        return ds;
     }
 }

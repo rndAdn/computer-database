@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Scope("singleton")
-public class DataSource  extends DriverManagerDataSource {
+public class MyDataSource  extends DriverManagerDataSource {
     
     
-    private Logger  LOGGER = LoggerFactory.getLogger(DataSource.class);
+    private Logger  LOGGER = LoggerFactory.getLogger(MyDataSource.class);
     
     
-    public DataSource() {  
+    public MyDataSource() {  
+        LOGGER.info("DataSource");
         this.setDriverClassName("com.mysql.jdbc.Driver");
         this.setUrl("jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull");
         this.setUsername("admincdb");

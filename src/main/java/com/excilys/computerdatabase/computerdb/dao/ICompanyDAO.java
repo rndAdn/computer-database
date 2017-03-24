@@ -19,7 +19,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    Optional<Company> getCompanyById(Connection connection, long id) throws DaoException;
+    Optional<Company> getCompanyById(long id) throws DaoException;
 
     /**
      * Find all Company from database by name.
