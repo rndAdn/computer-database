@@ -178,27 +178,6 @@ public class CompanyDao implements ICompanyDAO {
         optionalPage = Optional.of(builderPage.build());
         
         return optionalPage;
-        
-        /*Optional<Page> optionalPage = Optional.empty();
-        BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
-        List<Pageable> result = new ArrayList<>();
-        try (PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY)) {
-
-            ResultSet rset = selectStatement.executeQuery();
-
-            while (rset.next()) {
-                result.add(MapperCompany.mapCompany(rset));
-            }
-            connection.commit();
-            rset.close();
-        } catch (SQLException e) {
-            LOGGER.error("getCompanys : " + e.getMessage());
-            throw new DaoException(e.getMessage());
-        }
-        builderPage.list(result);
-        builderPage.totalRow(getNumberOfCompany());
-        optionalPage = Optional.of(builderPage.build());
-        return optionalPage;*/
     }
 
     @Override
