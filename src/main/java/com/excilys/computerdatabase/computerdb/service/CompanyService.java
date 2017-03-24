@@ -60,6 +60,7 @@ public class CompanyService {
      * @return a PagesList
      * @throws DaoException .
      */
+    @Transactional(readOnly=true)
     public Optional<Page> getCompanys() {
         Optional<Page> page = Optional.empty();
         try (Connection connection = databaseManager.getConnection()) {
@@ -76,7 +77,7 @@ public class CompanyService {
         return page;
     }
 
-
+    @Transactional(readOnly=true)
     public List<CompanyDTO> getCompanyDTOList() {
         List<CompanyDTO> dtoList = new ArrayList<>();
         Optional<Page> page = getCompanys();

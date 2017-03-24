@@ -120,7 +120,6 @@ public class CompanyDao implements ICompanyDAO {
     @Override
     public Optional<Page> getCompanyByName(Connection connection, String name, long limitStart, long size) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
-        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
         BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
         List<Pageable> result = new ArrayList<>();
 
@@ -130,7 +129,6 @@ public class CompanyDao implements ICompanyDAO {
         }
 
         try (
-                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPANY_BY_NAME)
         ) {
             selectStatement.setString(1, name + "%");
@@ -156,11 +154,9 @@ public class CompanyDao implements ICompanyDAO {
     @Override
     public Optional<Page> getCompanys(Connection connection, long limitStart, long size) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
-        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
         BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
         List<Pageable> result = new ArrayList<>();
         try (
-                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY_WITH_LIMIT)
         ) {
             selectStatement.setLong(1, limitStart);
@@ -189,7 +185,6 @@ public class CompanyDao implements ICompanyDAO {
         BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
         List<Pageable> result = new ArrayList<>();
         try (
-                //Connection connection = databaseManager.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(SELECT_ALL_COMPANY)
         ) {
 
@@ -214,7 +209,6 @@ public class CompanyDao implements ICompanyDAO {
     public long getNumberOfCompany(Connection connection) throws DaoException {
         long number = 0;
         try (
-                //Connection connection = databaseManager.getConnection();
                 Statement st = connection.createStatement()
         ) {
 
@@ -240,7 +234,6 @@ public class CompanyDao implements ICompanyDAO {
         }
 
         try (
-                //Connection connection = databaseManager.getConnection();
                 PreparedStatement st = connection.prepareStatement(COUNT_COMPANY_BY_NAME)
         ) {
             st.setString(1, name + "%");
@@ -266,7 +259,6 @@ public class CompanyDao implements ICompanyDAO {
             return false;
         }
         try (
-                //Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);
         ) {
             deleteStatment.setLong(1, company.getId());
