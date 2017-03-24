@@ -15,7 +15,7 @@ public class ListComputerAction implements ActionMenu {
     @Override
     public void executeAction() {
         Optional<Page> page;
-        page = ComputerService.INSTANCE.getComputers("", 30, 1, "name");
+        page = computerService.getComputers("", 30, 1, "name");
 
         List<Pageable> list = new ArrayList<>();
         

@@ -5,9 +5,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="./css/main.css" rel="stylesheet" media="screen">
+<link href="resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen">
+<link href="resources/css/font-awesome.css" rel="stylesheet"
+	media="screen">
+<link href="resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -25,20 +27,23 @@
 				<form action="addComputer" method="POST">
 					<fieldset>
 						<div class="form-group">
-							<label for="computerName">Computer name</label>
-							<input type="text" name="computerName" class="form-control" id="computerName" placeholder="Computer name">
+							<label for="computerName">Computer name</label> <input
+								type="text" name="computerName" class="form-control"
+								id="computerName" placeholder="Computer name">
 						</div>
 						<div class="form-group">
-							<label for="introduced">Introduced date</label> 
-							<input type="date" name="introduced" class="form-control" id="introduced" placeholder="Introduced date">
+							<label for="introduced">Introduced date</label> <input
+								type="date" name="introduced" class="form-control"
+								id="introduced" placeholder="Introduced date">
 						</div>
 						<div class="form-group">
-							<label for="discontinued">Discontinued date</label> 
-							<input type="date" name="discontinued" class="form-control" id="discontinued" placeholder="Discontinued date">
+							<label for="discontinued">Discontinued date</label> <input
+								type="date" name="discontinued" class="form-control"
+								id="discontinued" placeholder="Discontinued date">
 						</div>
 						<div class="form-group">
-							<label for="companyId">Company</label>
-							<select name="company" class="form-control" id="companyId">
+							<label for="companyId">Company</label> <select name="company"
+								class="form-control" id="companyId">
 								<option value="0:--">--</option>
 								<c:forEach items="${companylist}" var="company">
 									<option value="${company.id}:${company.name}">${company.name}</option>
@@ -48,14 +53,13 @@
 					</fieldset>
 					<div class="actions pull-right">
 						<input type="submit" value="Add" class="btn btn-primary">
-						or 
-						<a href="dashboard" class="btn btn-default">Cancel</a>
+						or <a href="" class="btn btn-default">Cancel</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	</section>
-	<script src="./js/validation.js"></script>
+	<script src="resources/js/validation.js"></script>
 </body>
 </html>

@@ -20,25 +20,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer;
+import com.excilys.computerdatabase.computerdb.model.entities.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 
+@Repository
+public class ComputerDao implements IComputerDAO {
 
-public class ComputerDao implements IComputerDAO{
-
-
-    
-    //@Autowired
-    ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-    DatabaseManager databaseManager = context.getBean(DatabaseManager.class);
-
-    private final Logger LOGGER = LoggerFactory
-            .getLogger(ComputerDao.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerDao.class);
 
     private final String SELECT_COMPUTER_BY_ID;
     private final String SELECT_COMPUTER_BY_NAME;
@@ -62,11 +60,22 @@ public class ComputerDao implements IComputerDAO{
     private String companyId;
     private String companyName;
 
-    /**
-     *
-     */
+    @Autowired
+    DatabaseManager databaseManager;
+
+    @Autowired
+    MyDataSource dataSource;
+
+    JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public void setJdbcTemplate(MyDataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
     public ComputerDao() {
-        
+        jdbcTemplate = new JdbcTemplate();
+
         try {
             Configuration config = new PropertiesConfiguration("query.properties");
             computerTable = config.getString("ComputerTable");
@@ -90,13 +99,11 @@ public class ComputerDao implements IComputerDAO{
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " WHERE " + computerId + " = ? ORDER BY " + computerName;
 
-
         SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
                 + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
                 + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
                 + ") LIKE UPPER(?) ORDER BY %s LIMIT ?, ? ";
-
 
         SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
                 + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
@@ -110,8 +117,8 @@ public class ComputerDao implements IComputerDAO{
                 + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
         COUNT_COMPUTERS = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable;
         COUNT_COMPUTERS_BY_NAME = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable
-                + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)";
+                + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = " + companyId + " WHERE UPPER("
+                + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)";
 
     }
 
@@ -122,84 +129,60 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("Id non valide : " + id);
             return optionalComputer;
         }
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(SELECT_COMPUTER_BY_ID)
-        ) {
 
-            selectStatement.setLong(1, id);
-
-            ResultSet rset = selectStatement.executeQuery();
-
-            if (rset.next()) {
-                optionalComputer = Optional.of(MapperComputer.mapComputer(rset));
-            }
-            connection.commit();
-            rset.close();
-        } catch (SQLException e) {
-            LOGGER.error("getComputerById : " + e.getMessage());
-            throw new DaoException(e.getMessage());
-        }
+        Computer computer = jdbcTemplate.queryForObject(SELECT_COMPUTER_BY_ID, new Object[] { id },
+                new RowMapper<Computer>() {
+                    public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Computer computer = new Computer.ComputerBuilder(rs.getString(computerName))
+                                .id(rs.getLong(computerId)).dateIntroduced(rs.getString(computerDateIntro))
+                                .dateDiscontinued(rs.getString(computerDateFin)).build();
+                        return computer;
+                    }
+                });
+        optionalComputer = Optional.ofNullable(computer);
         return optionalComputer;
     }
 
     @Override
-    public Optional<Page> getComputersByName(String name, long limitStart, long size, String orderby) throws DaoException {
+    public Optional<Page> getComputersByName(String name, long limitStart, long size, String orderby)
+            throws DaoException {
+        
+        
         Optional<Page> optionalPage = Optional.empty();
-        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
-        BuilderPage builderPage = new Page.BuilderPage(name, orderby, limitStart, size);
-        List<Pageable> result = new ArrayList<>();
-        if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValideName(name)) {
-            LOGGER.error("Name non valide : " + name);
-            return optionalPage;
+        BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
+
+        List<Computer> list = jdbcTemplate.query(SELECT_COMPUTER_BY_NAME, new Object[] { name, limitStart, size },
+                new RowMapper<Computer>() {
+                    public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Computer computer = new Computer.ComputerBuilder(rs.getString(computerName))
+                                .id(rs.getLong(computerId)).dateIntroduced(rs.getString(computerDateIntro))
+                                .dateDiscontinued(rs.getString(computerDateFin)).build();
+                        return computer;
+                    }
+                });
+        List<Pageable> list2 = new ArrayList<>();
+        for (Computer c : list) {
+            list2.add(c);
         }
-        String col = mapColumnOrderBy(orderby);
-        String query = String.format(SELECT_COMPUTER_BY_NAME, col);
-        try (
-
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(query)
-        ) {
-
-            selectStatement.setString(1, name + "%");
-            selectStatement.setString(2, name + "%");
-            selectStatement.setLong(3, (limitStart-1)*size);
-            selectStatement.setLong(4, size);
-
-            ResultSet rset;
-            rset = selectStatement.executeQuery();
-
-            while (rset.next()) {
-                result.add(MapperComputer.mapComputer(rset));
-            }
-            connection.commit();
-            rset.close();
-        } catch (SQLException e) {
-            LOGGER.error("getComputersByName : " + e.getMessage());
-            throw new DaoException(e.getMessage());
-        }
-        builderPage.list(result);
+        builderPage.list(list2);
         builderPage.totalRow(countComputersWithName(name));
         optionalPage = Optional.of(builderPage.build());
+
         return optionalPage;
     }
 
     @Override
     public Optional<Page> getComputers(long limitStart, long size, String orderby) throws DaoException {
         Optional<Page> optionalPage = Optional.empty();
-        //BuilderPage(String filter, String orderBy, long pageNumber, long rowByPages) {
         BuilderPage builderPage = new Page.BuilderPage("", orderby, limitStart, size);
         List<Pageable> result = new ArrayList<>();
         String col = mapColumnOrderBy(orderby);
 
-
         String query = String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, col);
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement selectStatement = connection.prepareStatement(query)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement selectStatement = connection.prepareStatement(query)) {
 
-            selectStatement.setLong(1, (limitStart-1)*size);
+            selectStatement.setLong(1, (limitStart - 1) * size);
             selectStatement.setLong(2, size);
             LOGGER.error("selectStatement : " + selectStatement.toString());
             ResultSet rset;
@@ -229,10 +212,8 @@ public class ComputerDao implements IComputerDAO{
             return false;
         }
         long id = computer.getId();
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)) {
             deleteStatment.setLong(1, id);
             result = deleteStatment.executeUpdate();
 
@@ -259,10 +240,8 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("Computer non valide Update : " + computer.toString2());
             return false;
         }
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement updateStatment = connection.prepareStatement(UPDATE_COMPUTER)) {
             updateStatment.setString(1, computer.getName());
 
             Optional<LocalDate> dateIntro = computer.getDateIntroduced();
@@ -311,10 +290,8 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("Computer non valide Insert: " + computer);
             return false;
         }
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement insertStatment = connection.prepareStatement(INSERT_COMPUTER)) {
             insertStatment.setString(1, computer.getName());
 
             Optional<LocalDate> dateIntro = computer.getDateIntroduced();
@@ -357,10 +334,7 @@ public class ComputerDao implements IComputerDAO{
     @Override
     public long countComputers() throws DaoException {
         long number = 0;
-        try (
-                Connection connection = databaseManager.getConnection();
-                Statement st = connection.createStatement()
-        ) {
+        try (Connection connection = databaseManager.getConnection(); Statement st = connection.createStatement()) {
             ResultSet rset;
             rset = st.executeQuery(COUNT_COMPUTERS);
             if (rset.next()) {
@@ -384,10 +358,8 @@ public class ComputerDao implements IComputerDAO{
             LOGGER.error("Name non valide : " + name);
             return 0;
         }
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement st = connection.prepareStatement(COUNT_COMPUTERS_BY_NAME)) {
             st.setString(1, name + "%");
             st.setString(2, name + "%");
             ResultSet rset;
@@ -410,10 +382,8 @@ public class ComputerDao implements IComputerDAO{
     public long deleteComputersCompany(long companyId) throws DaoException {
         int result = -1;
 
-        try (
-                Connection connection = databaseManager.getConnection();
-                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)
-        ) {
+        try (Connection connection = databaseManager.getConnection();
+                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)) {
             deleteStatment.setLong(1, companyId);
             result = deleteStatment.executeUpdate();
 
@@ -432,20 +402,19 @@ public class ComputerDao implements IComputerDAO{
         }
         return result;
     }
-    
+
     private String mapColumnOrderBy(String orderBy) {
         switch (orderBy) {
-            case "name":
-                return computerName;
-            case "dateIntro":
-                return computerDateIntro;
-            case "dateFin":
-                return computerDateFin;
-            case "company":
-                return computerCompanyName;
-            default:
-                return computerName;
+        case "name":
+            return computerName;
+        case "dateIntro":
+            return computerDateIntro;
+        case "dateFin":
+            return computerDateFin;
+        case "company":
+            return computerCompanyName;
+        default:
+            return computerName;
         }
     }
 }
-

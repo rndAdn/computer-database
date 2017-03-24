@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
-import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import java.sql.Connection;
 
 public interface ICompanyDAO {
 
@@ -74,5 +74,9 @@ public interface ICompanyDAO {
      * @throws DaoException .
      */
     boolean deleteCompany(Company company) throws DaoException;
+
+    Optional<Page> getCompanys() throws DaoException;
+
+
 
 }
