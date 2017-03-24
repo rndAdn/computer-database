@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +18,15 @@ import com.excilys.computerdatabase.computerdb.dao.DatabaseManager;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.view.web.DashboardController;
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.dao.mapper.CompanyDTOMapper;
 
 @Repository
 @Transactional
 public class CompanyService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
     @Autowired
     CompanyDao companyDao;
@@ -97,7 +102,7 @@ public class CompanyService {
         long nbSuppr = computerService.removeComputersCompany(company.getId());
         try (Connection connection = databaseManager.getConnection()) {
 
-            boolean result = companyDao.deleteCompany(connection, company);
+            boolean result = companyDao.deleteCompany(company);
             connection.commit();
             if (!result) {
                 return -1;

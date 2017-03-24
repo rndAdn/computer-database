@@ -46,9 +46,6 @@ public class CompanyDao implements ICompanyDAO {
     private final String DELETE_COMPANY;
 
     @Autowired
-    DatabaseManager databaseManager;
-
-    @Autowired
     MyDataSource dataSource;
 
     JdbcTemplate jdbcTemplate;
@@ -81,8 +78,8 @@ public class CompanyDao implements ICompanyDAO {
 
         COUNT_COMPANY = "SELECT count(*) as " + countTotal + " FROM " + companyTable;
 
-        COUNT_COMPANY_BY_NAME = "SELECT count(*) as " + countTotal + " FROM company WHERE UPPER("
-                + companyName + ") LIKE UPPER(?)";
+        COUNT_COMPANY_BY_NAME = "SELECT count(*) as " + countTotal + " FROM company WHERE UPPER(" + companyName
+                + ") LIKE UPPER(?)";
 
         DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE " + companyId + "=?;";
 
@@ -108,75 +105,73 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public Optional<Page> getCompanyByName(String name, long limitStart, long size)
-            throws DaoException {
-        
+    public Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException {
+
         Optional<Page> optionalPage = Optional.empty();
-        BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
-        
-        List<Company> list = jdbcTemplate.query(SELECT_COMPANY_BY_NAME, new Object[] {name , limitStart, size },
+        BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
+
+        List<Company> list = jdbcTemplate.query(SELECT_COMPANY_BY_NAME, new Object[] { name, limitStart, size },
                 new RowMapper<Company>() {
-            public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                return company;
-            }
-        });
+                    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
+                        return company;
+                    }
+                });
         List<Pageable> list2 = new ArrayList<>();
-        for (Company c : list){
+        for (Company c : list) {
             list2.add(c);
         }
         builderPage.list(list2);
         builderPage.totalRow(getNumberOfCompany());
         optionalPage = Optional.of(builderPage.build());
-        
+
         return optionalPage;
     }
 
     @Override
     public Optional<Page> getCompanys(long limitStart, long size) throws DaoException {
-        
+
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
-        
+
         List<Company> list = jdbcTemplate.query(SELECT_ALL_COMPANY_WITH_LIMIT, new Object[] { limitStart, size },
                 new RowMapper<Company>() {
-            public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                return company;
-            }
-        });
+                    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
+                        return company;
+                    }
+                });
         List<Pageable> list2 = new ArrayList<>();
-        for (Company c : list){
+        for (Company c : list) {
             list2.add(c);
         }
         builderPage.list(list2);
         builderPage.totalRow(getNumberOfCompany());
         optionalPage = Optional.of(builderPage.build());
-        
+
         return optionalPage;
     }
 
     @Override
     public Optional<Page> getCompanys() throws DaoException {
-        
+
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
-        
-        List<Company> list = jdbcTemplate.query(SELECT_ALL_COMPANY,
-                new RowMapper<Company>() {
+
+        List<Company> list = jdbcTemplate.query(SELECT_ALL_COMPANY, new RowMapper<Company>() {
             public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
                 return company;
             }
         });
         List<Pageable> list2 = new ArrayList<>();
-        for (Company c : list){
+        for (Company c : list) {
             list2.add(c);
         }
         builderPage.list(list2);
         builderPage.totalRow(getNumberOfCompany());
         optionalPage = Optional.of(builderPage.build());
-        
+
         return optionalPage;
     }
 
@@ -197,24 +192,25 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     @Override
-    public boolean deleteCompany(Connection connection, Company company) throws DaoException {
+    public boolean deleteCompany(Company company) throws DaoException {
         int result;
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
             LOGGER.error("Company non valide : '" + company + "'");
             return false;
         }
-        try (PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPANY);) {
-            deleteStatment.setLong(1, company.getId());
-            result = deleteStatment.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
 
-            LOGGER.error("deleteCompany : " + e.getMessage());
-            // databaseManager.rollback();
-            throw new DaoException(e.getMessage());
-        } finally {
-            // databaseManager.closeConnection();
-        }
+        result = jdbcTemplate.queryForObject(DELETE_COMPANY, Integer.class);
+        /*
+         * try (PreparedStatement deleteStatment =
+         * connection.prepareStatement(DELETE_COMPANY);) {
+         * deleteStatment.setLong(1, company.getId()); result =
+         * deleteStatment.executeUpdate(); connection.commit(); } catch
+         * (SQLException e) {
+         * 
+         * LOGGER.error("deleteCompany : " + e.getMessage()); //
+         * databaseManager.rollback(); throw new DaoException(e.getMessage()); }
+         * finally { // databaseManager.closeConnection(); }
+         */
         return result == 1;
     }
 

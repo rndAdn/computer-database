@@ -3,6 +3,12 @@ package com.excilys.computerdatabase.computerdb.model.entities;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.computerdatabase.computerdb.model.Utils;
+
 /**
  * @author renaud
  *
@@ -135,6 +141,8 @@ public class Computer implements Pageable {
     }
 
     public static class ComputerBuilder {
+        
+        private static final Logger LOGGER = LoggerFactory.getLogger(ComputerBuilder.class);
         private long id = -1;
         private final String name;
         private LocalDate dateIntroduced;
@@ -160,6 +168,23 @@ public class Computer implements Pageable {
          */
         public ComputerBuilder dateIntroduced(LocalDate dateIntroduced) {
             this.dateIntroduced = dateIntroduced;
+            return this;
+        }
+        
+        public ComputerBuilder dateIntroduced(String dateIntroduced) {
+            if(StringUtils.isBlank(dateIntroduced)) {
+                return this;
+            }
+            LOGGER.warn(dateIntroduced);
+            this.dateIntroduced = Utils.stringToDate(dateIntroduced).get();
+            return this;
+        }
+        
+        public ComputerBuilder dateDiscontinued(String dateDiscontinued) {
+            if(StringUtils.isBlank(dateDiscontinued)) {
+                return this;
+            }
+            this.dateDiscontinued = Utils.stringToDate(dateDiscontinued).get();
             return this;
         }
 

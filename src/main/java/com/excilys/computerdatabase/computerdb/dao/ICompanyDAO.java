@@ -73,7 +73,7 @@ public interface ICompanyDAO {
      * @return true if computer is delete false otherwise
      * @throws DaoException .
      */
-    boolean deleteCompany(Connection connection, Company company) throws DaoException;
+    boolean deleteCompany(Company company) throws DaoException;
 
     Optional<Page> getCompanys() throws DaoException;
 
