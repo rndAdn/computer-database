@@ -64,7 +64,7 @@ public class CompanyService {
     public Optional<Page> getCompanys() {
         Optional<Page> page = Optional.empty();
         try (Connection connection = databaseManager.getConnection()) {
-            page = companyDao.getCompanys(connection);
+            page = companyDao.getCompanys();
             
             connection.commit();
         } catch (DaoException e) {

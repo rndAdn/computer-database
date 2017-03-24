@@ -73,6 +73,7 @@ public class Page {
             return this;
         }
         
+        
         public BuilderPage totalRow(long totalRow){
             this.totalRow = totalRow;
             return this;

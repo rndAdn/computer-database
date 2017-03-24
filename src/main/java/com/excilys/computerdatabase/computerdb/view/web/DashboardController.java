@@ -40,6 +40,8 @@ public class DashboardController {
     }
     
     @RequestMapping(value="/dashboard", method = RequestMethod.GET)
+    
+    
     public ModelAndView getRedirect(ModelMap model) {
         return new ModelAndView("redirect:/");
     }
