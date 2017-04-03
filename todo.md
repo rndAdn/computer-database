@@ -22,6 +22,7 @@
     * [ ] Services
     * [x] ~~DAO~~
     * [x] ~~Model~~
+
 ## Debug
 * [ ] Log
 * [ ] Message Exception
@@ -40,16 +41,16 @@
 # Code
 * [x] ~~Interface DAO~~
 * [ ] Interface Service
-* [ ] Mettre des long dans les dto
+* [x] ~~Mettre des long dans les dto~~
 * [ ] clean commentaires inutiles (ex : pom)
 * [ ] Controller
 * [ ] ! Catch vide
 * [ ] Taglib
-* [ ] Simplifier PageList
+* [x] ~~Simplifier PageList~~
 * [ ] dans le mapper pas de catch NPE -> use TimeStamp
-* [ ] limiter la pool HikariCP
-* [ ] dans les Jsp mettre les getSession
-* [ ] Mettre un doGet dans le doPost
+* [x] ~~limiter la pool HikariCP~~
+* [x] ~~dans les Jsp mettre les getSession~~
+* [x] ~~Mettre un doGet dans le doPost~~
 
 
 ## Tests
@@ -72,3 +73,9 @@
  * [x] ~~url~~
  * [x] ~~Scope Mokito test~~
  * [x] ~~Numero de Version~~
+
+## Spring
+* [ ] JDBCTemplate
+* [x] ~~SpringMVC~~
+* [ ] i18n
+* [ ] Transactions

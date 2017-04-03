@@ -27,7 +27,7 @@ public class DeleteCompanyAction implements ActionMenu {
             return;
         }
 
-        Optional<Company> optionalCompany = CompanyService.INSTANCE.getCompanyByid(id);
+        Optional<Company> optionalCompany = companyService.getCompanyByid(id);
         if (!optionalCompany.isPresent()) {
             System.out.println("Company introuvable dans la base de donnée");
             return;
@@ -46,7 +46,7 @@ public class DeleteCompanyAction implements ActionMenu {
             return;
         }
 
-        long result = CompanyService.INSTANCE.removeCompany(company);
+        long result = companyService.removeCompany(company);
         System.out.println("Computer Supprimé :" + result);
         System.out.println("company supprimé");
     }

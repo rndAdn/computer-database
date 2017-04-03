@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
-import com.excilys.computerdatabase.computerdb.service.pages.Pageable;
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import java.sql.Connection;
 
 public interface ICompanyDAO {
 
@@ -33,7 +34,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getCompanyByName(String name, long limitStart, long size) throws DaoException;
+    Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException;
 
     /**
      * Get all Company from database.
@@ -46,7 +47,7 @@ public interface ICompanyDAO {
      * @throws DaoException
      *             .
      */
-    List<Pageable> getCompanys(long limitStart, long size) throws DaoException;
+    Optional<Page> getCompanys(long limitStart, long size) throws DaoException;
 
     /**
      * Get number of company in database.
@@ -73,5 +74,9 @@ public interface ICompanyDAO {
      * @throws DaoException .
      */
     boolean deleteCompany(Company company) throws DaoException;
+
+    Optional<Page> getCompanys() throws DaoException;
+
+
 
 }

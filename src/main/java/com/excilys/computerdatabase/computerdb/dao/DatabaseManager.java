@@ -2,33 +2,21 @@ package com.excilys.computerdatabase.computerdb.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 public class DatabaseManager {
 
-    private String dbName;
-    private String serverName;
-    private String poolSize;
-    private String userName;
-    private String password;
-    private Logger LOGGER;
-    private HikariDataSource ds = null;
-    private String dataSourceClassName;
-    private String autocommit;
+    private Logger  LOGGER = LoggerFactory.getLogger(DatabaseManager.class);
+    //private HikariDataSource ds = null;
+    
+    @Autowired
+    private MyDataSource ds;
     
     ThreadLocal<Connection> connectionThreadLocal;
 
@@ -37,7 +25,12 @@ public class DatabaseManager {
      */
     DatabaseManager() {
         LOGGER = LoggerFactory.getLogger(getClass());
-        LOGGER.info("DatabaseManager Constructor " + this);
+        LOGGER.info("DatabaseManager Constructor " +
+        this);
+        connectionThreadLocal = new ThreadLocal<>();
+        
+    }
+    /*
 
         try {
             Configuration config = new PropertiesConfiguration("database.properties");
@@ -68,26 +61,29 @@ public class DatabaseManager {
         config.setAutoCommit(Boolean.parseBoolean(autocommit));
         ds = new HikariDataSource(config);
         connectionThreadLocal = new ThreadLocal<>();
-    }
+    }*/
 
 
     /**
      * return the Connection, create a new one If connection is null.
      *
      * @return A Connection
+     * @throws DaoException 
      */
-    public Connection getConnection() {
+    public Connection getConnection() throws DaoException {
         Connection connection;
         try {
             if (connectionThreadLocal.get() == null || connectionThreadLocal.get().isClosed()) {
                 connection = ds.getConnection();
+                connection.setAutoCommit(false);
                 connectionThreadLocal.set(connection);
             }
         } catch (Exception e) {
             LOGGER.debug("get exception " + e.getMessage());
+            throw new DaoException(e.getMessage());
         }
 
-
+           
         return connectionThreadLocal.get();
     }
 
@@ -115,5 +111,10 @@ public class DatabaseManager {
         } catch (SQLException e) {
             LOGGER.error("Connection RollBack");
         }
+    }
+
+
+    public MyDataSource getDataSource() {
+        return ds;
     }
 }

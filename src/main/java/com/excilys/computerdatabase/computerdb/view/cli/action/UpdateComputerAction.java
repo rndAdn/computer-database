@@ -31,7 +31,7 @@ public class UpdateComputerAction implements ActionMenu {
             return;
         }
 
-        Optional<Computer> optionalComputer = ComputerService.INSTANCE.getComputerById(id);
+        Optional<Computer> optionalComputer = computerService.getComputerById(id);
         if (!optionalComputer.isPresent()) {
             System.out.println("Ordinateur introuvable dans la base de donnée");
             return;
@@ -71,7 +71,7 @@ public class UpdateComputerAction implements ActionMenu {
         Optional<Company> optionalCompany = Optional.empty();
         if (!StringUtils.isBlank(companyIdString)) {
             long companyid = Utils.stringToId(companyIdString);
-            optionalCompany = CompanyService.INSTANCE.getCompanyByid(companyid);
+            optionalCompany = companyService.getCompanyByid(companyid);
         }
 
         computer = new Computer.ComputerBuilder(name).id(id).dateIntroduced(dateIntro.orElse(null))
@@ -87,9 +87,9 @@ public class UpdateComputerAction implements ActionMenu {
             return;
         }
 
-        ComputerService.INSTANCE.updateComputer(computer);
+        computerService.updateComputer(computer);
         System.out.print("Ordinateur mis à jour");
-        optionalComputer = ComputerService.INSTANCE.getComputerById(id);
+        optionalComputer = computerService.getComputerById(id);
         if (!optionalComputer.isPresent()) {
             System.out.println("Ordinateur introuvable dans la base de donnée");
             sc.close();

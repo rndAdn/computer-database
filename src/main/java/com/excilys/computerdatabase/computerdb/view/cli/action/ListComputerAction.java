@@ -1,28 +1,37 @@
 package com.excilys.computerdatabase.computerdb.view.cli.action;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.computerdatabase.computerdb.model.entities.Page;
+import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
-import com.excilys.computerdatabase.computerdb.service.pages.Page;
-import com.excilys.computerdatabase.computerdb.service.pages.Pages;
 
 public class ListComputerAction implements ActionMenu {
 
     @Override
     public void executeAction() {
-        Pages pagesList;
-        pagesList = ComputerService.INSTANCE.getComputers();
+        Optional<Page> page;
+        page = computerService.getComputers("", 30, 1, "name");
 
-        Page page;
+        List<Pageable> list = new ArrayList<>();
+        
+        if(page.isPresent()) {
+            list = page.get().getListe();
+            do {
+                //page.printContent();
+                for (Pageable p : list) {
+                    System.out.println(p);
+                }
+                printFooter(page.get());
 
-        do {
-            pagesList.setOrderBy("name");
-            page = pagesList.getCurrentPage();
-            page.printContent();
+            } while (readAction(page.get()));
+        }
 
-            printFooter(pagesList);
-
-        } while (readAction(pagesList));
+        
     }
 
     /**
@@ -31,8 +40,8 @@ public class ListComputerAction implements ActionMenu {
      * @param pagesList
      *            .
      */
-    public void printFooter(Pages pages) {
-        System.out.print("page " + pages.getPageIndex() + "/" + pages.getTotalNumberOfPage()
+    public void printFooter(Page pagesList) {
+        System.out.print("page " + pagesList.getPageNumber() + "/" + pagesList.getTotalNumberOfPage()
                 + "Premiere page [first/f], Page Précédente [previous/p], Page Suivante  [next/n], Page Précédente [last/l], Retour [Back/B] : ");
     }
 
@@ -43,12 +52,12 @@ public class ListComputerAction implements ActionMenu {
      *            .
      * @return true if input is correct
      */
-    private boolean readAction(Pages pagesList) {
+    private boolean readAction(Page pagesList) {
         Scanner sc = new Scanner(System.in);
 
         String action = sc.nextLine();
 
-        if (action.equalsIgnoreCase("next") || action.equalsIgnoreCase("n")) {
+        /*if (action.equalsIgnoreCase("next") || action.equalsIgnoreCase("n")) {
             pagesList.nextPage();
         } else if (action.equalsIgnoreCase("previous") || action.equalsIgnoreCase("p")) {
             pagesList.previousPage();
@@ -59,7 +68,8 @@ public class ListComputerAction implements ActionMenu {
         } else {
             return false;
         }
-        return true;
+        return true;*/
+        return false;
 
     }
 
