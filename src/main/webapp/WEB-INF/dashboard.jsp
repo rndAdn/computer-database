@@ -20,6 +20,7 @@
 	<div class="container">
 		<a class="navbar-brand" href=""> Application - Computer
 			Database </a>
+			<a href="user?mylocale=en">English </a> | <a href="user?mylocale=fr">Français </a>
 	</div>
 	</header>
 
