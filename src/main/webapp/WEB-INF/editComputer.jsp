@@ -24,7 +24,7 @@
                 <div class="label label-default pull-right">
                     id: ${computer.id}
                 </div>
-                <h1>Edit Computer</h1>
+                <h1><spring:message code="local.editComputer"/></h1>
 
                 <form action="editComputer" method="POST">
                     <input type="hidden" value="${computer.id}" name="computerId" id="id"/>
@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
                             <input type="text" class="form-control" name="computerName" id="computerName" value="${computer.name}"
-                                   placeholder="Computer name">
+                                   placeholder="<spring:message code="local.computername"/>">
                         </div>
                         <div class="form-group">
                             <label for="introduced">Introduced date</label>

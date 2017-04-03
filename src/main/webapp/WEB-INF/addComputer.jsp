@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,26 +25,26 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-8 col-xs-offset-2 box">
-				<h1>Add Computer</h1>
+				<h1><spring:message code="local.addComputer"/></h1>
 				<form action="addComputer" method="POST">
 					<fieldset>
 						<div class="form-group">
-							<label for="computerName">Computer name</label> <input
+							<label for="computerName"><spring:message code="local.computername"/></label> <input
 								type="text" name="computerName" class="form-control"
-								id="computerName" placeholder="Computer name">
+								id="computerName" placeholder="<spring:message code="local.computername"/>">
 						</div>
 						<div class="form-group">
-							<label for="introduced">Introduced date</label> <input
+							<label for="introduced"><spring:message code="local.introduced"/></label> <input
 								type="date" name="introduced" class="form-control"
-								id="introduced" placeholder="Introduced date">
+								id="introduced" placeholder="<spring:message code="local.introduced"/>">
 						</div>
 						<div class="form-group">
-							<label for="discontinued">Discontinued date</label> <input
+							<label for="discontinued"><spring:message code="local.discontinued"/></label> <input
 								type="date" name="discontinued" class="form-control"
-								id="discontinued" placeholder="Discontinued date">
+								id="discontinued" placeholder="<spring:message code="local.discontinued"/>">
 						</div>
 						<div class="form-group">
-							<label for="companyId">Company</label> <select name="company"
+							<label for="companyId"><spring:message code="local.company"/></label> <select name="company"
 								class="form-control" id="companyId">
 								<option value="0:--">--</option>
 								<c:forEach items="${companylist}" var="company">
@@ -52,8 +54,8 @@
 						</div>
 					</fieldset>
 					<div class="actions pull-right">
-						<input type="submit" value="Add" class="btn btn-primary">
-						or <a href="" class="btn btn-default">Cancel</a>
+						<input type="submit" value="<spring:message code="local.add"/>" class="btn btn-primary">
+						<spring:message code="local.or"/> <a href="" class="btn btn-default"><spring:message code="local.cancel"/></a>
 					</div>
 				</form>
 			</div>
