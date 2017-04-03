@@ -249,6 +249,7 @@
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>${maven-jxr-plugin.version}</version>
 			</plugin>
+			<!--&ndash;&gt; -->
 
 			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
