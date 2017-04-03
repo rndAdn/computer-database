@@ -187,6 +187,20 @@ public class Computer implements Pageable {
             this.dateDiscontinued = Utils.stringToDate(dateDiscontinued).get();
             return this;
         }
+        
+        public ComputerBuilder dateIntroduced(Optional<LocalDate> dateIntroduced) {
+            if(! dateIntroduced.isPresent()) {
+                return this;
+            }
+            return dateIntroduced(dateIntroduced.get());
+        }
+        
+        public ComputerBuilder dateDiscontinued(Optional<LocalDate> dateDiscontinued) {
+            if(! dateDiscontinued.isPresent()) {
+                return this;
+            }
+            return dateDiscontinued(dateDiscontinued.get());
+        }
 
         /**
          * Add the optional id of the computer.
