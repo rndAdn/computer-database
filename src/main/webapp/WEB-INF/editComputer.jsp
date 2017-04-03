@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,22 +34,22 @@
                     <!-- TODO: Change this value with the computer id -->
                     <fieldset>
                         <div class="form-group">
-                            <label for="computerName">Computer name</label>
+                            <label for="computerName"><spring:message code="local.computername"/></label>
                             <input type="text" class="form-control" name="computerName" id="computerName" value="${computer.name}"
                                    placeholder="<spring:message code="local.computername"/>">
                         </div>
                         <div class="form-group">
-                            <label for="introduced">Introduced date</label>
+                            <label for="introduced"><spring:message code="local.introduced"/></label>
                             <input type="date" class="form-control" name="introduced" id="introduced" value="${computer.dateIntroduced}"
-                                   placeholder="Introduced date">
+                                   placeholder="<spring:message code="local.introduced"/>">
                         </div>
                         <div class="form-group">
-                            <label for="discontinued">Discontinued date</label>
+                            <label for="discontinued"><spring:message code="local.discontinued"/></label>
                             <input type="date" class="form-control" name="discontinued" id="discontinued"
-                                   value="${computer.dateDiscontinued}" placeholder="Discontinued date">
+                                   value="${computer.dateDiscontinued}" placeholder="<spring:message code="local.discontinued"/>">
                         </div>
                         <div class="form-group">
-                            <label for="companyId">Company</label>
+                            <label for="companyId"><spring:message code="local.company"/></label>
                             <select class="form-control" name="company" id="companyId">
                                 <option value="0">--</option>
                                 <c:forEach items="${companylist}" var="company">
@@ -65,9 +68,9 @@
                         </div>
                     </fieldset>
                     <div class="actions pull-right">
-                        <input type="submit" value="Edit" class="btn btn-primary">
-                        or
-                        <a href="" class="btn btn-default">Cancel</a>
+                        <input type="submit" value="<spring:message code="local.edit"/>" class="btn btn-primary">
+                        <spring:message code="local.or"/>
+                        <a href="" class="btn btn-default"><spring:message code="local.cancel"/></a>
                     </div>
                 </form>
             </div>
