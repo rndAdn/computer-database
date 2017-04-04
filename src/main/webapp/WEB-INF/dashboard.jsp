@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,28 +20,28 @@
 	<div class="container">
 		<a class="navbar-brand" href=""> Application - Computer
 			Database </a>
+			<a href="user?mylocale=en">English </a> | <a href="user?mylocale=fr">Français </a>
 	</div>
 	</header>
 
 	<section id="main">
 	<div class="container">
 		<h1 id="homeTitle">
-			${totalRowNumber}
-			Computers found bla
+			${totalRowNumber} <spring:message code="local.computerfound"/>
 		</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
 				<form id="searchForm" action="" method="GET" class="form-inline">
 
 					<input type="search" id="searchbox" name="search"
-						class="form-control" placeholder="Search name : ${search}" /> <input
-						type="submit" id="searchsubmit" value="Filter by name"
+						class="form-control" placeholder="<spring:message code="local.searchname"/> : ${search}" /> <input
+						type="submit" id="searchsubmit" value="<spring:message code="local.filter"/>"
 						class="btn btn-primary" />
 				</form>
 			</div>
 			<div class="pull-right">
-				<a class="btn btn-success" id="addComputer" href="addComputer">Add
-					Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+				<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="local.addComputer"/></a>
+				 <a class="btn btn-default" id="editComputer" href="#"
 					onclick="$.fn.toggleEditMode();">Edit</a>
 			</div>
 		</div>
@@ -65,24 +67,24 @@
 					</span></th>
 				<th>
 					<a href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=name" onclick="">
-						Computer name
+						<spring:message code="local.computername"/>
 					</a>
 				</th>
 				<th>
 					<a href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=dateIntro" onclick="">
-						Introduced date
+						<spring:message code="local.introduced"/>
 					</a>
 				</th>
 				<!-- Table header for Discontinued Date -->
 				<th>
 					<a href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=dateFin" onclick="">
-						Discontinued date
+						<spring:message code="local.discontinued"/>
 					</a>
 				</th>
 				<!-- Table header for Company -->
 				<th >
 					<a href="?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&orderBy=company" onclick="">
-					    Company
+					    <spring:message code="local.company"/>
 					</a>
 				</th>
 
@@ -98,7 +100,7 @@
 									value="${computer.name}"></c:out></a></td>
 						<td><c:out value="${computer.dateIntroduced}"></c:out></td>
 						<td><c:out value="${computer.dateDiscontinued}"></c:out></td>
-						<td><c:out value="${computer.company.name}"></c:out></td>
+						<td><c:out value="${computer.companyName}"></c:out></td>
 					</tr>
 				</c:forEach>
 			</tbody>

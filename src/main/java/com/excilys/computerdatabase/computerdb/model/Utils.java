@@ -28,10 +28,10 @@ public class Utils {
             try {
                 optionalDate = Optional.of(LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             } catch (DateTimeParseException e1) {
-                //LOGGER.error("stringToDate Invalide : " + dateString);
+                LOGGER.error("stringToDate Invalide : " + dateString + " " + e.getMessage());
             }
         } catch (NullPointerException e) {
-            //LOGGER.error("stringToDate null : " + dateString);
+            LOGGER.error("stringToDate null : " + dateString);
         }
 
         return optionalDate;

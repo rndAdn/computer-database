@@ -44,9 +44,11 @@ public class ComputerService {
      *             .
      */
     @Transactional
-    public boolean ajoutComputer(Computer computer) {
+    public boolean ajoutComputer(ComputerDTO computerDTO) {
         boolean result = false;
         try {
+            Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
+            
             result = computerDao.insertComputer(computer);
         } catch (DaoException e) {
             LOGGER.error("ajout Computer");
@@ -71,9 +73,8 @@ public class ComputerService {
         ComputerDTO computerDTO = new ComputerDTO.ComputerDTOBuilder(name).dateIntroduced(dateIntroStr)
                 .dateDiscontinued(dateFinStr).company(companyDTO).build();
 
-        Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
 
-        return ajoutComputer(computer);
+        return ajoutComputer(computerDTO);
     }
 
     /**

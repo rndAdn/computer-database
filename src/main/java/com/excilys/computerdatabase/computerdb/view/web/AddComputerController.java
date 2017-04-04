@@ -12,12 +12,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
+import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
 
@@ -40,19 +43,22 @@ public class AddComputerController {
         List<CompanyDTO> list = companyService.getCompanyDTOList();
         model.addAttribute("companylist", list);
         
+        ComputerDTO computerDTO = new ComputerDTO();
+        model.addAttribute("computerFormAdd", computerDTO);
+        
         return "addComputer";
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    protected ModelAndView post(ModelMap model, 
+    protected ModelAndView post(ModelMap model, @ModelAttribute("computerFormAdd") @Validated ComputerDTO computerDTO/*, 
             @RequestParam(value = "computerName", defaultValue = "") final String name,
             @RequestParam(value = "introduced", defaultValue = "") final String introduced,
             @RequestParam(value = "discontinued", defaultValue = "") final String discontinued,
-            @RequestParam(value = "company", defaultValue = "") final String company) {
+            @RequestParam(value = "company", defaultValue = "") final String company*/) {
 
-        LOGGER.info("Computer Demande Add : " + company);
+        LOGGER.info("Computer Demande Add : " + computerDTO);
 
-        boolean add = addComputer(name, introduced, discontinued, company);
+        boolean add = computerService.ajoutComputer(computerDTO);//addComputer(name, introduced, discontinued, company);
         if (!add) {
             LOGGER.info("Computer Add " + add);
         }
