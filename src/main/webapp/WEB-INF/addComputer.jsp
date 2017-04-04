@@ -17,8 +17,8 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href="dashboard"> Application - Computer
-			Database </a>
-			<a href="user?mylocale=en">English </a> | <a href="user?mylocale=fr">Français </a>
+			Database </a> <a href="user?mylocale=en">English </a> | <a
+			href="user?mylocale=fr">Français </a>
 	</div>
 	</header>
 
@@ -26,39 +26,63 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-8 col-xs-offset-2 box">
-				<h1><spring:message code="local.addComputer"/></h1>
-				<form action="addComputer" method="POST">
-					<fieldset>
-						<div class="form-group">
-							<label for="computerName"><spring:message code="local.computername"/></label> <input
-								type="text" name="computerName" class="form-control"
-								id="computerName" placeholder="<spring:message code="local.computername"/>">
+				<h1>
+					<spring:message code="local.addComputer" />
+				</h1>
+				
+				
+				<form:form action="addComputer" modelAttribute="computerFormAdd" method="POST" >
+				<fieldset>
+					<div class="form-group">
+							<label for="computerName"><spring:message code="local.computername" /></label>
+							<form:input 
+							path="name" 
+							type="text" 
+							class="form-control" 
+							name="computerName" 
+							id="computerName" />
 						</div>
 						<div class="form-group">
-							<label for="introduced"><spring:message code="local.introduced"/></label> <input
-								type="date" name="introduced" class="form-control"
-								id="introduced" placeholder="<spring:message code="local.introduced"/>">
+							<label for="introduced"><spring:message
+									code="local.introduced" /></label> 
+							<form:input path="dateIntroduced" type="date"
+								class="form-control" name="introduced" id="introduced"
+								value="${computer.dateIntroduced}"/>
 						</div>
 						<div class="form-group">
-							<label for="discontinued"><spring:message code="local.discontinued"/></label> <input
-								type="date" name="discontinued" class="form-control"
-								id="discontinued" placeholder="<spring:message code="local.discontinued"/>">
+							<label for="discontinued"><spring:message
+									code="local.discontinued" /></label> 
+							<form:input path="dateDiscontinued" type="date"
+								class="form-control" name="discontinued" id="discontinued"
+								value="${computer.dateDiscontinued}"/>
 						</div>
 						<div class="form-group">
-							<label for="companyId"><spring:message code="local.company"/></label> <select name="company"
-								class="form-control" id="companyId">
-								<option value="0:--">--</option>
+							<label for="companyId"><spring:message code="local.company" /></label> 
+							<form:select path="companyId" class="form-control" name="company" id="companyId">
+								<form:option value="0">--</form:option>
 								<c:forEach items="${companylist}" var="company">
-									<option value="${company.id}:${company.name}">${company.name}</option>
+									<c:choose>
+										<c:when test="${companyId == company.id}">
+											<form:option selected="true" value="${company.id}">${company.name}</form:option>
+										</c:when>
+										<c:otherwise>
+											<form:option value="${company.id}">${company.name}</form:option>
+										</c:otherwise>
+									</c:choose>
+
+
 								</c:forEach>
-							</select>
+							</form:select>
 						</div>
-					</fieldset>
-					<div class="actions pull-right">
-						<input type="submit" value="<spring:message code="local.add"/>" class="btn btn-primary">
-						<spring:message code="local.or"/> <a href="" class="btn btn-default"><spring:message code="local.cancel"/></a>
-					</div>
-				</form>
+				</fieldset>
+				<div class="actions pull-right">
+					<input type="submit" value="<spring:message code="local.add"/>"
+						class="btn btn-primary">
+					<spring:message code="local.or" />
+					<a href="" class="btn btn-default"><spring:message
+							code="local.cancel" /></a>
+				</div>
+				</form:form>
 			</div>
 		</div>
 	</div>
