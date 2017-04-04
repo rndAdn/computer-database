@@ -4,11 +4,12 @@ import java.time.LocalDate;
 
 public class ComputerDTO {
 
-    private final long id;
-    private final String name;
-    private final String dateIntroduced;
-    private final String dateDiscontinued;
-    private final CompanyDTO company;
+    private long id;
+    private String name;
+    private String dateIntroduced;
+    private String dateDiscontinued;
+    private long companyId = -1;
+    private String companyName = "";
 
     /**
      * Constructor of a Computer DTO with a computer.
@@ -22,7 +23,7 @@ public class ComputerDTO {
         this.name = computer.name;
         this.dateIntroduced = computer.dateIntroduced;
         this.dateDiscontinued = computer.dateDiscontinued;
-        this.company = computer.company;
+        //this.company = computer.company;
         /*this.id = computer.getId();
         this.name = computer.getName();
         if (computer.getDateIntroduced().isPresent()) {
@@ -43,6 +44,10 @@ public class ComputerDTO {
         }*/
 
     }
+    
+    public ComputerDTO(){
+        
+    }
 
     public long getId() {
         return id;
@@ -60,20 +65,53 @@ public class ComputerDTO {
         return dateDiscontinued;
     }
 
-    public CompanyDTO getCompany() {
-        return company;
+    
+    
+    
+
+    public void setId(long id) {
+        this.id = id;
     }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDateIntroduced(String dateIntroduced) {
+        this.dateIntroduced = dateIntroduced;
+    }
+
+    public void setDateDiscontinued(String dateDiscontinued) {
+        this.dateDiscontinued = dateDiscontinued;
+    }
+
+    
+    
 
     @Override
     public String toString() {
-        return "ComputerDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", dateIntroduced='" + dateIntroduced + '\'' +
-                ", dateDiscontinued='" + dateDiscontinued + '\'' +
-                ", company=" + company +
-                '}';
+        return "ComputerDTO [id=" + id + ", name=" + name + ", dateIntroduced=" + dateIntroduced + ", dateDiscontinued="
+                + dateDiscontinued + ", companyId=" + companyId + ", companyName=" + companyName + "]";
     }
+
+
+
 
     public static class ComputerDTOBuilder {
         private long id;

@@ -12,6 +12,7 @@ import com.excilys.computerdatabase.computerdb.model.Utils;
 import com.excilys.computerdatabase.computerdb.model.entities.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 
 import org.slf4j.Logger;
@@ -31,7 +32,12 @@ public class ComputerDTOMapper {
             computerDTOBuilder.dateDiscontinued(computer.getDateDiscontinued().get().format(formatter));
         }
         computerDTOBuilder.id(computer.getId()).company(CompanyDTOMapper.mapperCompanyToDTO(computer.getCompany()));
-        return computerDTOBuilder.build();
+        ComputerDTO computerDTO = computerDTOBuilder.build();
+        if (computer.getCompany().isPresent()) {
+            computerDTO.setCompanyId(computer.getCompanyId());
+            computerDTO.setCompanyName(computer.getCompany().get().getName());
+        }
+        return computerDTO;
     }
 
     public static ComputerDTO mapperComputerToDTO(Optional<Computer> computerOptional) {
@@ -53,8 +59,8 @@ public class ComputerDTOMapper {
         if (fin.isPresent()) {
             computerBuilder.dateDiscontinued(intro.get());
         }
-
-        Optional<Company> company = CompanyDTOMapper.mapperCompanyFromDTO(computerDTO.getCompany());
+        CompanyDTO companyDTO = new CompanyDTO.CompanyDTOBuilder().id(computerDTO.getCompanyId()).name(computerDTO.getCompanyName()).build();
+        Optional<Company> company = CompanyDTOMapper.mapperCompanyFromDTO(companyDTO);
         computerBuilder.company(company.orElse(null));
         return computerBuilder.build();
     }

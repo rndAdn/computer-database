@@ -1,38 +1,24 @@
 package com.excilys.computerdatabase.computerdb.model.dto;
 
 public class CompanyDTO {
-    private final long id;
-    private final String name;
+    private long id;
+    private String name;
 
     /**
-     * Constructor of a Company DTO with a company.
+     * Constructor of a Company DTO with a companyDTOBuilder.
      *
      * @param company .
      */
-    /*public CompanyDTO(Company company) {
-        this.id = company.getId();
-        this.name = company.getName();
-    }*/
-
-    /**
-     * Constructor of a Company DTO with a Optional company.
-     * if Company is empty id is equals to -1 and name to "-"
-     *
-     * @param company Optional Company
-     */
-    /*public CompanyDTO(Optional<Company> company) {
-        if (company.isPresent()) {
-            this.id = company.get().getId();
-            this.name = company.get().getName();
-        } else {
-            this.id = -1;
-            this.name = "-";
-        }
-    }*/
+    
     private CompanyDTO(CompanyDTOBuilder company) {
         this.id = company.id;
         this.name = company.name;
     }
+    
+    public CompanyDTO(){
+        
+    }
+    
 
     public long getId() {
         return id;
@@ -42,6 +28,15 @@ public class CompanyDTO {
         return name;
     }
 
+    
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {
