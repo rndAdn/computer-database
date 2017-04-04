@@ -61,8 +61,6 @@ public class ComputerDao implements IComputerDAO {
     private String companyId;
     private String companyName;
 
-    @Autowired
-    DatabaseManager databaseManager;
 
     @Autowired
     MyDataSource dataSource;
@@ -186,7 +184,11 @@ public class ComputerDao implements IComputerDAO {
             return false;
         }
         long id = computer.getId();
-        try (Connection connection = databaseManager.getConnection();
+        result = jdbcTemplate.update(DELETE_COMPUTER, 
+                id);
+        
+        
+        /*try (Connection connection = databaseManager.getConnection();
                 PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)) {
             deleteStatment.setLong(1, id);
             result = deleteStatment.executeUpdate();
@@ -196,14 +198,14 @@ public class ComputerDao implements IComputerDAO {
 
             LOGGER.error("deleteComputer : " + e.getMessage());
             databaseManager.rollback();
-            throw new DaoException(e.getMessage());
+            throw new DaoException((byte)1, e.getMessage());
         } finally {
             databaseManager.closeConnection();
         }
 
         if (result != 1) {
             LOGGER.info("deleteComputer False id : " + id + " result : " + result);
-        }
+        }*/
         return result == 1;
     }
 

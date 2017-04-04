@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.computerdb.dao.CompanyDao;
 import com.excilys.computerdatabase.computerdb.dao.DaoException;
-import com.excilys.computerdatabase.computerdb.dao.DatabaseManager;
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
@@ -33,8 +32,6 @@ public class CompanyService {
     @Autowired
     ComputerService computerService;
     
-    @Autowired
-    DatabaseManager databaseManager;
     
 
     
@@ -68,15 +65,11 @@ public class CompanyService {
     @Transactional(readOnly=true)
     public Optional<Page> getCompanys() {
         Optional<Page> page = Optional.empty();
-        try (Connection connection = databaseManager.getConnection()) {
+        try {
             page = companyDao.getCompanys();
-            
-            connection.commit();
         } catch (DaoException e) {
-            e.printStackTrace();
-        } catch (SQLException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            e.printStackTrace();
         }
 
         return page;
@@ -100,18 +93,14 @@ public class CompanyService {
 
     public long removeCompany(Company company) {
         long nbSuppr = computerService.removeComputersCompany(company.getId());
-        try (Connection connection = databaseManager.getConnection()) {
+        try {
 
             boolean result = companyDao.deleteCompany(company);
-            connection.commit();
             if (!result) {
                 return -1;
             }
         } catch (DaoException e) {
             e.printStackTrace();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
         }
         return nbSuppr;
     }
