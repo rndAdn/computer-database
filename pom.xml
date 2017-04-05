@@ -134,6 +134,16 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.9.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.5.6-Final</version>
+		</dependency>
 
 
 	</dependencies>
@@ -252,9 +262,9 @@
 			<!--&ndash;&gt; -->
 
 			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
-				</plugin> -->
-		</plugins>
-	</reporting>
+			<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
+		</plugin> -->
+	</plugins>
+</reporting>
 
 </project>
