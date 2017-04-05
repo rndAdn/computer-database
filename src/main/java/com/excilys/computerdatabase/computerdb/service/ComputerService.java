@@ -246,7 +246,7 @@ public class ComputerService {
             Computer computer = computerOptional.get();
             boolean deleted = deleteComputer(computer);
             if (!deleted) {
-                LOGGER.error("delete computer : " + computer.getDetail());
+                LOGGER.error("delete computer : " + computer);
                 return false;
             }
         }

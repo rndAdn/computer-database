@@ -213,7 +213,7 @@ public class ComputerDao implements IComputerDAO {
     public boolean updateComputer(Computer computer) throws DaoException {
         int result = -1;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
-            LOGGER.error("Computer non valide Update : " + computer.toString2());
+            LOGGER.error("Computer non valide Update : " + computer);
             return false;
         }
         Optional<LocalDate> dateIntro = computer.getDateIntroduced();

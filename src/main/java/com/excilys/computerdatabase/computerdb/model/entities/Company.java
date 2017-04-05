@@ -1,5 +1,13 @@
 package com.excilys.computerdatabase.computerdb.model.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "COMPANY")
 public class Company implements Pageable {
 
     private final long id;
@@ -16,17 +24,21 @@ public class Company implements Pageable {
         this.name = companyBuilder.name;
     }
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
     public long getId() {
         return id;
     }
 
+    @Column(name = "name", unique = false, nullable = false, length = 20)
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "id : " + id + "\tname : " + name;
+        return "Company [id=" + id + ", name=" + name + "]";
     }
 
     @Override
@@ -61,14 +73,6 @@ public class Company implements Pageable {
             return false;
         }
         return true;
-    }
-
-
-    public String toString2() {
-        return "Company{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 
     public static class CompanyBuilder {

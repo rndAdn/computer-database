@@ -3,6 +3,12 @@ package com.excilys.computerdatabase.computerdb.model.entities;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +19,9 @@ import com.excilys.computerdatabase.computerdb.model.Utils;
  * @author renaud
  *
  */
+
+@Entity
+@Table(name = "COMPUTER")
 public class Computer implements Pageable {
 
     private final long id;
@@ -35,10 +44,14 @@ public class Computer implements Pageable {
         this.company = computerBuilder.company;
     }
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
     public long getId() {
         return id;
     }
-
+    
+    @Column(name = "name", unique = false, nullable = false, length = 20)
     public String getName() {
         return name;
     }
@@ -60,16 +73,14 @@ public class Computer implements Pageable {
         return ((company != null) ? company.getId() : null);
     }
 
-    /**
-     * Get a String representation of Computer.
-     *
-     * @return String representation
-     */
-    public String getDetail() {
-        return "Id : " + id + "\tNom : " + name + "\tDate Introduction : "
-                + ((dateIntroduced != null) ? dateIntroduced : "NC") + "\tDate fin : "
-                + ((dateDiscontinued != null) ? dateDiscontinued : "NC") + "\tCompany : "
-                + ((company != null) ? company.getName() : "NC");
+    
+    
+    
+    
+    @Override
+    public String toString() {
+        return "Computer [id=" + id + ", name=" + name + ", dateIntroduced=" + dateIntroduced + ", dateDiscontinued="
+                + dateDiscontinued + ", company=" + company + "]";
     }
 
     @Override
@@ -130,15 +141,6 @@ public class Computer implements Pageable {
         return true;
     }
 
-    public String toString2() {
-        return "Computer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", dateIntroduced=" + dateIntroduced +
-                ", dateDiscontinued=" + dateDiscontinued +
-                ", company=" + company.toString2() +
-                '}';
-    }
 
     public static class ComputerBuilder {
         

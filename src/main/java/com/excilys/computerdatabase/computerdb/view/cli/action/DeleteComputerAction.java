@@ -33,7 +33,7 @@ public class DeleteComputerAction implements ActionMenu {
         }
 
         Computer computer = optionalComputer.get();
-        System.out.println(computer.getDetail());
+        System.out.println(computer);
 
         System.out.print("Supprimer ? [O/n]");
 

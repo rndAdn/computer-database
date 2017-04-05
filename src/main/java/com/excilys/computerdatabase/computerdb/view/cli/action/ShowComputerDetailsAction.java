@@ -25,7 +25,7 @@ public class ShowComputerDetailsAction implements ActionMenu {
             return;
         }
 
-        System.out.println(optionalComputer.get().getDetail());
+        System.out.println(optionalComputer.get());
     }
 
 }

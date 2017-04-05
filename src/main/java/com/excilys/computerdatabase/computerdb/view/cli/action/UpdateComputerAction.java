@@ -38,7 +38,7 @@ public class UpdateComputerAction implements ActionMenu {
         }
 
         Computer computer = optionalComputer.get();
-        System.out.println(computer.getDetail());
+        System.out.println(computer);
 
         System.out.print("Entrez le nom de l'ordinateur (Obligatoire): ");
         String name = sc.nextLine();
@@ -77,7 +77,7 @@ public class UpdateComputerAction implements ActionMenu {
         computer = new Computer.ComputerBuilder(name).id(id).dateIntroduced(dateIntro.orElse(null))
                 .dateDiscontinued(dateFin.orElse(null)).company(optionalCompany.orElse(null)).build();
 
-        System.out.println(computer.getDetail());
+        System.out.println(computer);
 
         System.out.print("Mettre à jour ? [O/n]");
         String reponse = sc.nextLine();
@@ -97,7 +97,7 @@ public class UpdateComputerAction implements ActionMenu {
         }
         computer = optionalComputer.get();
 
-        System.out.println(computer.getDetail());
+        System.out.println(computer);
     }
 
 }
