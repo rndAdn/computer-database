@@ -12,17 +12,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.excilys.computerdatabase.computerdb.model.dto.CompanyDTO;
 import com.excilys.computerdatabase.computerdb.model.dto.ComputerDTO;
 import com.excilys.computerdatabase.computerdb.service.CompanyService;
 import com.excilys.computerdatabase.computerdb.service.ComputerService;
+import com.excilys.computerdatabase.computerdb.view.ComputerFormValidator;
 
 @Controller
 @RequestMapping("/addComputer")
@@ -36,6 +41,18 @@ public class AddComputerController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AddComputerController.class);
     
+    ComputerFormValidator computerFormValidator;
+    
+    @Autowired
+    public AddComputerController(ComputerFormValidator computerFormValidator) {
+        this.computerFormValidator = computerFormValidator;
+    }
+    
+  //Set a form validator
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(computerFormValidator);
+    }
     
     @RequestMapping(method = RequestMethod.GET)
     public String get( ModelMap model) {
@@ -50,31 +67,22 @@ public class AddComputerController {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    protected ModelAndView post(ModelMap model, @ModelAttribute("computerFormAdd") @Validated ComputerDTO computerDTO/*, 
-            @RequestParam(value = "computerName", defaultValue = "") final String name,
-            @RequestParam(value = "introduced", defaultValue = "") final String introduced,
-            @RequestParam(value = "discontinued", defaultValue = "") final String discontinued,
-            @RequestParam(value = "company", defaultValue = "") final String company*/) {
+    protected String post(ModelMap model, @ModelAttribute("computerFormAdd") @Validated ComputerDTO computerDTO, BindingResult bindingResult,
+            final RedirectAttributes redirectAttributes) {
 
+        if (bindingResult.hasErrors()) {
+            LOGGER.info("hasError : " + computerDTO);
+            return "addComputer";
+        }
         LOGGER.info("Computer Demande Add : " + computerDTO);
 
-        boolean add = computerService.ajoutComputer(computerDTO);//addComputer(name, introduced, discontinued, company);
+        boolean add = computerService.ajoutComputer(computerDTO);
         if (!add) {
             LOGGER.info("Computer Add " + add);
         }
-
-        return new ModelAndView("redirect:/");
+        redirectAttributes.addFlashAttribute("css", "success");
+        return "redirect:/";
     }
 
-
-    private boolean addComputer(String name, String dateIntroStr, String dateFinStr, String company) {
-
-        String companyId, companyName;
-        String[] companyInfo = company.split(":");
-        companyId = companyInfo[0];
-        companyName = companyInfo[1];
-        computerService.ajoutComputer(name, dateIntroStr, dateFinStr, companyId, companyName);
-        return true;
-    }
 
 }

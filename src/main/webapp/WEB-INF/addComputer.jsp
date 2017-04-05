@@ -41,6 +41,7 @@
 							class="form-control" 
 							name="computerName" 
 							id="computerName" />
+							<form:errors path="name" cssClass="error"/>
 						</div>
 						<div class="form-group">
 							<label for="introduced"><spring:message
@@ -55,6 +56,7 @@
 							<form:input path="dateDiscontinued" type="date"
 								class="form-control" name="discontinued" id="discontinued"
 								value="${computer.dateDiscontinued}"/>
+								<form:errors path="dateDiscontinued" cssClass="error"/>
 						</div>
 						<div class="form-group">
 							<label for="companyId"><spring:message code="local.company" /></label> 
