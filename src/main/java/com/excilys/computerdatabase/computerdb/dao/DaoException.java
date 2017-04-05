@@ -11,6 +11,10 @@ public class DaoException extends Exception {
         this.code = code;
     }
     
+    public DaoException(String message) {
+        this((byte)0 ,message);
+    }
+    
     
     
     

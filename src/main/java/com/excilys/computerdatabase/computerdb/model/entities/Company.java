@@ -6,11 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Entity
 @Table(name = "COMPANY")
 public class Company implements Pageable {
-
+    
+    @NotNull
+    @Min(1)
     private final long id;
+    
+    @NotNull
+    @Size(min=1, max=20)
     private final String name;
 
     /**

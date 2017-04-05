@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.computerdb.view.web;
+package com.excilys.computerdatabase.computerdb.view;
 
 import javax.servlet.annotation.WebServlet;
 

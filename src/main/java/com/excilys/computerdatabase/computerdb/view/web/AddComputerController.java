@@ -48,7 +48,7 @@ public class AddComputerController {
         this.computerFormValidator = computerFormValidator;
     }
     
-  //Set a form validator
+    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(computerFormValidator);

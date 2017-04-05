@@ -1,10 +1,7 @@
 package com.excilys.computerdatabase.computerdb.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,22 +10,36 @@ import com.excilys.computerdatabase.computerdb.dao.controller.ControllerDAOCompa
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import org.hibernate.SessionFactory;
+
 import com.excilys.computerdatabase.computerdb.model.entities.Company;
 import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
+import com.excilys.computerdatabase.computerdb.view.HibernateUtil;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
-import com.excilys.computerdatabase.computerdb.dao.mapper.MapperCompany;
 
 @Repository
 public class CompanyDao implements ICompanyDAO {
+    
+    
+    /*private SessionFactory sessionFactory;
+    
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+     
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }*/
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
 
@@ -55,6 +66,7 @@ public class CompanyDao implements ICompanyDAO {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    
     public CompanyDao() {
         jdbcTemplate = new JdbcTemplate();
 
@@ -92,6 +104,11 @@ public class CompanyDao implements ICompanyDAO {
             LOGGER.error("Id non valide : " + id);
             return optionalCompany;
         }
+        Query query = HibernateUtil.getSessionFactory().getCurrentSession().createQuery("from company where id = :id ");
+        
+        
+        
+        
         Company company = jdbcTemplate.queryForObject(SELECT_COMPANY_BY_ID, new Object[] { id },
                 new RowMapper<Company>() {
                     public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
