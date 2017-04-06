@@ -105,7 +105,8 @@ public class CompanyDao implements ICompanyDAO {
             return optionalCompany;
         }
         Query query = HibernateUtil.getSessionFactory().getCurrentSession().createQuery("from company where id = :id ");
-        
+        List<Company> list = query.list();
+        LOGGER.error("LIST HJSDJ : " + list);
         
         
         
@@ -123,9 +124,12 @@ public class CompanyDao implements ICompanyDAO {
 
     @Override
     public Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException {
-
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("from company where name = :name ");
+        query.setString(0, name);
+        List<Company> listt = query.list();
+        LOGGER.error("LIST HJSDJ : " + listt);
         Optional<Page> optionalPage = Optional.empty();
-        BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
+        /*BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
 
         List<Company> list = jdbcTemplate.query(SELECT_COMPANY_BY_NAME, new Object[] { name, limitStart, size },
                 new RowMapper<Company>() {
@@ -141,7 +145,7 @@ public class CompanyDao implements ICompanyDAO {
         builderPage.list(list2);
         builderPage.totalRow(getNumberOfCompany());
         optionalPage = Optional.of(builderPage.build());
-
+        */
         return optionalPage;
     }
 

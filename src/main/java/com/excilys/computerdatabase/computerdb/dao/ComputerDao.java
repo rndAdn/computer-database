@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.TypedQuery;
+
 import com.excilys.computerdatabase.computerdb.dao.controller.ControllerDAOComputer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,7 @@ import com.excilys.computerdatabase.computerdb.model.entities.Page;
 import com.excilys.computerdatabase.computerdb.model.entities.Pageable;
 import com.sun.org.apache.bcel.internal.generic.Type;
 import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
+import com.excilys.computerdatabase.computerdb.view.HibernateUtil;
 import com.excilys.computerdatabase.computerdb.dao.mapper.MapperComputer;
 
 @Repository
@@ -39,16 +43,11 @@ public class ComputerDao implements IComputerDAO {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerDao.class);
 
-    private final String SELECT_COMPUTER_BY_ID;
-    private final String SELECT_COMPUTER_BY_NAME;
-    private final String SELECT_ALL_COMPUTERS_WITH_LIMIT;
+
     private final String DELETE_COMPUTER;
     private final String DELETE_COMPUTERS;
     private final String INSERT_COMPUTER;
     private final String UPDATE_COMPUTER;
-    private final String COUNT_COMPUTERS;
-    private final String COUNT_COMPUTERS_BY_NAME;
-
     private String computerTable;
     private String computerId;
     private String computerName;
@@ -93,32 +92,12 @@ public class ComputerDao implements IComputerDAO {
             ce.printStackTrace();
         }
 
-        SELECT_COMPUTER_BY_ID = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
-                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
-                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE " + computerId + " = ? ORDER BY " + computerName;
-
-        SELECT_COMPUTER_BY_NAME = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
-                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
-                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " WHERE UPPER(" + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName
-                + ") LIKE UPPER(?) ORDER BY %s LIMIT ?, ? ";
-
-        SELECT_ALL_COMPUTERS_WITH_LIMIT = "SELECT " + computerId + ", " + computerName + ", " + computerDateIntro + ", "
-                + computerDateFin + ", " + computerCompanyId + ", " + companyName + " as " + computerCompanyName
-                + " FROM " + computerTable + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = "
-                + companyId + " ORDER BY %s LIMIT ?, ? ";
         DELETE_COMPUTER = "DELETE FROM " + computerTable + " WHERE id=?;";
         DELETE_COMPUTERS = "DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "=?;";
         INSERT_COMPUTER = "INSERT into " + computerTable + " (" + computerName + "," + computerDateIntro + ","
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
         UPDATE_COMPUTER = "UPDATE " + computerTable + " SET " + computerName + "=?, " + computerDateIntro + "=?, "
                 + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
-        COUNT_COMPUTERS = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable;
-        COUNT_COMPUTERS_BY_NAME = "SELECT count(" + computerId + ") as " + countTotal + " FROM " + computerTable
-                + " LEFT JOIN " + companyTable + " ON " + computerCompanyId + " = " + companyId + " WHERE UPPER("
-                + computerName + ") LIKE UPPER(?) OR UPPER(" + companyName + ") LIKE UPPER(?)";
-
     }
 
     @Override
@@ -128,10 +107,13 @@ public class ComputerDao implements IComputerDAO {
             LOGGER.error("Id non valide : " + id);
             return optionalComputer;
         }
+        
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.id LIKE :id or c.company.name LIKE :name", Computer.class);
+        query.setParameter("id",  id);
+        List<Computer> list = query.getResultList();
+        LOGGER.info("HQL getComputerById: " + list);
 
-        Computer computer = (Computer) jdbcTemplate.queryForObject(
-                SELECT_COMPUTER_BY_ID, new Object[] { id }, new MapperComputer());
-        optionalComputer = Optional.ofNullable(computer);
+        optionalComputer = Optional.ofNullable(list.get(0));
         return optionalComputer;
     }
 
@@ -140,11 +122,22 @@ public class ComputerDao implements IComputerDAO {
             throws DaoException {
         
         
+        
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.name LIKE :name or c.company.name LIKE :name order by :order", Computer.class);
+        query.setParameter("name",  name + "%");
+        query.setParameter("order", orderby);
+        query.setMaxResults((int) size);
+        query.setFirstResult((int) ((limitStart -1) * size));
+        List<Computer> list = query.getResultList();
+        LOGGER.info("HQL getComputersByName: " + list);
+        
+        
+        
+        
+        
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
-        String query = String.format(SELECT_COMPUTER_BY_NAME, orderby);
-        List<Computer> list = (ArrayList<Computer>)jdbcTemplate.query(query, new Object[] { name + "%", name + "%", (limitStart -1) * size , size },
-                new MapperComputer());
+        
         List<Pageable> list2 = new ArrayList<>();
         for (Computer c : list) {
             list2.add(c);
@@ -161,9 +154,20 @@ public class ComputerDao implements IComputerDAO {
         
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", orderby, limitStart, size);
-        String query = String.format(SELECT_ALL_COMPUTERS_WITH_LIMIT, orderby);
-        List<Computer> list = (ArrayList<Computer>)jdbcTemplate.query(query, new Object[] {(limitStart -1) * size , size },
-                new MapperComputer());
+        
+        
+        
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company order by :order", Computer.class);
+        query.setParameter("order", orderby);
+        query.setMaxResults((int) size);
+        query.setFirstResult((int) ((limitStart -1) * size));
+        List<Computer> list = query.getResultList();
+        LOGGER.info("HQL getComputers: " + list);
+        
+        
+        
+        
+        
         List<Pageable> list2 = new ArrayList<>();
         for (Computer c : list) {
             list2.add(c);
@@ -186,26 +190,7 @@ public class ComputerDao implements IComputerDAO {
         long id = computer.getId();
         result = jdbcTemplate.update(DELETE_COMPUTER, 
                 id);
-        
-        
-        /*try (Connection connection = databaseManager.getConnection();
-                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTER)) {
-            deleteStatment.setLong(1, id);
-            result = deleteStatment.executeUpdate();
 
-            connection.commit();
-        } catch (SQLException e) {
-
-            LOGGER.error("deleteComputer : " + e.getMessage());
-            databaseManager.rollback();
-            throw new DaoException((byte)1, e.getMessage());
-        } finally {
-            databaseManager.closeConnection();
-        }
-
-        if (result != 1) {
-            LOGGER.info("deleteComputer False id : " + id + " result : " + result);
-        }*/
         return result == 1;
     }
 
@@ -254,15 +239,23 @@ public class ComputerDao implements IComputerDAO {
 
     @Override
     public long countComputers() throws DaoException {
-
-        return jdbcTemplate.queryForObject(COUNT_COMPUTERS, Long.class);
+        
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery(
+                "select count(*) from Computer");
+        Long count = (Long)query.uniqueResult();
+        LOGGER.info("HQL countComputers: " + count);
+        return count;
     }
 
     @Override
     public long countComputersWithName(String name) throws DaoException {
         
-        return jdbcTemplate.queryForObject(COUNT_COMPUTERS_BY_NAME, new Object[] {name + "%", name + "%"}, Long.class);
-        
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery(
+                "select count(*) from Computer c left join c.company where c.name LIKE :name or c.company.name LIKE :name");
+        query.setParameter("name",  name + "%");
+        Long count = (Long)query.uniqueResult();
+        LOGGER.info("HQL countComputersWithName: " + count);
+        return count;
     }
 
     @Override
@@ -271,25 +264,7 @@ public class ComputerDao implements IComputerDAO {
         
         result = jdbcTemplate.update(DELETE_COMPUTERS, 
                 companyId);
-        /*
-        try (Connection connection = databaseManager.getConnection();
-                PreparedStatement deleteStatment = connection.prepareStatement(DELETE_COMPUTERS)) {
-            deleteStatment.setLong(1, companyId);
-            result = deleteStatment.executeUpdate();
 
-            connection.commit();
-        } catch (SQLException e) {
-
-            LOGGER.error("deleteComputer : " + e.getMessage());
-            databaseManager.rollback();
-            throw new DaoException(e.getMessage());
-        } finally {
-            databaseManager.closeConnection();
-        }
-
-        if (result == 0) {
-            LOGGER.info("deleteComputersCompany False id : " + companyId + " result : " + result);
-        }*/
         return result;
     }
 

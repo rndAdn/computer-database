@@ -11,16 +11,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "COMPANY")
+@Table(name = "company")
 public class Company implements Pageable {
     
-    @NotNull
-    @Min(1)
-    private final long id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
+    private long id;
     
-    @NotNull
-    @Size(min=1, max=20)
-    private final String name;
+    @Column(name = "name", unique = false, nullable = false, length = 20)
+    private String name;
 
     /**
      * Company Constructor.
@@ -32,15 +32,18 @@ public class Company implements Pageable {
         this.id = companyBuilder.id;
         this.name = companyBuilder.name;
     }
+    
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue
+    public Company() {
+
+    }
+
+    
     public long getId() {
         return id;
     }
 
-    @Column(name = "name", unique = false, nullable = false, length = 20)
+    
     public String getName() {
         return name;
     }
@@ -83,6 +86,22 @@ public class Company implements Pageable {
         }
         return true;
     }
+    
+    
+    
+    
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+
 
     public static class CompanyBuilder {
         private long id;

@@ -3,10 +3,15 @@ package com.excilys.computerdatabase.computerdb.model.entities;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,15 +26,33 @@ import com.excilys.computerdatabase.computerdb.model.Utils;
  */
 
 @Entity
-@Table(name = "COMPUTER")
+@Table(name = "computer")
 public class Computer implements Pageable {
 
-    private final long id;
-    private final String name;
-    private final LocalDate dateIntroduced;
-    private final LocalDate dateDiscontinued;
-    private final Company company;
+    @Id
+    @GeneratedValue
+    private long id;
+    
+    @Column(name = "name", unique = false, nullable = false, length = 20)
+    private String name;
+    
+    
+    @Column(name = "introduced", unique = false, nullable = true)
+    private LocalDate dateIntroduced;
+    
+    @Column(name = "discontinued", unique = false, nullable = true)
+    private LocalDate dateDiscontinued;
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
+    
+    
+    public Computer(){
+        
+    }
+    
     /**
      * Computer Constructor.
      *
@@ -44,27 +67,31 @@ public class Computer implements Pageable {
         this.company = computerBuilder.company;
     }
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue
+    
     public long getId() {
         return id;
     }
     
-    @Column(name = "name", unique = false, nullable = false, length = 20)
+   
     public String getName() {
         return name;
     }
 
+    
+    
     public Optional<LocalDate> getDateIntroduced() {
         return Optional.ofNullable(dateIntroduced);
 
     }
 
+    
+    
     public Optional<LocalDate> getDateDiscontinued() {
         return Optional.ofNullable(dateDiscontinued);
     }
 
+    
+    
     public Optional<Company> getCompany() {
         return Optional.ofNullable(company);
     }
