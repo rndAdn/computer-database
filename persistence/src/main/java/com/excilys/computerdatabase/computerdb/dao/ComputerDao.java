@@ -109,7 +109,7 @@ public class ComputerDao implements IComputerDAO {
             return optionalComputer;
         }
         
-        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.id LIKE :id or c.company.name LIKE :name", Computer.class);
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.id = :id", Computer.class);
         query.setParameter("id",  id);
         List<Computer> list = query.getResultList();
         LOGGER.info("HQL getComputerById: " + list);
