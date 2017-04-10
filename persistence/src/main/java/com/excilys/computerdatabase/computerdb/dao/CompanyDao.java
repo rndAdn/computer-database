@@ -28,18 +28,6 @@ import com.excilys.computerdatabase.computerdb.model.entities.Page.BuilderPage;
 
 @Repository
 public class CompanyDao implements ICompanyDAO {
-    
-    
-    /*private SessionFactory sessionFactory;
-    
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-     
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }*/
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
 
@@ -56,8 +44,7 @@ public class CompanyDao implements ICompanyDAO {
     private final String COUNT_COMPANY_BY_NAME;
     private final String DELETE_COMPANY;
 
-    @Autowired
-    MyDataSource dataSource;
+    final MyDataSource dataSource;
 
     JdbcTemplate jdbcTemplate;
 
@@ -67,7 +54,8 @@ public class CompanyDao implements ICompanyDAO {
     }
 
     
-    public CompanyDao() {
+    @Autowired
+    public CompanyDao(MyDataSource dataSource) {
         jdbcTemplate = new JdbcTemplate();
 
         try {
@@ -95,6 +83,7 @@ public class CompanyDao implements ICompanyDAO {
 
         DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE " + companyId + "=?;";
 
+        this.dataSource = dataSource;
     }
 
     @Override

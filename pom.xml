@@ -11,7 +11,7 @@
 		<module>service</module>
 		<module>binding</module>
 		<module>webapp</module>
-		<module>console</module>
+		<!-- <module>console</module> -->
 	</modules>
 	<url>https://github.com/rndAdn/computer-database</url>
 	<properties>

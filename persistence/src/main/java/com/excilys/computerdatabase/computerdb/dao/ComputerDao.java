@@ -62,8 +62,7 @@ public class ComputerDao implements IComputerDAO {
     private String companyName;
 
 
-    @Autowired
-    MyDataSource dataSource;
+    final MyDataSource dataSource;
 
     JdbcTemplate jdbcTemplate;
 
@@ -72,7 +71,8 @@ public class ComputerDao implements IComputerDAO {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public ComputerDao() {
+    @Autowired
+    public ComputerDao(MyDataSource dataSource) {
         jdbcTemplate = new JdbcTemplate();
 
         try {
@@ -99,6 +99,7 @@ public class ComputerDao implements IComputerDAO {
                 + computerDateFin + "," + computerCompanyId + ") values (?,?,?,?);";
         UPDATE_COMPUTER = "UPDATE " + computerTable + " SET " + computerName + "=?, " + computerDateIntro + "=?, "
                 + computerDateFin + "=?, " + computerCompanyId + "=? WHERE " + computerId + "=?;";
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -121,20 +122,18 @@ public class ComputerDao implements IComputerDAO {
     @Override
     public Optional<Page> getComputersByName(String name, long limitStart, long size, String orderby)
             throws DaoException {
-        
-        
-        
-        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.name LIKE :name or c.company.name LIKE :name order by :order", Computer.class);
+
+        String order = mapColumnOrderBy(orderby);
+
+
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company where c.name LIKE :name or c.company.name LIKE :name order by orderb", Computer.class);
         query.setParameter("name",  name + "%");
-        query.setParameter("order", orderby);
+        query.setParameter("orderb", order);
         query.setMaxResults((int) size);
         query.setFirstResult((int) ((limitStart -1) * size));
         List<Computer> list = query.getResultList();
         LOGGER.info("HQL getComputersByName: " + list);
-        
-        
-        
-        
+
         
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
@@ -156,10 +155,10 @@ public class ComputerDao implements IComputerDAO {
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", orderby, limitStart, size);
         
+        String order = mapColumnOrderBy(orderby);
         
-        
-        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company order by :order", Computer.class);
-        query.setParameter("order", orderby);
+        TypedQuery<Computer> query = HibernateUtil.getSessionFactory().openSession().createQuery("select c from Computer c left join c.company order by orderb", Computer.class);
+        query.setParameter("orderb", order);
         query.setMaxResults((int) size);
         query.setFirstResult((int) ((limitStart -1) * size));
         List<Computer> list = query.getResultList();
@@ -183,15 +182,16 @@ public class ComputerDao implements IComputerDAO {
 
     @Override
     public boolean deleteComputer(Computer computer) throws DaoException {
-        int result = -1;
+        int result;
         if (!ControllerDAOComputer.CONTROLLER_DAO_COMPUTER.isValide(computer)) {
             LOGGER.error("Computer non valide Delete: " + computer);
             return false;
         }
         long id = computer.getId();
-        result = jdbcTemplate.update(DELETE_COMPUTER, 
-                id);
 
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "= :id;");
+        query.setParameter("id", id);
+        result = query.executeUpdate();
         return result == 1;
     }
 
@@ -206,7 +206,10 @@ public class ComputerDao implements IComputerDAO {
         Optional<LocalDate> dateFin = computer.getDateDiscontinued();
         
         Long companyId = computer.getCompanyId();
-        
+
+
+
+
         result = jdbcTemplate.update(UPDATE_COMPUTER, 
                 computer.getName(), 
                 dateIntro.isPresent()?dateIntro.get():Types.NULL,
@@ -238,6 +241,7 @@ public class ComputerDao implements IComputerDAO {
         return result == 1;
     }
 
+    //TODO : rassembler count computer
     @Override
     public long countComputers() throws DaoException {
         
@@ -261,11 +265,11 @@ public class ComputerDao implements IComputerDAO {
 
     @Override
     public long deleteComputersCompany(long companyId) throws DaoException {
-        int result = -1;
-        
-        result = jdbcTemplate.update(DELETE_COMPUTERS, 
-                companyId);
+        int result;
 
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("DELETE FROM " + computerTable + " WHERE " + computerCompanyId + "= :id;");
+        query.setParameter("id", companyId);
+        result = query.executeUpdate();
         return result;
     }
 
