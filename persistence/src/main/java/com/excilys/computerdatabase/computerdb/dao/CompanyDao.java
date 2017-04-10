@@ -33,7 +33,25 @@ public class CompanyDao implements ICompanyDAO {
 
     private String companyTable;
     private String companyId;
+    private String companyName;
+    private String countTotal;
 
+
+    
+    @Autowired
+    public CompanyDao() {
+
+        try {
+            Configuration config = new PropertiesConfiguration("query.properties");
+            companyTable = config.getString("CompanyTable");
+            companyId = config.getString("CompanyId");
+            companyName = config.getString("CompanyName");
+            countTotal = config.getString("CountTotal");
+        } catch (ConfigurationException ce) {
+            ce.printStackTrace();
+        }
+
+    }
 
     @Override
     public Optional<Company> getCompanyById(long id) throws DaoException {

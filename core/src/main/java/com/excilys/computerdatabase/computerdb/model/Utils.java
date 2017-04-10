@@ -33,7 +33,8 @@ public class Utils {
         } catch (NullPointerException e) {
             LOGGER.error("stringToDate null : " + dateString);
         }
-
+        
+        LOGGER.info("stringToDate final : " + optionalDate);
         return optionalDate;
     }
 
