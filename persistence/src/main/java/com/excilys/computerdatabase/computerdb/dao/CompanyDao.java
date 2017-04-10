@@ -33,58 +33,7 @@ public class CompanyDao implements ICompanyDAO {
 
     private String companyTable;
     private String companyId;
-    private String companyName;
-    private String countTotal;
 
-    private final String SELECT_COMPANY_BY_ID;
-    private final String SELECT_COMPANY_BY_NAME;
-    private final String SELECT_ALL_COMPANY_WITH_LIMIT;
-    private final String SELECT_ALL_COMPANY;
-    private final String COUNT_COMPANY;
-    private final String COUNT_COMPANY_BY_NAME;
-    private final String DELETE_COMPANY;
-
-    final MyDataSource dataSource;
-
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public void setJdbcTemplate(MyDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    
-    @Autowired
-    public CompanyDao(MyDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate();
-
-        try {
-            Configuration config = new PropertiesConfiguration("query.properties");
-            companyTable = config.getString("CompanyTable");
-            companyId = config.getString("CompanyId");
-            companyName = config.getString("CompanyName");
-            countTotal = config.getString("CountTotal");
-        } catch (ConfigurationException ce) {
-            ce.printStackTrace();
-        }
-
-        SELECT_COMPANY_BY_ID = "SELECT * FROM " + companyTable + " WHERE " + companyId + " = ?";
-
-        SELECT_COMPANY_BY_NAME = "SELECT * FROM " + companyTable + " WHERE " + companyName + " = ? LIMIT ?, ?";
-
-        SELECT_ALL_COMPANY_WITH_LIMIT = "SELECT * FROM " + companyTable + " LIMIT ?, ?";
-
-        SELECT_ALL_COMPANY = "SELECT * FROM " + companyTable;
-
-        COUNT_COMPANY = "SELECT count(*) as " + countTotal + " FROM " + companyTable;
-
-        COUNT_COMPANY_BY_NAME = "SELECT count(*) as " + countTotal + " FROM company WHERE UPPER(" + companyName
-                + ") LIKE UPPER(?)";
-
-        DELETE_COMPANY = "DELETE FROM " + companyTable + " WHERE " + companyId + "=?;";
-
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Optional<Company> getCompanyById(long id) throws DaoException {
@@ -93,40 +42,27 @@ public class CompanyDao implements ICompanyDAO {
             LOGGER.error("Id non valide : " + id);
             return optionalCompany;
         }
-        Query query = HibernateUtil.getSessionFactory().getCurrentSession().createQuery("from company where id = :id ");
+        
+        Query query = HibernateUtil.getSessionFactory().getCurrentSession().createQuery("from Company where id = :id ");
+        query.setParameter("id", id);
         List<Company> list = query.list();
-        LOGGER.error("LIST HJSDJ : " + list);
         
-        
-        
-        Company company = jdbcTemplate.queryForObject(SELECT_COMPANY_BY_ID, new Object[] { id },
-                new RowMapper<Company>() {
-                    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                        return company;
-                    }
-                });
-        optionalCompany = Optional.ofNullable(company);
+        if (list.size() > 0) {
+            optionalCompany = Optional.ofNullable(list.get(0));
+        }
         return optionalCompany;
 
     }
 
     @Override
     public Optional<Page> getCompanyByName(String name, long limitStart, long size) throws DaoException {
-        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("from company where name = :name ");
-        query.setString(0, name);
-        List<Company> listt = query.list();
-        LOGGER.error("LIST HJSDJ : " + listt);
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("from Company where name = :name ");
+        BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
+        
+        query.setParameter("name", name);
+        List<Company> list = query.list();
         Optional<Page> optionalPage = Optional.empty();
-        /*BuilderPage builderPage = new Page.BuilderPage(name, "name", limitStart, size);
-
-        List<Company> list = jdbcTemplate.query(SELECT_COMPANY_BY_NAME, new Object[] { name, limitStart, size },
-                new RowMapper<Company>() {
-                    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                        return company;
-                    }
-                });
+ 
         List<Pageable> list2 = new ArrayList<>();
         for (Company c : list) {
             list2.add(c);
@@ -134,7 +70,7 @@ public class CompanyDao implements ICompanyDAO {
         builderPage.list(list2);
         builderPage.totalRow(getNumberOfCompany());
         optionalPage = Optional.of(builderPage.build());
-        */
+        
         return optionalPage;
     }
 
@@ -143,14 +79,12 @@ public class CompanyDao implements ICompanyDAO {
 
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", "name", limitStart, size);
-
-        List<Company> list = jdbcTemplate.query(SELECT_ALL_COMPANY_WITH_LIMIT, new Object[] { limitStart, size },
-                new RowMapper<Company>() {
-                    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                        return company;
-                    }
-                });
+        
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("from Company");
+        query.setMaxResults((int) size);
+        query.setFirstResult((int) ((limitStart -1) * size));
+        List<Company> list = query.list();
+        
         List<Pageable> list2 = new ArrayList<>();
         for (Company c : list) {
             list2.add(c);
@@ -168,12 +102,9 @@ public class CompanyDao implements ICompanyDAO {
         Optional<Page> optionalPage = Optional.empty();
         BuilderPage builderPage = new Page.BuilderPage("", "name", -1, -1);
 
-        List<Company> list = jdbcTemplate.query(SELECT_ALL_COMPANY, new RowMapper<Company>() {
-            public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Company company = new Company.CompanyBuilder(rs.getString("name")).id(rs.getLong("id")).build();
-                return company;
-            }
-        });
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("from Company");
+        List<Company> list = query.list();
+        
         List<Pageable> list2 = new ArrayList<>();
         for (Company c : list) {
             list2.add(c);
@@ -187,40 +118,35 @@ public class CompanyDao implements ICompanyDAO {
 
     @Override
     public long getNumberOfCompany() throws DaoException {
-        return jdbcTemplate.queryForObject(COUNT_COMPANY, Long.class);
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery(
+                "select count(*) from Company");
+        Long count = (Long)query.uniqueResult();
+        LOGGER.info("HQL countCompany: " + count);
+        return count;
     }
 
     @Override
     public long getNumberOfCompany(String name) throws DaoException {
-        long number = 0;
-        if (ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValideName(name)) {
-            LOGGER.error("Name non valide : '" + name + "'");
-            return number;
-        }
-        return jdbcTemplate.queryForObject(COUNT_COMPANY_BY_NAME, Long.class, name);
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery(
+                "select count(*) from Company c name LIKE :name");
+        query.setParameter("name",  name + "%");
+        Long count = (Long)query.uniqueResult();
+        LOGGER.info("HQL countCompanygsWithName: " + count);
+        return count;
 
     }
 
     @Override
     public boolean deleteCompany(Company company) throws DaoException {
-        int result;
         if (!ControllerDAOCompany.CONTROLLER_DAO_COMPANY.isValide(company)) {
             LOGGER.error("Company non valide : '" + company + "'");
             return false;
         }
-
-        result = jdbcTemplate.queryForObject(DELETE_COMPANY, Integer.class);
-        /*
-         * try (PreparedStatement deleteStatment =
-         * connection.prepareStatement(DELETE_COMPANY);) {
-         * deleteStatment.setLong(1, company.getId()); result =
-         * deleteStatment.executeUpdate(); connection.commit(); } catch
-         * (SQLException e) {
-         * 
-         * LOGGER.error("deleteCompany : " + e.getMessage()); //
-         * databaseManager.rollback(); throw new DaoException(e.getMessage()); }
-         * finally { // databaseManager.closeConnection(); }
-         */
+        
+        Query query = HibernateUtil.getSessionFactory().openSession().createQuery("DELETE FROM " + companyTable + " WHERE " + companyId + "= :id");
+        query.setParameter("id", company.getId());
+        int result = query.executeUpdate();
+        
         return result == 1;
     }
 
