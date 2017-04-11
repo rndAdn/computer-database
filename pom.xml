@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdb</artifactId>
-	<version>6.0.0</version>
+	<version>7.0.0</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>core</module>
@@ -286,8 +286,8 @@
 			</plugin>
 			<!--&ndash;&gt; -->
 
-			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version> 
+			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
 				</plugin> -->
 		</plugins>
 	</reporting>

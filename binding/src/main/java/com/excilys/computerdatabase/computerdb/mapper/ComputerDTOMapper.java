@@ -51,14 +51,19 @@ public class ComputerDTOMapper {
 
         ComputerBuilder computerBuilder = new ComputerBuilder(computerDTO.getName());
         computerBuilder.id(computerDTO.getId());
+        
         Optional<LocalDate> intro = Utils.stringToDate(computerDTO.getDateIntroduced());
         Optional<LocalDate> fin = Utils.stringToDate(computerDTO.getDateDiscontinued());
+        
+        
         if (intro.isPresent()) {
             computerBuilder.dateIntroduced(intro.get());
         }
         if (fin.isPresent()) {
             computerBuilder.dateDiscontinued(intro.get());
         }
+        
+        
         CompanyDTO companyDTO = new CompanyDTO.CompanyDTOBuilder().id(computerDTO.getCompanyId()).name(computerDTO.getCompanyName()).build();
         Optional<Company> company = CompanyDTOMapper.mapperCompanyFromDTO(companyDTO);
         computerBuilder.company(company.orElse(null));
