@@ -1,8 +1,13 @@
 package com.excilys.computerdatabase.computerdb.model.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ComputerDTO {
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+//@XmlRootElement(name = "ComputerDTO")
+public class ComputerDTO implements Serializable{
 
     private long id;
     private String name;
@@ -23,25 +28,7 @@ public class ComputerDTO {
         this.name = computer.name;
         this.dateIntroduced = computer.dateIntroduced;
         this.dateDiscontinued = computer.dateDiscontinued;
-        //this.company = computer.company;
-        /*this.id = computer.getId();
-        this.name = computer.getName();
-        if (computer.getDateIntroduced().isPresent()) {
-            this.dateIntroduced = computer.getDateIntroduced().get().toString();
-        } else {
-            this.dateIntroduced = "-";
-        }
-
-        if (computer.getDateDiscontinued().isPresent()) {
-            this.dateDiscontinued = computer.getDateDiscontinued().get().toString();
-        } else {
-            this.dateDiscontinued = "-";
-        }
-        if(computer.getCompany().isPresent()){
-            company = new CompanyDTO.CompanyDTOBuilder().id(computer.getCompany().get().getId()).name(computer.getCompany().get().getName() ).build();
-        } else {
-            company = new CompanyDTO.CompanyDTOBuilder().name("-").build();
-        }*/
+       
 
     }
     
@@ -65,7 +52,13 @@ public class ComputerDTO {
         return dateDiscontinued;
     }
 
+    public long getCompanyId() {
+        return companyId;
+    }
     
+    public String getCompanyName() {
+        return companyName;
+    }
     
     
 
@@ -73,26 +66,10 @@ public class ComputerDTO {
         this.id = id;
     }
 
-    public long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(long companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public void setDateIntroduced(String dateIntroduced) {
         this.dateIntroduced = dateIntroduced;
     }
@@ -100,6 +77,21 @@ public class ComputerDTO {
     public void setDateDiscontinued(String dateDiscontinued) {
         this.dateDiscontinued = dateDiscontinued;
     }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+   
+    
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    
+
+    
 
     
     

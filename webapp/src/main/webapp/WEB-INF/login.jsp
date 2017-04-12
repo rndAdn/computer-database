@@ -36,7 +36,7 @@
 </head>
 <body onload='document.loginForm.username.focus();'>
 
-	<h1>Spring Security Custom Login Form (Annotation)</h1>
+	<h1>Computer Database</h1>
 
 	<div id="login-box">
 
@@ -50,7 +50,7 @@
 		</c:if>
 
 		<form name='loginForm'
-		    action="/login" method='POST'>
+		    action="login" method='POST'>
 
 		    <table>
 			<tr>
