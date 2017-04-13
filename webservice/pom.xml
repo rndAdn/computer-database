@@ -8,18 +8,34 @@
 		<artifactId>computerdb</artifactId>
 		<version>7.0.0</version>
 	</parent>
-	<artifactId>binding</artifactId>
-	<packaging>jar</packaging>
-	<name>binding</name>
+	<artifactId>webservice</artifactId>
+	<packaging>war</packaging>
+	<name>webapp</name>
 	<url>http://maven.apache.org</url>
 
-	
 	<dependencies>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>service</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>persistence</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>binding</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -30,4 +46,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	</project>
+</project>
