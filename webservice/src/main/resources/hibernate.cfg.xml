@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+   "-//Hibernate/Hibernate Configuration DTD//EN"
+   "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+   <!-- a SessionFactory instance listed as /jndi/name -->
+   <session-factory
+       name="java:hibernate/SessionFactory">
+
+       <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull</property>
+       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+       <property name="hibernate.connection.username">admincdb</property>
+	   <property name="hibernate.connection.password">qwerty1234</property>
+
+       <mapping class="com.excilys.computerdatabase.computerdb.model.entities.Company"/>
+       <mapping class="com.excilys.computerdatabase.computerdb.model.entities.Computer"/>
+
+   </session-factory>
+
+</hibernate-configuration>

@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computerdb</artifactId>
-		<version>8.0.0</version>
+		<version>7.0.0</version>
 	</parent>
-	<artifactId>webapp</artifactId>
+	<artifactId>webservice</artifactId>
 	<packaging>war</packaging>
 	<name>webapp</name>
 	<url>http://maven.apache.org</url>

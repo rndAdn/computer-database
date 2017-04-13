@@ -49,7 +49,7 @@ public class ComputerService {
         boolean result = false;
         try {
             Computer computer = ComputerDTOMapper.mapperComputerFromDTO(computerDTO);
-            
+            LOGGER.info(computer.toString());
             result = computerDao.insertComputer(computer);
         } catch (DaoException e) {
             LOGGER.error("ajout Computer");

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdb</artifactId>
-	<version>7.0.0</version>
+	<version>8.0.0</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>core</module>
@@ -11,6 +11,7 @@
 		<module>service</module>
 		<module>binding</module>
 		<module>webapp</module>
+		<module>webservice</module>
 		<!-- <module>console</module> -->
 	</modules>
 	<url>https://github.com/rndAdn/computer-database</url>
@@ -20,7 +21,7 @@
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<maven-site-plugin.version>3.5</maven-site-plugin.version>
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-		<maven-checkstyle-plugin.configLocation>config/checkstyle/checkstyle.xml</maven-checkstyle-plugin.configLocation>
+		<maven-checkstyle-plugin.configLocation>../config/checkstyle/checkstyle.xml</maven-checkstyle-plugin.configLocation>
 		<maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
@@ -38,8 +39,31 @@
 		<spring.version>4.3.7.RELEASE</spring.version>
 		<spring.security.version>4.2.2.RELEASE</spring.security.version>
 		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
+		<jackson.version>2.6.3</jackson.version>
 	</properties>
 	<dependencies>
+	<!-- dépendances pour jackson mapper -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -172,6 +196,9 @@
 			<version>1.0.0.Final</version>
 		</dependency>
 
+		
+
+
 
 
 	</dependencies>
@@ -286,8 +313,8 @@
 			</plugin>
 			<!--&ndash;&gt; -->
 
-			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version>
+			<!-- Ajout de la javadoc <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-javadoc-plugin</artifactId> <version>${maven-javadoc-plugin.version}</version> 
 				</plugin> -->
 		</plugins>
 	</reporting>
