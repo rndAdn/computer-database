@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.computerdb.view.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,10 +43,35 @@ public class WebServiceController {
     ResponseEntity<?> add(@PathVariable Long id, @RequestBody ComputerDTO computerDTO) {
         
         LOGGER.info(computerDTO.toString());
-
-        return ResponseEntity.noContent().build();
+        boolean update = computerService.updateComputer(computerDTO);
+        
+        if (update) {
+            return new ResponseEntity<>("Computer updated",
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Error ",
+                    HttpStatus.NOT_MODIFIED);
+        }
 
     }
+    
+    
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    ResponseEntity<?> add(@RequestBody ComputerDTO computerDTO) {
+        
+        LOGGER.info(computerDTO.toString());
+        boolean add = computerService.ajoutComputer(computerDTO);
+        
+        if (add) {
+            return new ResponseEntity<>("Computer added",
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Error ",
+                    HttpStatus.NOT_ACCEPTABLE);
+        }
+
+    }
+    
 
 //    @RequestMapping(method = RequestMethod.POST)
 //    ResponseEntity<?> add(@PathVariable String userId, @RequestBody Bookmark input) {

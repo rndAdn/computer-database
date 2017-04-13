@@ -226,6 +226,7 @@ public class ComputerDao implements IComputerDAO {
         
         Long companyId = computer.getCompanyId();
         
+        HibernateUtil.getSessionFactory().openSession().save(computer);
         /*result = jdbcTemplate.update(INSERT_COMPUTER, 
                 computer.getName(), 
                 dateIntro.isPresent()?dateIntro.get():Types.NULL,

@@ -11,6 +11,7 @@
 		<module>service</module>
 		<module>binding</module>
 		<module>webapp</module>
+		<module>webservice</module>
 		<!-- <module>console</module> -->
 	</modules>
 	<url>https://github.com/rndAdn/computer-database</url>
@@ -38,7 +39,7 @@
 		<spring.version>4.3.7.RELEASE</spring.version>
 		<spring.security.version>4.2.2.RELEASE</spring.security.version>
 		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
-		<jackson.version>2.4.1</jackson.version>
+		<jackson.version>2.6.3</jackson.version>
 	</properties>
 	<dependencies>
 	<!-- dépendances pour jackson mapper -->
